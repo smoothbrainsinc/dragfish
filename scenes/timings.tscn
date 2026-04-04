@@ -1,0 +1,118 @@
+[gd_scene load_steps=16 format=3 uid="uid://be8p6bw8mtmcn"]
+
+[ext_resource type="Script" uid="uid://bkcqm2rmweyrn" path="res://scripts/game/timing_system.gd" id="1_v7ra0"]
+[ext_resource type="PackedScene" uid="uid://cq1rea4p55sum" path="res://scenes/track_1000m_full_barriers.tscn" id="2_g4360"]
+[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="3_exc3w"]
+[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="4_15le1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e0q1u"]
+size = Vector3(50, 20, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0q1u"]
+albedo_color = Color(1, 1, 0, 1)
+stencil_flags = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_v7ra0"]
+material = SubResource("StandardMaterial3D_e0q1u")
+size = Vector3(12, 0.11, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v7ra0"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sm4ro"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sm4ro"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_exc3w"]
+material = SubResource("StandardMaterial3D_sm4ro")
+size = Vector3(12, 0.15, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exc3w"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_15le1"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j4qsx"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w5lx7"]
+size = Vector3(14, 20, 0.1)
+
+[node name="Timings" type="Node3D" node_paths=PackedStringArray("start_line", "checkpoint_60ft", "checkpoint_330ft", "checkpoint_660ft", "checkpoint_1000ft", "finish_line", "speed_trap_start")]
+script = ExtResource("1_v7ra0")
+start_line = NodePath("timing_marks/start")
+checkpoint_60ft = NodePath("timing_marks/60_feet")
+checkpoint_330ft = NodePath("timing_marks/330_feet")
+checkpoint_660ft = NodePath("timing_marks/660_feet")
+checkpoint_1000ft = NodePath("timing_marks/1000_feet")
+finish_line = NodePath("timing_marks/finish_line")
+speed_trap_start = NodePath("timing_marks/speed_trap")
+
+[node name="track_1000m_full_barriers" parent="." instance=ExtResource("2_g4360")]
+
+[node name="timing_marks" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 450)
+
+[node name="finish_line" type="Area3D" parent="timing_marks" groups=["finish_checkpoint"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/finish_line"]
+shape = SubResource("BoxShape3D_e0q1u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="timing_marks/finish_line"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.064819336, 0)
+mesh = SubResource("BoxMesh_v7ra0")
+
+[node name="Label3D" type="Label3D" parent="timing_marks/finish_line"]
+pixel_size = 0.1
+billboard = 2
+text = "FINISH"
+vertical_alignment = 2
+uppercase = true
+
+[node name="speed_trap" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.048)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/speed_trap"]
+shape = SubResource("BoxShape3D_v7ra0")
+
+[node name="start" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09060669, -402.335)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_sm4ro")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="timing_marks/start"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09942627, 0)
+mesh = SubResource("BoxMesh_exc3w")
+
+[node name="60_feet" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -384.047)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/60_feet"]
+shape = SubResource("BoxShape3D_exc3w")
+
+[node name="330_feet" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -301.751)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/330_feet"]
+shape = SubResource("BoxShape3D_15le1")
+
+[node name="660_feet" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -201.167)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/660_feet"]
+shape = SubResource("BoxShape3D_j4qsx")
+
+[node name="1000_feet" type="Area3D" parent="timing_marks"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97.535)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="timing_marks/1000_feet"]
+shape = SubResource("BoxShape3D_w5lx7")
+
+[node name="start_tree" parent="." instance=ExtResource("3_exc3w")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 49.601196)
+script = ExtResource("4_15le1")

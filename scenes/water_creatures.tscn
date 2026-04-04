@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://dx6q122k2ccbk"]
+
+[ext_resource type="Script" uid="uid://4ekps628fl7t" path="res://scenes/fish_simulation.gd" id="1_or3pl"]
+[ext_resource type="Script" uid="uid://dlf4duys3u80j" path="res://scenes/fish_spawner_embedded.gd" id="1_pat3b"]
+[ext_resource type="PackedScene" uid="uid://csa8qnils6c0a" path="res://assets/models/fishes/blue_gill_2.tscn" id="2_sbaja"]
+[ext_resource type="Script" uid="uid://ltit38hegqiw" path="res://scripts/swimming_script.gd" id="3_7nr04"]
+[ext_resource type="PackedScene" uid="uid://c5feunj5rr6i" path="res://scenes/lake_monster.tscn" id="5_or3pl"]
+[ext_resource type="PackedScene" uid="uid://d4n4fted65j30" path="res://scenes/northern_pike.tscn" id="7_pat3b"]
+[ext_resource type="PackedScene" uid="uid://dr1ngy5xddmcd" path="res://mermaid/merelf2.tscn" id="8_8f827"]
+[ext_resource type="PackedScene" uid="uid://oerv8cu8360p" path="res://mermaid/merelf666.tscn" id="8_8jsnj"]
+
+[node name="water_creatures" type="Node3D"]
+
+[node name="FishSchool" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
+script = ExtResource("1_pat3b")
+number_of_fish = 2000
+separation_weight = 2.0
+alignment_weight = 0.5
+
+[node name="blue_gill2" parent="." instance=ExtResource("2_sbaja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.845, -6, 0)
+script = ExtResource("3_7nr04")
+
+[node name="lakeMonster" parent="." instance=ExtResource("5_or3pl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.205872, 0)
+swim_speed = 0.5
+turn_speed = 1.5
+dive_speed = 0.5
+
+[node name="NorthernPike" parent="." instance=ExtResource("7_pat3b")]
+visible = false
+script = ExtResource("1_or3pl")
+fish_model_path = "uid://o1ltep35pvl8"
+
+[node name="merelf2" parent="." instance=ExtResource("8_8f827")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+
+[node name="merelf" parent="." instance=ExtResource("8_8jsnj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.988, 0)
+visible = false
+script = ExtResource("3_7nr04")
+swim_speed = 1.5
+turn_speed = 2.5
+dive_speed = 1.0
+rotate_speed = 2.0

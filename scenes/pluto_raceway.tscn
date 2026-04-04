@@ -1,0 +1,95 @@
+[gd_scene load_steps=13 format=3 uid="uid://bmre0ij65ujdr"]
+
+[ext_resource type="Script" uid="uid://btlva0x46f8hi" path="res://scripts/game/race_manager.gd" id="1_62cym"]
+[ext_resource type="PackedScene" uid="uid://bbssvd4xrvryt" path="res://scenes/grounds.tscn" id="1_ye3oe"]
+[ext_resource type="Script" uid="uid://cllamoosnqa4a" path="res://scripts/game/race_controller.gd" id="2_2x6fk"]
+[ext_resource type="Script" uid="uid://c8bghfjglqhd" path="res://scenes/visual_effects_manager.gd" id="3_gkc72"]
+[ext_resource type="PackedScene" uid="uid://be8p6bw8mtmcn" path="res://scenes/timings.tscn" id="3_ye3oe"]
+[ext_resource type="Script" uid="uid://113mxh22bnum" path="res://scripts/game/cameras.gd" id="4_vrjwo"]
+[ext_resource type="Script" uid="uid://ceqadahowealt" path="res://scenes/environment_manager.gd" id="5_pinsw"]
+[ext_resource type="Script" uid="uid://c6dia2q16ws4c" path="res://camera_3d.gd" id="7_uk5hu"]
+[ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="10_uk5hu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jys5f"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_uk5hu"]
+sky_material = SubResource("ProceduralSkyMaterial_jys5f")
+
+[sub_resource type="Environment" id="Environment_73ebb"]
+background_mode = 2
+sky = SubResource("Sky_uk5hu")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Root" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_73ebb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.70710677, 0.5, -0.6123724, 0.6123724, 0, 0, 0)
+shadow_enabled = true
+
+[node name="RaceManager" type="Node" parent="."]
+script = ExtResource("1_62cym")
+
+[node name="left_lane_spawn" type="Marker3D" parent="RaceManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.867788, 0, -163.11652)
+
+[node name="right_lane_spawn" type="Marker3D" parent="RaceManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.179806, 0, -163.37793)
+
+[node name="RaceController" type="Node" parent="."]
+script = ExtResource("2_2x6fk")
+
+[node name="VisualEffectsManager" type="Node" parent="."]
+script = ExtResource("3_gkc72")
+
+[node name="EnvironmentManager" type="Node" parent="."]
+script = ExtResource("5_pinsw")
+
+[node name="Cameras" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.52063, 2.731, 271.43378)
+script = ExtResource("4_vrjwo")
+
+[node name="Camera1" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, -5.064237e-08, 7.126074e-08, 0, 0.81512785, 0.5792812, -8.742278e-08, 0.5792812, -0.81512785, -30.077, 6.601, -200)
+top_level = true
+size = 24.343
+
+[node name="Camera2" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1, 0, 0, 0, 0.9999863, 0.005235964, 0, -0.005235964, 0.9999863, 0, 8.481, 0)
+
+[node name="Camera3" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-0.49916837, 0, -0.866505, 0, 1, 0, 0.866505, 0, -0.49916837, 9.930363, 32.957245, 60.92383)
+
+[node name="Camera4" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-0.5750055, 0.27982366, -0.76880914, 0, 0.9396927, 0.34202015, 0.81814957, 0.19666347, -0.54032844, -41.440598, -31.899525, -278.8804)
+script = ExtResource("7_uk5hu")
+
+[node name="Camera5" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 0, 21.776, -476.309)
+fov = 17.8
+size = 7.98
+
+[node name="Camera6" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1.0000001, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 900, 0)
+
+[node name="Camera7" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0.99999845, 0.00097344833, -0.0014486439, 0, 0.83001226, 0.5577451, 0.0017453283, -0.5577442, 0.83001095, -0.024, 1.923, -68.729)
+size = 2.554
+
+[node name="Camera8" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-4.371139e-08, 0.34202012, -0.9396926, 0, 0.9396926, 0.34202012, 1, 1.4950174e-08, -4.107527e-08, -7.32, 2.735, -73.517)
+current = true
+
+[node name="Timings" parent="." instance=ExtResource("3_ye3oe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.52063, -2.4926524, -201.41321)
+
+[node name="water_creatures" parent="." instance=ExtResource("10_uk5hu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.975418, 0)
+
+[node name="grounds" parent="." instance=ExtResource("1_ye3oe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 370.16913)

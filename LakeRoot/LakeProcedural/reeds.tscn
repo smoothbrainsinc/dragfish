@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvwgag2kspikn"]
+
+[ext_resource type="PackedScene" uid="uid://0ntrv3f1ditd" path="res://assets/models/fishes/reeds.glb" id="1_g520v"]
+
+[node name="Reeds" type="Node3D"]
+
+[node name="reeds" parent="." instance=ExtResource("1_g520v")]

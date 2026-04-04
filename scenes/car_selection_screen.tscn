@@ -1,0 +1,206 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwdpt7gk8y0ak"]
+
+[ext_resource type="Script" uid="uid://cym2i1mhv8i82" path="res://scripts/game/car_selection_script.gd" id="1_4yt6y"]
+
+[node name="CarSelectionScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_4yt6y")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 40.0
+offset_right = 1009.0
+offset_bottom = 45.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 0
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 32
+text = "OPPONENT"
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_font_sizes/font_size = 32
+text = "YOUR CAR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer2" type="GridContainer" parent="."]
+layout_mode = 0
+offset_left = 149.0
+offset_top = 58.0
+offset_right = 914.0
+offset_bottom = 443.0
+theme_override_constants/h_separation = 165
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="GridContainer" type="GridContainer" parent="GridContainer2"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GridContainer2/GridContainer"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+stretch = true
+
+[node name="playerViewport" type="SubViewport" parent="GridContainer2/GridContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(300, 300)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="GridContainer2/GridContainer/SubViewportContainer/playerViewport"]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, -4, 1, 4)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="GridContainer2/GridContainer/SubViewportContainer/playerViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.684082, 4.006775, 0)
+light_energy = 50.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GridContainer2/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 214
+alignment = 1
+
+[node name="Button" type="Button" parent="GridContainer2/GridContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "<"
+
+[node name="Button2" type="Button" parent="GridContainer2/GridContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = ">"
+
+[node name="GridContainer2" type="GridContainer" parent="GridContainer2"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GridContainer2/GridContainer2"]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+stretch = true
+
+[node name="NPCViewport" type="SubViewport" parent="GridContainer2/GridContainer2/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(300, 300)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="GridContainer2/GridContainer2/SubViewportContainer/NPCViewport"]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, -4, 1, 4)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="GridContainer2/GridContainer2/SubViewportContainer/NPCViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.684082, 4.006775, 0)
+light_energy = 50.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer2/GridContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 214
+alignment = 1
+
+[node name="Button" type="Button" parent="GridContainer2/GridContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "<"
+
+[node name="Button2" type="Button" parent="GridContainer2/GridContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = ">"
+
+[node name="Control" type="Control" parent="GridContainer2"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="GridContainer2/Control"]
+clip_contents = true
+layout_mode = 0
+offset_left = -3.0
+offset_top = 9.0
+offset_right = 1100.0
+offset_bottom = 623.0
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 5
+
+[node name="Label" type="Label" parent="GridContainer2/Control/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "SELECT YOUR CARS"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer2/Control/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="NPCPanel" type="Panel" parent="GridContainer2/Control/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer2/Control/GridContainer/HBoxContainer/NPCPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="CarName" type="Label" parent="GridContainer2/Control/GridContainer/HBoxContainer/NPCPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Stats" type="Label" parent="GridContainer2/Control/GridContainer/HBoxContainer/NPCPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerPanel" type="Panel" parent="GridContainer2/Control/GridContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer2/Control/GridContainer/HBoxContainer/PlayerPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="CarName" type="Label" parent="GridContainer2/Control/GridContainer/HBoxContainer/PlayerPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Stats" type="Label" parent="GridContainer2/Control/GridContainer/HBoxContainer/PlayerPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="GridContainer2/Control/GridContainer/HBoxContainer"]
+layout_mode = 2
+text = "START"
+
+[node name="PitButton" type="Button" parent="GridContainer2/Control/GridContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "PIT AREA"
+
+[node name="GarageButton" type="Button" parent="GridContainer2/Control/GridContainer/HBoxContainer"]
+layout_mode = 2
+text = "GARAGE"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GridContainer2/Control/GridContainer"]
+layout_mode = 2
+alignment = 1
+
+[connection signal="pressed" from="GridContainer2/GridContainer/HBoxContainer2/Button" to="." method="_on_npc_prev_pressed"]
+[connection signal="pressed" from="GridContainer2/GridContainer/HBoxContainer2/Button2" to="." method="_on_npc_next_pressed"]
+[connection signal="pressed" from="GridContainer2/GridContainer2/HBoxContainer/Button" to="." method="_on_player_prev_pressed"]
+[connection signal="pressed" from="GridContainer2/GridContainer2/HBoxContainer/Button2" to="." method="_on_player_next_pressed"]
+[connection signal="pressed" from="GridContainer2/Control/GridContainer/HBoxContainer/StartButton" to="." method="_on_start_race_pressed"]
+[connection signal="pressed" from="GridContainer2/Control/GridContainer/HBoxContainer/PitButton" to="." method="_on_pit_button_pressed"]
+[connection signal="pressed" from="GridContainer2/Control/GridContainer/HBoxContainer/GarageButton" to="." method="_on_garage_button_pressed"]

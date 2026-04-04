@@ -1,0 +1,148 @@
+[gd_scene load_steps=2 format=3 uid="uid://4ukkcq3o0nyq"]
+
+[ext_resource type="PackedScene" uid="uid://cm705d1dppar5" path="res://assets/components/motion_indicator.tscn" id="2_u8dq1"]
+
+[node name="VehicleUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TopLayout" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="FrontSection" type="VBoxContainer" parent="MainContainer/TopLayout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/TopLayout/FrontSection"]
+layout_mode = 2
+text = "Front"
+horizontal_alignment = 1
+
+[node name="FrontColumns" type="HBoxContainer" parent="MainContainer/TopLayout/FrontSection"]
+layout_mode = 2
+
+[node name="FrontLeft" parent="MainContainer/TopLayout/FrontSection/FrontColumns"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+layout_mode = 2
+script = null
+
+[node name="FrontRight" parent="MainContainer/TopLayout/FrontSection/FrontColumns"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+layout_mode = 2
+script = null
+
+[node name="NameSection" type="VBoxContainer" parent="MainContainer/TopLayout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/TopLayout/NameSection"]
+layout_mode = 2
+text = "NAME"
+horizontal_alignment = 1
+
+[node name="NameColumn" parent="MainContainer/TopLayout/NameSection"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+layout_mode = 2
+script = null
+
+[node name="RearSection" type="VBoxContainer" parent="MainContainer/TopLayout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/TopLayout/RearSection"]
+layout_mode = 2
+text = "Rear"
+horizontal_alignment = 1
+
+[node name="RearColumns" type="HBoxContainer" parent="MainContainer/TopLayout/RearSection"]
+layout_mode = 2
+
+[node name="RearLeft" parent="MainContainer/TopLayout/RearSection/RearColumns"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+layout_mode = 2
+script = null
+
+[node name="RearRight" parent="MainContainer/TopLayout/RearSection/RearColumns"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+layout_mode = 2
+script = null
+
+[node name="MotionSection" type="VBoxContainer" parent="MainContainer/TopLayout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/TopLayout/MotionSection"]
+layout_mode = 2
+text = "Motion"
+
+[node name="MotionControls" type="HBoxContainer" parent="MainContainer/TopLayout/MotionSection"]
+layout_mode = 2
+
+[node name="EngineIndicator" parent="MainContainer/TopLayout/MotionSection/MotionControls" instance=ExtResource("2_u8dq1")]
+layout_mode = 2
+
+[node name="SteeringIndicator" parent="MainContainer/TopLayout/MotionSection/MotionControls" instance=ExtResource("2_u8dq1")]
+layout_mode = 2
+
+[node name="BrakeIndicator" parent="MainContainer/TopLayout/MotionSection/MotionControls" instance=ExtResource("2_u8dq1")]
+layout_mode = 2
+
+[node name="CarImage" type="TextureRect" parent="MainContainer/TopLayout"]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 2
+
+[node name="BottomButtons" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="Race" type="Button" parent="MainContainer/BottomButtons"]
+layout_mode = 2
+text = "RACE"
+
+[node name="Select" type="Button" parent="MainContainer/BottomButtons"]
+layout_mode = 2
+text = "SELECT"

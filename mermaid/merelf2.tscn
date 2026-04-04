@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr1ngy5xddmcd"]
+
+[ext_resource type="PackedScene" uid="uid://cfp5dn5xh2jrh" path="res://mermaid/merelf.glb" id="1_psnln"]
+[ext_resource type="Script" uid="uid://ltit38hegqiw" path="res://scripts/swimming_script.gd" id="2_4g2lu"]
+
+[node name="merelf" instance=ExtResource("1_psnln")]
+script = ExtResource("2_4g2lu")
+
+[node name="Armature" parent="." index="0"]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/0/position = Vector3(-6.5084826e-10, -0.023704985, -0.058408167)
+bones/0/rotation = Quaternion(0.2107501, 0.04305578, 0.012130658, 0.976516)
+bones/4/rotation = Quaternion(-0.6580717, -8.9716984e-08, -2.346606e-07, 0.7529554)
+bones/6/rotation = Quaternion(0.6888978, 0.35057983, -0.08347053, 0.62892485)
+bones/6/scale = Vector3(0.9999999, 0.9999997, 0.99999964)
+bones/8/rotation = Quaternion(-0.20915467, -0.80463433, 0.1012622, 0.5464099)
+bones/10/rotation = Quaternion(0.75627, -0.27919152, 0.13045356, 0.57713926)
+bones/10/scale = Vector3(0.9999999, 0.9999998, 0.99999994)
+bones/12/rotation = Quaternion(-0.20903131, 0.80467147, -0.1014915, 0.54635996)
+bones/13/position = Vector3(-2.415618e-09, -0.072093554, 0.011733055)
+bones/13/rotation = Quaternion(-0.6617829, 0.20641285, 0.71187204, -0.11258498)
+bones/15/rotation = Quaternion(-0.061129846, -0.024404716, -0.20859976, 0.9757837)
+bones/16/rotation = Quaternion(-0.01053809, 0.0014345756, -0.055363342, 0.9984097)
+bones/17/rotation = Quaternion(-0.015799403, 0.0009246307, -0.07534456, 0.997032)
+bones/18/rotation = Quaternion(-0.089720495, 0.019044548, -0.2573545, 0.96195436)
+bones/19/rotation = Quaternion(-0.02342035, 0.0033773552, -0.07509331, 0.9968958)
+
+[node name="AnimationPlayer" parent="." index="1"]
+autoplay = "ArmatureAction"
+
+[node name="RayCast3D" type="RayCast3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+target_position = Vector3(0, 0, 2)

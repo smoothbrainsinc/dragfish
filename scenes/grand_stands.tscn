@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpbnq5wrwbb18"]
+
+[ext_resource type="PackedScene" uid="uid://6w2o6yvjc63n" path="res://scenes/bleachers.tscn" id="1_sp5qg"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="bleachers4" parent="." instance=ExtResource("1_sp5qg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.32110596, 0, 201.5807)
+
+[node name="bleachers2" parent="." instance=ExtResource("1_sp5qg")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 30, 0, -285.78503)
+
+[node name="bleachers3" parent="." instance=ExtResource("1_sp5qg")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 31, 0, 116.569954)
+
+[node name="bleacher" parent="." instance=ExtResource("1_sp5qg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -201)

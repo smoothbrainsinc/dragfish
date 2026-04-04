@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://bilfqc7nfeedx"]
+
+[ext_resource type="Script" uid="uid://c6w2658hjhkcd" path="res://scripts/sand_pit.gd" id="1_ktmaq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rfbfa"]
+size = Vector3(40, 1, 300)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bbrf7"]
+size = Vector3(40, 1, 300)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ktmaq"]
+albedo_color = Color(0.4973613, 0.48783666, 0, 1)
+
+[node name="sandpit" type="Area3D"]
+script = ExtResource("1_ktmaq")
+max_penetration = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_rfbfa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_bbrf7")
+surface_material_override/0 = SubResource("StandardMaterial3D_ktmaq")

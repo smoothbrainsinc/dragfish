@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="VehicleConfig" load_steps=9 format=3 uid="uid://bukpnavja76hp"]
+
+[ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
+[ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]
+[ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_fcxg4"]
+[ext_resource type="Script" uid="uid://du1enhren7ngr" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="4_7ko4g"]
+
+[sub_resource type="Resource" id="Resource_i61f7"]
+script = ExtResource("1_uwxqw")
+redline_rpm = 17000.0
+rev_limiter_rpm = 16900.0
+torque_curve = {
+1000.0: 50.0,
+2000.0: 25000.0,
+3000.0: 32500.0,
+4500.0: 40000.0,
+6000.0: 41000.0,
+7000.0: 39000.0,
+7500.0: 35000.0
+}
+
+[sub_resource type="Resource" id="Resource_iads6"]
+script = ExtResource("2_fcxg4")
+compound_name = "dragster radial"
+compound_type = 2
+friction_coefficient = 1.3
+
+[sub_resource type="Resource" id="Resource_f8llp"]
+script = ExtResource("2_fcxg4")
+compound_name = "Drag Slick"
+compound_type = 3
+friction_coefficient = 2.0
+optimal_slip_ratio = 0.2
+
+[sub_resource type="Resource" id="Resource_k7kr5"]
+script = ExtResource("4_7ko4g")
+gear_ratios = Array[float]([2.79, 1.78, 1.29, 1.0])
+final_drive = 3.962
+shift_time = 0.25
+clutch_slip = 0.15
+
+[resource]
+script = ExtResource("1_dvd3c")
+vehicle_name = "real_drag"
+display_name = "Real Drag"
+description = "My dragster"
+scene_path = "res://vehicles/real_drag.tscn"
+mass = 1700.0
+center_of_mass_offset = Vector3(0, -0.5, 0)
+default_wheel_radius = 0.5
+engine = SubResource("Resource_i61f7")
+transmission = SubResource("Resource_k7kr5")
+front_tires = SubResource("Resource_iads6")
+rear_tires = SubResource("Resource_f8llp")
+drag_coefficient = 0.9
+frontal_area = 3.5
+category = 5

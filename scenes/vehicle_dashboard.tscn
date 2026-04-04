@@ -1,0 +1,130 @@
+[gd_scene load_steps=4 format=3 uid="uid://duukh7matks2q"]
+
+[ext_resource type="Script" uid="uid://bs5o4oab0yohp" path="res://scripts/vehicle_dashboard.gd" id="1_mn2pc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84mao"]
+bg_color = Color(0, 0, 0, 0.70000005)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mn2pc"]
+bg_color = Color(0, 0, 0, 0.70000005)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="VehicleDashboard" type="CanvasLayer" node_paths=PackedStringArray("speed_label", "rpm_label", "traction_label", "detailed_panel", "gforce_label", "inputs_label", "wheel1_label", "wheel2_label", "wheel3_label", "wheel4_label")]
+script = ExtResource("1_mn2pc")
+speed_label = NodePath("MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer/SpeedLabel")
+rpm_label = NodePath("MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer/RPMLabel")
+traction_label = NodePath("MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer/TractionLabel")
+detailed_panel = NodePath("MarginContainer/VBoxContainer/DetailedPanel")
+gforce_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/GForceLabel")
+inputs_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid/InputsLabel")
+wheel1_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid/Wheel1Label")
+wheel2_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid/Wheel2Label")
+wheel3_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid/Wheel3Label")
+wheel4_label = NodePath("MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid/Wheel4Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -54.0
+offset_bottom = 282.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BasicStatsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_84mao")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BasicStatsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="SpeedLabel" type="Label" parent="MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Speed: -----MPH"
+
+[node name="RPMLabel" type="Label" parent="MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "RPM: -----RPM"
+
+[node name="TractionLabel" type="Label" parent="MarginContainer/VBoxContainer/BasicStatsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Traction: -----"
+
+[node name="DetailedPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mn2pc")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/DetailedPanel"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/DetailedPanel"]
+layout_mode = 2
+
+[node name="GForceLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="WheelTitle" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer"]
+layout_mode = 2
+text = "WHEEL"
+
+[node name="WheelGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="InputsLabel" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2
+
+[node name="Wheel1Label" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2
+text = "W1: ---"
+
+[node name="Wheel2Label" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2
+text = "W2: ---"
+
+[node name="Wheel3Label" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2
+text = "W3: ---"
+
+[node name="Wheel4Label" type="Label" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2
+text = "W4: ---"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
+layout_mode = 2

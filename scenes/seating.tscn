@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dd1ybvv6sf8j5"]
+
+[ext_resource type="PackedScene" uid="uid://ds83gmd05mprr" path="res://assets/models/bleacher-supports.glb" id="1_tiusk"]
+[ext_resource type="PackedScene" uid="uid://bfe8ptvkinufx" path="res://assets/models/bleachers_raw.tscn" id="2_m8ssq"]
+[ext_resource type="PackedScene" uid="uid://6w2o6yvjc63n" path="res://scenes/bleachers.tscn" id="3_lewg2"]
+
+[node name="seating" type="Node3D"]
+
+[node name="bleacher-supports" parent="." instance=ExtResource("1_tiusk")]
+
+[node name="bleachers" parent="." instance=ExtResource("2_m8ssq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -95.08411, 0, 0)
+
+[node name="Node3D" parent="." instance=ExtResource("3_lewg2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95.36442, 0, 0)

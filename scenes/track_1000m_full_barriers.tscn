@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://cq1rea4p55sum"]
+
+[ext_resource type="PackedScene" uid="uid://dgmbdlkkmf0uc" path="res://assets/models/track_section_with_barriers.tscn" id="1_fl3o1"]
+
+[node name="track_1000m_full_barriers" type="Node3D"]
+
+[node name="track_section_with_barriers" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003, 0, -0.006)
+
+[node name="track_section_with_barriers2" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
+
+[node name="track_section_with_barriers3" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 200)
+
+[node name="track_section_with_barriers4" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 300)
+
+[node name="track_section_with_barriers5" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 400)
+
+[node name="track_section_with_barriers6" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500)
+
+[node name="track_section_with_barriers7" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 600)
+
+[node name="track_section_with_barriers8" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 700)
+
+[node name="track_section_with_barriers9" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 800)
+
+[node name="track_section_with_barriers10" parent="." instance=ExtResource("1_fl3o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 900)

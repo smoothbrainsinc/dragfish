@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://cm705d1dppar5"]
+
+[ext_resource type="Script" uid="uid://cn6anuu311fid" path="res://assets/components/motion_indicator.gd" id="1_j2j41"]
+
+[node name="MotionIndicator" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_j2j41")
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="ValueLabel" type="Label" parent="."]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1

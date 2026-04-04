@@ -1,0 +1,54 @@
+[gd_scene load_steps=2 format=3 uid="uid://crgtmjpoemtbd"]
+
+[ext_resource type="Script" uid="uid://6h6lxjiexysd" path="res://ui/WheelPropertyRow.gd" id="1_dgc4r"]
+
+[node name="WheelPropertyRow" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+script = ExtResource("1_dgc4r")
+
+[node name="FR" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 1000.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="FL" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 1000.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Engine Force"
+horizontal_alignment = 1
+
+[node name="RL" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 1000.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="RR" type="SpinBox" parent="."]
+layout_mode = 2
+max_value = 1000.0
+step = 0.01
+allow_greater = true
+allow_lesser = true
+alignment = 1
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+text = "RESET"

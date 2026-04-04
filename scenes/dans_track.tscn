@@ -1,0 +1,87 @@
+[gd_scene load_steps=12 format=3 uid="uid://fwu67wqqtxpd"]
+
+[ext_resource type="PackedScene" uid="uid://bm5ji86nt57kx" path="res://scenes/track1000.tscn" id="1_mcas1"]
+[ext_resource type="PackedScene" uid="uid://bbssvd4xrvryt" path="res://scenes/grounds.tscn" id="2_04u10"]
+[ext_resource type="Script" uid="uid://bkcqm2rmweyrn" path="res://scripts/game/timing_system.gd" id="4_vx7pv"]
+[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="5_euldt"]
+[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="6_7shus"]
+[ext_resource type="PackedScene" uid="uid://6w2o6yvjc63n" path="res://scenes/bleachers.tscn" id="6_e0itp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_hsrn0"]
+size = Vector3(12, 0.2, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0e54"]
+albedo_color = Color(1, 1, 0.019607844, 1)
+metallic = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_7bjy2"]
+size = Vector3(12, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hvfri"]
+albedo_color = Color(1, 1, 0, 1)
+stencil_flags = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qbes4"]
+margin = 0.0
+size = Vector3(750, 0, 1504)
+
+[node name="DansTrack" type="Node3D"]
+
+[node name="grounds" parent="." instance=ExtResource("2_04u10")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 201)
+
+[node name="StartLine" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -402.3)
+script = ExtResource("4_vx7pv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StartLine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+mesh = SubResource("BoxMesh_hsrn0")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_v0e54")
+
+[node name="FinishLine" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="FinishLine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02890139, 0)
+mesh = SubResource("BoxMesh_7bjy2")
+surface_material_override/0 = SubResource("StandardMaterial3D_hvfri")
+
+[node name="Label3D" type="Label3D" parent="FinishLine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0685234, 0)
+billboard = 1
+text = "F I N I S H"
+font_size = 256
+outline_size = 64
+uppercase = true
+
+[node name="start_tree" parent="." groups=["start_tree"] instance=ExtResource("5_euldt")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -402.1)
+script = ExtResource("6_7shus")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="track" parent="StaticBody3D" instance=ExtResource("1_mcas1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -450)
+
+[node name="track2" parent="StaticBody3D" instance=ExtResource("1_mcas1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.3, 0, -450)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.01, 207)
+shape = SubResource("BoxShape3D_qbes4")
+
+[node name="bleachers" parent="." instance=ExtResource("6_e0itp")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, 43.18441)
+
+[node name="bleachers3" parent="." instance=ExtResource("6_e0itp")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -20, 0, -367)
+
+[node name="bleachers4" parent="." instance=ExtResource("6_e0itp")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 20, 0, -447.13306)
+
+[node name="bleachers2" parent="." instance=ExtResource("6_e0itp")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 20, 0, -43.18441)
+
+[node name="Node3D" type="Node3D" parent="."]

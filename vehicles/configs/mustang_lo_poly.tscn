@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://8hqv7nkbtsh5"]
+
+[ext_resource type="PackedScene" uid="uid://djrgio78hslc5" path="res://assets/models/mustang_lo-poly.glb" id="1_ans0w"]
+
+[node name="mustang_lo-poly" instance=ExtResource("1_ans0w")]

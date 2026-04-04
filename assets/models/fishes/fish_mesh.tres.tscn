@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dm1780d8moecu"]
+
+[ext_resource type="PackedScene" uid="uid://byp37dat8m6ss" path="res://assets/models/fishes/blue_gill2.glb" id="1_fowdn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drami"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_drami")
+
+[node name="blue_gill2" parent="MeshInstance3D" instance=ExtResource("1_fowdn")]

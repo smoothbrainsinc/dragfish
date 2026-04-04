@@ -1,0 +1,116 @@
+[gd_scene load_steps=10 format=3 uid="uid://vaoqqje5c3ii"]
+
+[ext_resource type="PackedScene" uid="uid://biko607vkv00n" path="res://vehicles/real_drag_2.tscn" id="1_lnk0s"]
+[ext_resource type="Script" uid="uid://bfvqudaiqblks" path="res://scripts/game/vehicle/VehicleController.gd" id="2_qsq1i"]
+[ext_resource type="Resource" uid="uid://il6evspjsyb0" path="res://test_config.tres" id="3_bgsa8"]
+[ext_resource type="Script" uid="uid://113mxh22bnum" path="res://scripts/game/cameras.gd" id="4_ns62d"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qsq1i"]
+size = Vector3(2000, 1, 2000)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bgsa8"]
+size = Vector3(2000, 1, 2000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ns62d"]
+albedo_color = Color(0.3764706, 0.54509807, 1, 1)
+metallic = 1.0
+roughness = 0.1
+clearcoat_enabled = true
+clearcoat_roughness = 0.01
+
+[sub_resource type="Sky" id="Sky_xshb2"]
+
+[sub_resource type="Environment" id="Environment_e2f5q"]
+background_mode = 2
+background_energy_multiplier = 10.0
+sky = SubResource("Sky_xshb2")
+ambient_light_color = Color(1, 1, 0.7490196, 1)
+ambient_light_energy = 16.0
+
+[node name="Roam" type="Node3D"]
+script = ExtResource("2_qsq1i")
+is_player_controlled = null
+vehicle_name = null
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_qsq1i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9960327, -4.6900635, 0.44509888)
+mesh = SubResource("BoxMesh_bgsa8")
+skeleton = NodePath("../CollisionShape3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_ns62d")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_e2f5q")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.7071068, 0.5, -0.5, 0, 0.7071068, 0.70710677, 0.7071068, -0.5, 0.5, 0, 100, 0)
+light_color = Color(1, 0.9137255, 0.67058825, 1)
+light_energy = 500.0
+shadow_enabled = true
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.7071068, 0.5, -0.5, 0, 0.7071068, 0.70710677, 0.7071068, -0.5, 0.5, 100, 100, 200.754)
+light_color = Color(1, 0.9137255, 0.67058825, 1)
+light_energy = 500.0
+shadow_enabled = true
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.7071068, 0.5, -0.5, 0, 0.7071068, 0.70710677, 0.7071068, -0.5, 0.5, 0, 100, -631.217)
+light_color = Color(1, 0.9137255, 0.67058825, 1)
+light_energy = 500.0
+shadow_enabled = true
+
+[node name="Node" type="Node" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Node"]
+transform = Transform3D(-0.9788674, -0.105934426, 0.17491853, 0, 0.85536426, 0.518027, -0.20449595, 0.5070798, -0.8372882, 0, 10, -10)
+current = true
+
+[node name="realDrag2" parent="." instance=ExtResource("1_lnk0s")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 36.630577, 0)
+mass = 0.001
+script = ExtResource("2_qsq1i")
+vehicle_config = ExtResource("3_bgsa8")
+is_player_controlled = null
+vehicle_name = null
+
+[node name="Cameras" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.731, -327.153)
+script = ExtResource("4_ns62d")
+
+[node name="Camera1" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.6, -6.678)
+top_level = true
+size = 24.343
+
+[node name="Camera2" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.139, -1.766, 326.913)
+
+[node name="Camera3" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7.101, -1.597, 326.471)
+
+[node name="Camera4" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1, 0, 0, 0, 0.9396927, 0.34202018, 0, -0.3420202, 0.9396927, -2.5112305, 5.011696, 7.8497925)
+
+[node name="Camera5" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, -2.1629502e-08, 8.6751186e-08, 0, 0.9702958, 0.24192192, -8.940695e-08, 0.24192192, -0.9702958, 0, 21.78801, -505.2586)
+projection = 1
+size = 7.98
+
+[node name="Camera6" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1.0000001, -1.8626451e-09, 3.7252903e-09, 0, 0.90258527, 0.43051112, 0, -0.43051115, 0.9025853, 0.11899948, 10.79549, 369.353)
+
+[node name="Camera7" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0.8231364, -0.03466603, 0.56678456, 0, 0.9981348, 0.061048545, -0.56784374, -0.050251275, 0.8216011, 42.62503, 4.465, -364.45)
+h_offset = 0.475
+v_offset = -0.505
+projection = 1
+fov = 13.0
+size = 2.554
+
+[node name="Camera8" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-4.371139e-08, 0.34202015, -0.9396927, 0, 0.9396927, 0.34202015, 1, 1.4950176e-08, -4.107527e-08, -7.32, 2.7349997, 0)

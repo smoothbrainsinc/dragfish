@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgmbdlkkmf0uc"]
+
+[ext_resource type="PackedScene" uid="uid://cdff037tr46x2" path="res://scenes/surface.tscn" id="1_1s0g3"]
+[ext_resource type="PackedScene" uid="uid://d3iyh0u4iyave" path="res://assets/models/barriers.tscn" id="2_4g82e"]
+
+[node name="track_section_with_barriers" type="Node3D"]
+
+[node name="Surface" parent="." instance=ExtResource("1_1s0g3")]
+
+[node name="barriers" parent="." instance=ExtResource("2_4g82e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 0.762, -25)
+
+[node name="barriers2" parent="." instance=ExtResource("2_4g82e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6, 0.762, 25)
+
+[node name="barriers3" parent="." instance=ExtResource("2_4g82e")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.6, 0.762, -25)
+
+[node name="barriers4" parent="." instance=ExtResource("2_4g82e")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.6, 0.762, 25)

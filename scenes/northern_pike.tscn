@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4n4fted65j30"]
+
+[ext_resource type="PackedScene" uid="uid://o1ltep35pvl8" path="res://assets/models/fishes/northern.glb" id="1_2vn8y"]
+
+[node name="NorthernPike" type="Node3D"]
+
+[node name="northern" parent="." instance=ExtResource("1_2vn8y")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)

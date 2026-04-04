@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://bm5ji86nt57kx"]
+
+[ext_resource type="PackedScene" uid="uid://dgmbdlkkmf0uc" path="res://assets/models/track_section_with_barriers.tscn" id="1_py62s"]
+
+[node name="track_1000m" type="Node3D"]
+
+[node name="track_section_with_barriers" parent="." instance=ExtResource("1_py62s")]
+
+[node name="track_section_with_barriers2" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
+
+[node name="track_section_with_barriers3" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 200)
+
+[node name="track_section_with_barriers4" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 300)
+
+[node name="track_section_with_barriers5" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 400)
+
+[node name="track_section_with_barriers6" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500)
+
+[node name="track_section_with_barriers7" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 600)
+
+[node name="track_section_with_barriers8" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 700)
+
+[node name="track_section_with_barriers9" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 800)
+
+[node name="track_section_with_barriers10" parent="." instance=ExtResource("1_py62s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.262, 900)

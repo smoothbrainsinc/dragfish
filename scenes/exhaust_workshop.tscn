@@ -1,0 +1,81 @@
+[gd_scene load_steps=8 format=3 uid="uid://dulnhlf0a6ndb"]
+
+[ext_resource type="Script" uid="uid://dv28tijxdvhh5" path="res://scripts/exhaust_workshop.gd" id="1_nvhf6"]
+[ext_resource type="PackedScene" path="res://vehicles/buckit2.tscn" id="2_5sjny"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eachy"]
+stencil_flags = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2tqnc"]
+material = SubResource("StandardMaterial3D_eachy")
+size = Vector2(50, 50)
+subdivide_width = 50
+subdivide_depth = 50
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xto6f"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2tqnc"]
+size = Vector3(1.135, 1.18, 6.29)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wtigp"]
+size = Vector3(1.0230713, 1.1612396, 6.3048096)
+
+[node name="ExhaustWorkshop" type="Node3D"]
+script = ExtResource("1_nvhf6")
+
+[node name="Buckit" parent="." instance=ExtResource("2_5sjny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6890663, 0)
+
+[node name="VehicleMount" type="Node3D" parent="."]
+
+[node name="GroundPlane" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_2tqnc")
+
+[node name="GroundPlane" type="StaticBody3D" parent="GroundPlane"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundPlane/GroundPlane"]
+shape = SubResource("BoxShape3D_xto6f")
+
+[node name="WorkshopCamera1" type="Camera3D" parent="."]
+transform = Transform3D(-1, -6.547579e-08, 5.7928087e-08, 0, 0.66262007, 0.7489557, -8.742278e-08, 0.7489557, -0.66262007, 0, 7.425, -3.18)
+fov = 72.2
+
+[node name="WorkshopCamera2" type="Camera3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.69, 2, 0)
+
+[node name="WorkshopCamera3" type="Camera3D" parent="."]
+transform = Transform3D(0.03489949, -0.95823556, 0.2838423, 0, 0.2840153, 0.9588197, -0.9993908, -0.033462323, 0.009911991, 1.535, 3.585, 1.575)
+
+[node name="WorkshopCamera4" type="Camera3D" parent="."]
+transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 10, 0)
+fov = 31.5
+
+[node name="WorkshopCamera5" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 2.125, 3.225)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.70710677, 0.5, -0.6123724, 0.6123724, 0, 0, 0)
+shadow_enabled = true
+
+[node name="VehicleLift" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VehicleLift"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58443165, -0.36077166)
+mesh = SubResource("BoxMesh_2tqnc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleLift"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008605957, 0.5804068, -0.3632202)
+shape = SubResource("BoxShape3D_wtigp")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ThrottleDisplay" type="Label" parent="UI"]
+custom_minimum_size = Vector2(300, 150)
+offset_right = 80.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 18
+text = "THROTTLE"

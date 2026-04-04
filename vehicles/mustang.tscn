@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8s1cfqrtll8d"]
+
+[ext_resource type="Script" uid="uid://bfvqudaiqblks" path="res://scripts/game/vehicle/VehicleController.gd" id="1_koqrt"]
+[ext_resource type="PackedScene" uid="uid://c60n1bsspuhsi" path="res://vehicles/time_2_drag.tscn" id="2_cwgna"]
+
+[node name="mustang" type="Node3D"]
+script = ExtResource("1_koqrt")
+
+[node name="time2drag" parent="." instance=ExtResource("2_cwgna")]

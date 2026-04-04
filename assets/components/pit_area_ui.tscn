@@ -1,0 +1,607 @@
+[gd_scene load_steps=2 format=3 uid="uid://devnw7i0wx155"]
+
+[ext_resource type="Script" uid="uid://dir7brfyxkdd8" path="res://ui/pit_area_ui_controller.gd" id="1_wqs8n"]
+
+[node name="PitAreaUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("1_wqs8n")
+
+[node name="PropertyLabels" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1154.0
+offset_bottom = 600.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PropertyLabels"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PropertyLabels" type="VBoxContainer" parent="PropertyLabels/HBoxContainer"]
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="PropertyLabels/HBoxContainer/PropertyLabels"]
+custom_minimum_size = Vector2(550, 600)
+layout_mode = 2
+color = Color(0.21176471, 0.28235295, 0.3372549, 1)
+
+[node name="3dMotion" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect"]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 0
+offset_left = 42.0
+offset_top = 39.0
+offset_right = 492.0
+offset_bottom = 62.0
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.25882354, 1, 0.84313726, 1)
+text = "PER WHEEL MOTION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MotionSection" type="VBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion"]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 0
+offset_top = 27.0
+offset_right = 128.0
+offset_bottom = 79.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="EngineForceContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/EngineForceContainer"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/EngineForceContainer"]
+layout_mode = 2
+
+[node name="engine_force" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/EngineForceContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Engine Force"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/EngineForceContainer"]
+layout_mode = 2
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/EngineForceContainer"]
+layout_mode = 2
+
+[node name="BrakeContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/BrakeContainer"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/BrakeContainer"]
+layout_mode = 2
+
+[node name="brake" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/BrakeContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Brake"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/BrakeContainer"]
+layout_mode = 2
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/BrakeContainer"]
+layout_mode = 2
+
+[node name="SteeringContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/SteeringContainer"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/SteeringContainer"]
+layout_mode = 2
+
+[node name="steering" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/SteeringContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Steering"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/SteeringContainer"]
+layout_mode = 2
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/SteeringContainer"]
+layout_mode = 2
+
+[node name="Wheel" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25882354, 1, 0.84313726, 1)
+text = "WHEEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WheelSection" type="VBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel"]
+layout_mode = 0
+offset_top = 27.0
+offset_right = 128.0
+offset_bottom = 79.0
+
+[node name="RollContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RollContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.1
+value = 0.1
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RollContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.1
+value = 0.1
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RollContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Roll Influence"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RollContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.1
+value = 0.1
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RollContainer"]
+layout_mode = 2
+max_value = 10.0
+step = 0.1
+value = 0.1
+allow_greater = true
+allow_lesser = true
+
+[node name="RadiusContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RadiusContainer"]
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+value = 0.5
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RadiusContainer"]
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+value = 0.5
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RadiusContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Radius"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RadiusContainer"]
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+value = 0.5
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RadiusContainer"]
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+value = 0.5
+allow_greater = true
+allow_lesser = true
+
+[node name="RestContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RestContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.01
+value = 0.15
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RestContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.01
+value = 0.15
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RestContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Rest Length"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RestContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.01
+value = 0.15
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/RestContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.01
+value = 0.15
+allow_greater = true
+allow_lesser = true
+
+[node name="FrictionContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/FrictionContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.5
+value = 10.5
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/FrictionContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.5
+value = 10.5
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/FrictionContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Friction Slip"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/FrictionContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.5
+value = 10.5
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/FrictionContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.5
+value = 10.5
+allow_greater = true
+allow_lesser = true
+
+[node name="VSeparator" type="VSeparator" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+
+[node name="Suspension" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25882354, 1, 0.84313726, 1)
+text = "SUSPENSION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SuspensionSection" type="VBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension"]
+layout_mode = 0
+offset_top = 27.0
+offset_right = 128.0
+offset_bottom = 79.0
+
+[node name="TravelContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/TravelContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.2
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/TravelContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.2
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/TravelContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Travel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/TravelContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.2
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/TravelContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.2
+allow_greater = true
+allow_lesser = true
+
+[node name="StifnessContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/StifnessContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.01
+value = 5.88
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/StifnessContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.01
+value = 5.88
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/StifnessContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Stiffness"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/StifnessContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.01
+value = 5.88
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/StifnessContainer"]
+layout_mode = 2
+max_value = 500.0
+step = 0.01
+value = 5.88
+allow_greater = true
+allow_lesser = true
+
+[node name="MaxForceContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/MaxForceContainer"]
+layout_mode = 2
+max_value = 10000.0
+value = 6000.0
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/MaxForceContainer"]
+layout_mode = 2
+max_value = 10000.0
+value = 6000.0
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/MaxForceContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Max Force"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/MaxForceContainer"]
+layout_mode = 2
+max_value = 10000.0
+value = 6000.0
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/MaxForceContainer"]
+layout_mode = 2
+max_value = 10000.0
+value = 6000.0
+allow_greater = true
+allow_lesser = true
+
+[node name="VSeparator2" type="VSeparator" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection"]
+layout_mode = 2
+
+[node name="Damping" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25882354, 1, 0.84313726, 1)
+text = "DAMPING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DampingSection" type="VBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping"]
+layout_mode = 0
+offset_top = 27.0
+offset_right = 128.0
+offset_bottom = 79.0
+
+[node name="CompressionContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection"]
+layout_mode = 2
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/CompressionContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.83
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/CompressionContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.83
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/CompressionContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Compression"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/CompressionContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.83
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/CompressionContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.83
+allow_greater = true
+allow_lesser = true
+
+[node name="RelaxationContainer" type="HBoxContainer" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection"]
+layout_mode = 2
+
+[node name="SpinBox3" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/RelaxationContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.88
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox4" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/RelaxationContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.88
+allow_greater = true
+allow_lesser = true
+
+[node name="Label" type="Label" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/RelaxationContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Relaxation"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/RelaxationContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.88
+allow_greater = true
+allow_lesser = true
+
+[node name="SpinBox2" type="SpinBox" parent="PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection/Wheel/WheelSection/Suspension/SuspensionSection/Damping/DampingSection/RelaxationContainer"]
+layout_mode = 2
+step = 0.01
+value = 0.88
+allow_greater = true
+allow_lesser = true
+
+[node name="Panel" type="Panel" parent="PropertyLabels/HBoxContainer"]
+custom_minimum_size = Vector2(600, 600)
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="ColorRect" type="ColorRect" parent="PropertyLabels/HBoxContainer/Panel"]
+custom_minimum_size = Vector2(600, 50)
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 59.0
+color = Color(0, 0.5121522, 0.89824414, 1)
+
+[node name="GridContainer" type="GridContainer" parent="PropertyLabels/HBoxContainer/Panel/ColorRect"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 5.0
+offset_right = 588.0
+offset_bottom = 55.0
+theme_override_constants/h_separation = 30
+columns = 4
+
+[node name="Select" type="Button" parent="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9944553, 0.87041855, 0.37271178, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "SELECT"
+
+[node name="Start" type="Button" parent="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6387909, 0.98683435, 0.39881298, 1)
+theme_override_font_sizes/font_size = 30
+text = "RACE"
+
+[node name="Reset" type="Button" parent="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93455863, 0, 0.44951195, 1)
+theme_override_font_sizes/font_size = 30
+text = "RESET"
+
+[node name="Save" type="Button" parent="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9944553, 0.87041855, 0.37271178, 1)
+theme_override_font_sizes/font_size = 30
+text = "SAVE
+"
+
+[node name="CarImage" type="SubViewportContainer" parent="PropertyLabels/HBoxContainer/Panel"]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 176.0
+offset_right = 402.0
+offset_bottom = 432.0
+
+[node name="SubViewport" type="SubViewport" parent="PropertyLabels/HBoxContainer/Panel/CarImage"]
+handle_input_locally = false
+size = Vector2i(256, 256)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport"]
+transform = Transform3D(0.9848077, -0.015134435, -0.1729874, 0, 0.9961947, -0.08715574, 0.17364818, 0.08583164, 0.98106027, 0, 1, 9)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport"]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://s5q0ofadswv0"]
+
+[ext_resource type="Script" uid="uid://dol25qm31i8v1" path="res://scripts/stat_column.gd" id="1_yaqxk"]
+
+[node name="StatColumn" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 158.0
+script = ExtResource("1_yaqxk")
+
+[node name="HeaderLabel" type="Label" parent="."]
+layout_mode = 2
+
+[node name="Value1" type="Label" parent="."]
+layout_mode = 2
+
+[node name="Value2" type="Label" parent="."]
+layout_mode = 2
+
+[node name="Value3" type="Label" parent="."]
+layout_mode = 2
+
+[node name="Value4" type="Label" parent="."]
+layout_mode = 2
+
+[node name="Value5" type="Label" parent="."]
+layout_mode = 2
+text = "
+"

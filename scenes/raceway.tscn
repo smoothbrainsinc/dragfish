@@ -1,0 +1,188 @@
+[gd_scene load_steps=17 format=3 uid="uid://c4emlhfxewcm1"]
+
+[ext_resource type="Script" uid="uid://cllamoosnqa4a" path="res://scripts/race_controller.gd" id="1_6ru53"]
+[ext_resource type="Script" uid="uid://btlva0x46f8hi" path="res://scripts/race_manager.gd" id="1_baie0"]
+[ext_resource type="PackedScene" uid="uid://fwu67wqqtxpd" path="res://scenes/dans_track.tscn" id="2_6ru53"]
+[ext_resource type="Script" uid="uid://113mxh22bnum" path="res://scripts/cameras.gd" id="3_tp0nt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6aisw"]
+size = Vector3(50, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fjp6s"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3sabu"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4yhn6"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g6ryq"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wnx2p"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8gygb"]
+size = Vector3(14, 20, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ffq5j"]
+size = Vector3(0.46, 0.81, 978.00195)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_baie0"]
+size = Vector3(37.327274, 25.669678, 89.77922)
+
+[sub_resource type="Environment" id="Environment_vn2nh"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6aisw"]
+
+[sub_resource type="Compositor" id="Compositor_fjp6s"]
+
+[node name="root" type="Node3D"]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0, 0, 0)
+
+[node name="RaceController" type="Node" parent="."]
+script = ExtResource("1_6ru53")
+
+[node name="race_manager" type="Node3D" parent="."]
+script = ExtResource("1_baie0")
+
+[node name="DansTrack" parent="." instance=ExtResource("2_6ru53")]
+transform = Transform3D(0.99999964, 0.00067705766, -0.0005403921, -0.00067699293, 0.99999976, 0.000118165684, 0.000540473, -0.00011779455, 0.9999999, 0, 0.1, 0)
+
+[node name="finish_line" type="Area3D" parent="DansTrack"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/finish_line"]
+shape = SubResource("BoxShape3D_6aisw")
+
+[node name="speed_trap" type="Area3D" parent="DansTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.048)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/speed_trap"]
+shape = SubResource("BoxShape3D_fjp6s")
+
+[node name="start" type="Area3D" parent="DansTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -402.335)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/start"]
+shape = SubResource("BoxShape3D_3sabu")
+
+[node name="60_feet" type="Area3D" parent="DansTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -384.047)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/60_feet"]
+shape = SubResource("BoxShape3D_4yhn6")
+
+[node name="330_feet" type="Area3D" parent="DansTrack/60_feet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 82.29599)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/60_feet/330_feet"]
+shape = SubResource("BoxShape3D_g6ryq")
+
+[node name="660_feet" type="Area3D" parent="DansTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -201.167)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/660_feet"]
+shape = SubResource("BoxShape3D_wnx2p")
+
+[node name="1000_feet" type="Area3D" parent="DansTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DansTrack/1000_feet"]
+shape = SubResource("BoxShape3D_8gygb")
+
+[node name="walls_and_bleachers" type="StaticBody3D" parent="DansTrack"]
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.304, 0.45, 11.106476)
+shape = SubResource("BoxShape3D_ffq5j")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.357, 0.45, 24.79007)
+shape = SubResource("BoxShape3D_ffq5j")
+
+[node name="bleacher1" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.167732, 12.334839, -0.18855861)
+shape = SubResource("BoxShape3D_baie0")
+
+[node name="bleacher2" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.79142, 12.334839, -0.18855861)
+shape = SubResource("BoxShape3D_baie0")
+
+[node name="bleacher3" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.610767, 12.334839, -407.12457)
+shape = SubResource("BoxShape3D_baie0")
+
+[node name="bleacher4" type="CollisionShape3D" parent="DansTrack/walls_and_bleachers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.79142, 12.334839, -403.5621)
+shape = SubResource("BoxShape3D_baie0")
+
+[node name="Cameras" type="Node3D" parent="."]
+script = ExtResource("3_tp0nt")
+
+[node name="Camera1" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 8.379102e-09, -8.70203e-08, 0, 0.9953962, 0.09584575, 8.742278e-08, 0.09584575, -0.9953962, 0, 7.465, -450)
+projection = 1
+size = 7.98
+
+[node name="Camera2" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0.9099613, 0, -0.41469324, 0, 1, 0, 0.41469324, 0, 0.9099613, -6.865, 1.2, -200)
+
+[node name="Camera3" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.86, 1.22, -200)
+
+[node name="Camera4" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1.0000001, 0, 0, 0, 0.9396927, 0.34202015, 0, -0.3420202, 0.9396927, -2.5112214, 5.011697, 7.849771)
+
+[node name="Camera5" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-1.0000001, -1.8626451e-08, 7.4505806e-08, 0, 0.9702958, 0.24192189, -8.940697e-08, 0.24192192, -0.9702958, 0, 21.78801, -477.2586)
+projection = 1
+size = 7.98
+
+[node name="Camera6" type="Camera3D" parent="Cameras"]
+transform = Transform3D(1.0000001, -1.8626451e-09, 3.7252903e-09, 0, 0.90258527, 0.43051112, 0, -0.43051115, 0.9025853, 0.11899948, 10.79549, 369.353)
+
+[node name="Camera7" type="Camera3D" parent="Cameras"]
+transform = Transform3D(0.8231364, -0.03466603, 0.56678456, 0, 0.9981348, 0.06104854, -0.56784374, -0.050251275, 0.8216011, 25.625, 4.465, -364.45)
+h_offset = 0.475
+v_offset = -0.505
+projection = 1
+fov = 13.0
+size = 2.554
+
+[node name="Camera8" type="Camera3D" parent="Cameras"]
+transform = Transform3D(-4.371139e-08, 0.34202012, -0.9396926, 0, 0.9396926, 0.34202012, 1, 1.4950174e-08, -4.107527e-08, -7.32, 2.735, 0)
+
+[node name="Node" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vn2nh")
+camera_attributes = SubResource("CameraAttributesPractical_6aisw")
+compositor = SubResource("Compositor_fjp6s")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node"]
+transform = Transform3D(0.8535534, -0.14644665, -0.5, 0.50000006, 0.50000006, 0.70710677, 0.14644663, -0.8535534, 0.5, 0, 75, 0)
+light_color = Color(0.46732473, 0.93401146, 0.89066225, 1)
+light_energy = 2.0
+shadow_enabled = true
+directional_shadow_mode = 0
+sky_mode = 2
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Node"]
+transform = Transform3D(0.96992564, 0.19695094, -0.14301923, 0.21217899, -0.39623845, 0.89329445, 0.11926535, -0.89677495, -0.42611068, -10.483826, 100, 533.89087)
+light_color = Color(0.94733936, 0.8318925, 0.6403454, 1)
+shadow_enabled = true
+sky_mode = 1
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="Node"]
+transform = Transform3D(0.70710677, 0.27628863, 0.65089524, 0, 0.92050487, -0.39073113, -0.70710677, 0.27628863, 0.65089524, 0, 500, -500)
+light_color = Color(0.96365577, 0.81746686, 0.60149544, 1)
+shadow_enabled = true
+sky_mode = 1
+
+[connection signal="area_entered" from="DansTrack/finish_line" to="race_manager" method="_on_finish_line_area_entered"]
+[connection signal="body_entered" from="DansTrack/finish_line" to="race_manager" method="_on_finish_line_body_entered"]
+[connection signal="area_entered" from="DansTrack/speed_trap" to="race_manager" method="_on_speed_trap_area_entered"]
+[connection signal="area_entered" from="DansTrack/60_feet" to="race_manager" method="_on__feet_area_entered"]
+[connection signal="area_entered" from="DansTrack/60_feet/330_feet" to="race_manager" method="_on__feet_area_entered"]
+[connection signal="area_entered" from="DansTrack/660_feet" to="race_manager" method="_on__feet_area_entered"]
+[connection signal="area_entered" from="DansTrack/1000_feet" to="race_manager" method="_on__feet_area_entered"]

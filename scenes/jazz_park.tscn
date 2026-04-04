@@ -1,0 +1,102 @@
+[gd_scene load_steps=8 format=3 uid="uid://b7kwp54lcxjwh"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fo1gp"]
+size = Vector2(500, 500)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fo1gp"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eqibc"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_28piu"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d2bpp"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v12y1"]
+albedo_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ymjtx"]
+albedo_color = Color(0, 1, 0.003921569, 1)
+
+[node name="jazz_park" type="Node3D"]
+
+[node name="Zone_A" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 0, -500)
+visible = false
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_fo1gp")
+
+[node name="Label3D11" type="Label3D" parent="Zone_A"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+pixel_size = 1.0
+billboard = 1
+text = "A"
+uppercase = true
+
+[node name="Zone_B" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 0, -500)
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_eqibc")
+
+[node name="Label3D10" type="Label3D" parent="Zone_B"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+visible = false
+pixel_size = 1.0
+billboard = 1
+text = "B"
+uppercase = true
+
+[node name="Zone_C" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_28piu")
+
+[node name="Label3D9" type="Label3D" parent="Zone_C"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+pixel_size = 1.0
+billboard = 1
+text = "C"
+uppercase = true
+
+[node name="Zone_D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_d2bpp")
+
+[node name="Label3D8" type="Label3D" parent="Zone_D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+pixel_size = 1.0
+billboard = 1
+text = "D"
+uppercase = true
+
+[node name="Zone_E" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 0, 500)
+visible = false
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_v12y1")
+
+[node name="Label3D7" type="Label3D" parent="Zone_E"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+pixel_size = 1.0
+billboard = 1
+text = "E"
+uppercase = true
+
+[node name="Zone_F" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 250, 0, 500)
+mesh = SubResource("PlaneMesh_fo1gp")
+surface_material_override/0 = SubResource("StandardMaterial3D_ymjtx")
+
+[node name="Label3D6" type="Label3D" parent="Zone_F"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+visible = false
+pixel_size = 1.0
+billboard = 1
+text = "F"
+uppercase = true

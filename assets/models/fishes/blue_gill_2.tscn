@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://csa8qnils6c0a"]
+
+[ext_resource type="ArrayMesh" uid="uid://e3m36ee4dd4i" path="res://fish_mesh.tres" id="1_sb710"]
+
+[node name="blue_gill2" type="Node3D"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="object" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_sb710")
+skeleton = NodePath("")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.3147812, 0, 1.4489369e-07)
+target_position = Vector3(0, 0, 2)

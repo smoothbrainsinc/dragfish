@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://6w2o6yvjc63n"]
+
+[ext_resource type="PackedScene" uid="uid://ds83gmd05mprr" path="res://assets/models/bleacher-supports.glb" id="1_27cvq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27cvq"]
+size = Vector3(89.38727, 25.072815, 39.56894)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="bleacher-supports" parent="." instance=ExtResource("1_27cvq")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="bleacher-supports"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.883636, 12.463593, -19.84053)
+shape = SubResource("BoxShape3D_27cvq")
