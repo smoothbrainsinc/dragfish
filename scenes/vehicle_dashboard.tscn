@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://duukh7matks2q"]
+[gd_scene load_steps=5 format=3 uid="uid://duukh7matks2q"]
 
 [ext_resource type="Script" uid="uid://bs5o4oab0yohp" path="res://scripts/vehicle_dashboard.gd" id="1_mn2pc"]
 
@@ -25,6 +25,19 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="Environment" id="Environment_6fyji"]
+tonemap_mode = 3
+ssao_enabled = true
+ssao_radius = 0.5
+ssao_intensity = 1.2
+glow_enabled = true
+glow_levels/1 = 0.8
+glow_intensity = 0.6
+fog_enabled = true
+fog_light_color = Color(0.41960785, 0.48235294, 0.54901963, 1)
+fog_density = 0.003
+fog_sky_affect = 0.3
 
 [node name="VehicleDashboard" type="CanvasLayer" node_paths=PackedStringArray("speed_label", "rpm_label", "traction_label", "detailed_panel", "gforce_label", "inputs_label", "wheel1_label", "wheel2_label", "wheel3_label", "wheel4_label")]
 script = ExtResource("1_mn2pc")
@@ -128,3 +141,6 @@ text = "W4: ---"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/DetailedPanel/VBoxContainer/WheelGrid"]
 layout_mode = 2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6fyji")

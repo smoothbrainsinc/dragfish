@@ -3,6 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://baosabnxpurxs" path="res://assets/models/water_2m_4_collision.tscn" id="1_buyht"]
 
 [node name="water_lake_hell" type="Node3D"]
+visible = false
 
 [node name="water_2m4_collision2" parent="." instance=ExtResource("1_buyht")]
-visible = true
