@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ClassConfig" load_steps=2 format=3 uid="uid://bvns1ki0qjywe"]
+
+[ext_resource type="Script" uid="uid://c06w2t2m6rbl2" path="res://scripts/game/vehicle/resources/ClassConfig.gd" id="1_d1a01"]
+
+[resource]
+script = ExtResource("1_d1a01")
+display_name = "Trust Baby"
+description = "stock everything but maxed out cosmetics, daddy's money went on looks not performance"
+metadata/_custom_type_script = "uid://c06w2t2m6rbl2"

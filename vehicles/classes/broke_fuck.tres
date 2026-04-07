@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ClassConfig" load_steps=2 format=3 uid="uid://d23e1q6cq3116"]
+
+[ext_resource type="Script" uid="uid://c06w2t2m6rbl2" path="res://scripts/game/vehicle/resources/ClassConfig.gd" id="1_ujr34"]
+
+[resource]
+script = ExtResource("1_ujr34")
+display_name = "Broke Fuck"
+description = "budget builds, strict limit on mods"
+metadata/_custom_type_script = "uid://c06w2t2m6rbl2"

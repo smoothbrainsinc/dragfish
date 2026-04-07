@@ -35,11 +35,10 @@ size_flags_vertical = 4
 text = "CHOOSE
 VEHICLE"
 
-[node name="garage" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "GARAGE"
-
 [node name="quit" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "QUIT
 "
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/choose_vehicle" to="." method="_on_choose_vehicle_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/quit" to="." method="_on_quit_pressed"]

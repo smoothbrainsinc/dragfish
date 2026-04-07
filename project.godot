@@ -45,7 +45,7 @@ GameManager="*res://scripts/game/GameManager.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/boujie_water_shader/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

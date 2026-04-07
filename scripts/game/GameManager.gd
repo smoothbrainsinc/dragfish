@@ -11,6 +11,7 @@ var available_vehicles: Array[VehicleConfig] = []
 # Selected vehicles for race
 var player_car_config: VehicleConfig
 var npc_car_config: VehicleConfig
+var last_raced_config: VehicleConfig
 var player_lane: String = "right"
 
 # For tuning screen

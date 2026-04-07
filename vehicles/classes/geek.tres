@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ClassConfig" load_steps=2 format=3 uid="uid://dvlj6wvu67dpg"]
+
+[ext_resource type="Script" uid="uid://c06w2t2m6rbl2" path="res://scripts/game/vehicle/resources/ClassConfig.gd" id="1_pjogu"]
+
+[resource]
+script = ExtResource("1_pjogu")
+display_name = "Geek"
+description = "perfectly calculated optimal builds, no creativity just math"
+metadata/_custom_type_script = "uid://c06w2t2m6rbl2"

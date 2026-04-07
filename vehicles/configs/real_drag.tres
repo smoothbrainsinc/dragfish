@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="VehicleConfig" load_steps=9 format=3 uid="uid://bukpnavja76hp"]
+[gd_resource type="Resource" script_class="VehicleConfig" load_steps=10 format=3 uid="uid://bukpnavja76hp"]
 
 [ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]
 [ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_fcxg4"]
 [ext_resource type="Script" uid="uid://du1enhren7ngr" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="4_7ko4g"]
+[ext_resource type="Resource" uid="uid://dxae1527ctc77" path="res://vehicles/classes/tweeker.tres" id="5_j63kf"]
 
 [sub_resource type="Resource" id="Resource_i61f7"]
 script = ExtResource("1_uwxqw")
@@ -54,4 +55,4 @@ front_tires = SubResource("Resource_iads6")
 rear_tires = SubResource("Resource_f8llp")
 drag_coefficient = 0.9
 frontal_area = 3.5
-category = 5
+vehicle_class = ExtResource("5_j63kf")

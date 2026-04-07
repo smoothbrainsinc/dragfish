@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ClassConfig" load_steps=2 format=3 uid="uid://dxae1527ctc77"]
+
+[ext_resource type="Script" uid="uid://c06w2t2m6rbl2" path="res://scripts/game/vehicle/resources/ClassConfig.gd" id="1_82wo0"]
+
+[resource]
+script = ExtResource("1_82wo0")
+display_name = "Tweeker"
+description = "stayed up 3 days tuning, weird franken-builds that somehow work"
+metadata/_custom_type_script = "uid://c06w2t2m6rbl2"

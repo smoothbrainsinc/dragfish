@@ -65,8 +65,8 @@ class_name VehicleConfig
 @export_group("Tuning")
 ## Allow this car to be tuned by player
 @export var is_tunable: bool = true
-## Performance category (for matchmaking/restrictions)
-@export var category: Category = Category.STREET
+## Vehicle class this vehicle belongs to
+@export var vehicle_class: ClassConfig
 ## Performance index (calculated from specs)
 @export var performance_index: float = 0.0
 
@@ -83,14 +83,6 @@ enum ShiftStrategy {
 	AGGRESSIVE    ## Hold gear longer, risk over-rev
 }
 
-enum Category {
-	STREET,      ## Street legal
-	SPORT,       ## Modified street
-	PRO_STREET,  ## Heavy modifications
-	PRO_STOCK,   ## Professional stock class
-	FUNNY_CAR,   ## Funny car class
-	TOP_FUEL     ## Top fuel dragster
-}
 
 ## Validate the configuration
 func is_valid() -> bool:
@@ -184,28 +176,14 @@ func get_drive_type_string() -> String:
 			return "AWD"
 	return "UNKNOWN"
 
-## Get category as string
-func get_category_string() -> String:
-	match category:
-		Category.STREET:
-			return "Street"
-		Category.SPORT:
-			return "Sport"
-		Category.PRO_STREET:
-			return "Pro Street"
-		Category.PRO_STOCK:
-			return "Pro Stock"
-		Category.FUNNY_CAR:
-			return "Funny Car"
-		Category.TOP_FUEL:
-			return "Top Fuel"
-	return "UNKNOWN"
+
 
 ## Get comprehensive debug info
 func get_debug_info() -> String:
+	var class_str = vehicle_class.display_name if vehicle_class else "No Class"
 	return "%s (%s) - %d HP, %.0f kg, %s, %s" % [
 		display_name,
-		get_category_string(),
+		class_str,
 		get_horsepower(),
 		mass,
 		get_drive_type_string(),

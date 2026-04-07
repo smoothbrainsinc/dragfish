@@ -127,8 +127,8 @@ layout_mode = 2
 [node name="GridContainer" type="GridContainer" parent="GridContainer2/Control"]
 clip_contents = true
 layout_mode = 0
-offset_left = -3.0
-offset_top = 9.0
+offset_left = -119.0
+offset_top = 11.0
 offset_right = 1100.0
 offset_bottom = 623.0
 theme_override_constants/h_separation = 4
@@ -145,6 +145,7 @@ uppercase = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GridContainer2/Control/GridContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 14
 
 [node name="NPCPanel" type="Panel" parent="GridContainer2/Control/GridContainer/HBoxContainer"]

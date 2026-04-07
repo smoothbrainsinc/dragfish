@@ -13,11 +13,9 @@ class_name EngineConfig
 @export var torque_curve: Dictionary = {
 	1000.0: 200.0,
 	2000.0: 300.0,
-	3000.0: 400.0,
-	4500.0: 500.0,  # Peak torque
+	4000.0: 500.0,  # Peak torque
 	6000.0: 480.0,
-	7000.0: 420.0,
-	7500.0: 350.0
+	8000.0: 420.0
 }
 
 @export_group("Characteristics")

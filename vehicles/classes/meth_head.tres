@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ClassConfig" load_steps=2 format=3 uid="uid://c5j14u4kg330r"]
+
+[ext_resource type="Script" uid="uid://c06w2t2m6rbl2" path="res://scripts/game/vehicle/resources/ClassConfig.gd" id="1_4ltpm"]
+
+[resource]
+script = ExtResource("1_4ltpm")
+display_name = "Meth Head"
+description = "unlimited class, anything goes, pure chaos"
+metadata/_custom_type_script = "uid://c06w2t2m6rbl2"
