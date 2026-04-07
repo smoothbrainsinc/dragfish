@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://vwjonvuq07t2"]
-
-[ext_resource type="PackedScene" uid="uid://cw4kknqli5tiy" path="res://water_lake_hell.tscn" id="1_ebeji"]
-
-[node name="LW_HellAwaits" type="StaticBody3D"]
-
-[node name="water_lake_hell" parent="." instance=ExtResource("1_ebeji")]
