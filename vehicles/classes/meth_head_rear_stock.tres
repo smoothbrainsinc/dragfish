@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WheelConfig" load_steps=2 format=3 uid="uid://bveobwghapl07"]
+
+[ext_resource type="Script" uid="uid://dgwtba5ryj11c" path="res://Wheelconfig.gd" id="1_cagdi"]
+
+[resource]
+script = ExtResource("1_cagdi")
+rest_length = 0.3
+friction_slip = 10.0
+suspension_travel = 0.3
+suspension_max_force = 10000.0
+metadata/_custom_type_script = "uid://dgwtba5ryj11c"

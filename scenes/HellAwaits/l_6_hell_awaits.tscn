@@ -44,10 +44,8 @@ data = PackedVector3Array(362.21548, -177.3944, 383.9401, 362.21548, -147.3944, 
 [node name="L6_HellAwaits" type="StaticBody3D"]
 
 [node name="L6-bottom" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.80478, 0.54981697, -218.15631)
 mesh = SubResource("ArrayMesh_rxm4v")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.80478, 0.54981697, -218.15631)
 shape = SubResource("ConcavePolygonShape3D_cw0sx")

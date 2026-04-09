@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="VehicleClassConfig" load_steps=4 format=3 uid="uid://dtfdesgl04md6"]
+
+[ext_resource type="Script" uid="uid://bkxbhngwgkqb2" path="res://Vehicleclassconfig.gd" id="1_m16bx"]
+[ext_resource type="Resource" uid="uid://du2b0ouw5imfp" path="res://vehicles/classes/meth_head_front_stock.tres" id="2_jrexa"]
+[ext_resource type="Resource" uid="uid://bveobwghapl07" path="res://vehicles/classes/meth_head_rear_stock.tres" id="3_simee"]
+
+[resource]
+script = ExtResource("1_m16bx")
+class_name_id = "meth_head"
+display_name = "Meth Head"
+description = "unlimited class, anything goes, pure chaos"
+stock_front_wheel_config = ExtResource("2_jrexa")
+stock_rear_wheel_config = ExtResource("3_simee")
+metadata/_custom_type_script = "uid://bkxbhngwgkqb2"

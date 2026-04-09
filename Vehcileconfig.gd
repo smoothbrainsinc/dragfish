@@ -9,13 +9,6 @@
 class_name VehicleConfig
 extends Resource
 
-enum ShiftStrategy {
-	REDLINE,
-	OPTIMAL,
-	CONSERVATIVE,
-	AGGRESSIVE
-}
-
 @export_group("Identity")
 @export var vehicle_name: String = ""
 @export var display_name: String = ""
@@ -54,7 +47,7 @@ enum ShiftStrategy {
 @export_group("Rules")
 ## If false, the pit UI locks all spinboxes for this car.
 @export var is_tunable: bool = true
-@export_file("*.tscn") var scene_path: String = ""
+
 
 ## Apply both wheel configs to the wheels on a VehicleBody3D.
 ## Call this from the vehicle's _ready(). This is the only place
@@ -90,18 +83,3 @@ func save() -> void:
 		push_error("[VehicleConfig] Failed to save %s: error %d" % [vehicle_name, err])
 	else:
 		print("[VehicleConfig] Saved: %s" % resource_path)
-
-func get_horsepower() -> float:
-	if not engine:
-		return 0.0
-	var peak = 0.0
-	for rpm in engine.torque_curve:
-		var torque = engine.torque_curve[rpm]
-		var hp = (torque * rpm) / 5252.0
-		if hp > peak:
-			peak = hp
-	return peak
-
-
-func is_valid() -> bool:
-	return not scene_path.is_empty() and engine != null and transmission != null

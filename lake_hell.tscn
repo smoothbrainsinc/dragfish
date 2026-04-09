@@ -11,6 +11,7 @@
 [node name="lake_hell" type="Node3D"]
 
 [node name="L1_HellAwaits" parent="." instance=ExtResource("1_ekwav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.375, 0, 18.249908)
 
 [node name="L2_HellAwaits" parent="." instance=ExtResource("2_jhso4")]
 
@@ -21,5 +22,7 @@
 [node name="L5_HellAwaits" parent="." instance=ExtResource("5_315vc")]
 
 [node name="L6_HellAwaits" parent="." instance=ExtResource("6_ubqu8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.924)
 
 [node name="water_HellAwaits" parent="." instance=ExtResource("7_ekwav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.180786, -9.472458, 23.562866)

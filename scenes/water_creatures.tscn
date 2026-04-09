@@ -14,9 +14,9 @@
 [node name="FishSchool" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
 script = ExtResource("1_pat3b")
-number_of_fish = 2000
-separation_weight = 2.0
-alignment_weight = 0.5
+number_of_fish = 500
+separation_weight = 0.5
+alignment_weight = 1.0
 
 [node name="blue_gill2" parent="." instance=ExtResource("2_sbaja")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.845, -6, 0)

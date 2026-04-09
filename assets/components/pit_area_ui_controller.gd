@@ -1,296 +1,259 @@
+# pit_area_ui_controller.gd
+# res://scripts/ui/pit_area_ui_controller.gd
+#
+# Owns the pit UI. Reads from VehicleConfig, writes back to VehicleConfig.
+# No JSON. No GameManager wheel_modifications dict. No ambiguity.
+# One thing does one thing:
+#   - Load  → reads VehicleConfig wheel configs into spinboxes
+#   - Edit  → writes spinbox value directly to the live WheelConfig resource AND the wheel node
+#   - Save  → calls VehicleConfig.save() which writes the .tres to disk
+#   - Reset → calls VehicleConfig.reset_to_class_stock(), reapplies to wheels, reloads spinboxes
+
 extends Node
 
-@onready var preview = get_parent().get_node_or_null("PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport")
-@onready var race_button = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Start"
+# ─── node refs ────────────────────────────────────────────────────────────────
+@onready var race_button   = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Start"
 @onready var select_button = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Select"
-@onready var reset_button = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Reset"
-@onready var save_button = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Save"
+@onready var reset_button  = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Reset"
+@onready var save_button   = $"../PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Save"
 
+# ─── state ────────────────────────────────────────────────────────────────────
 var current_vehicle: VehicleBody3D = null
-var wheels: Array[VehicleWheel3D] = []
-var original_values: Dictionary = {}
-var current_modifications: Dictionary = {}
+var wheels: Array[VehicleWheel3D]  = []
+var vehicle_config: VehicleConfig  = null   # the single source of truth
 
-func _ready():
-	# Connect buttons
-	race_button.pressed.connect(_on_race_pressed)
-	select_button.pressed.connect(_on_select_pressed)
-	reset_button.pressed.connect(_on_reset_pressed)
-	save_button.pressed.connect(_on_save_pressed)
-	
-	# Load vehicle
-	if GameManager.player_car_data and not GameManager.player_car_data.is_empty():
-		load_selected_vehicle()
-	else:
-		push_error("No vehicle data in GameManager! Make sure car_selection_screen sets player_car_data.")
 
-func load_selected_vehicle():
-	# Check if we have player_car_data
-	if not GameManager.player_car_data or GameManager.player_car_data.is_empty():
-		push_error("No vehicle data in GameManager!")
+# ─── boot ─────────────────────────────────────────────────────────────────────
+func _ready() -> void:
+	if not GameManager.player_car_config:
+		push_error("[PitUI] No vehicle config in GameManager.")
 		return
-	
-	var scene_path = GameManager.player_car_data.get("scene_path", "")
-	if scene_path.is_empty():
-		push_error("No scene path in player_car_data!")
-		return
-	
-	var vehicle_scene = load(scene_path)
-	
+	vehicle_config = ResourceLoader.load(
+		GameManager.player_car_config.resource_path,
+		"",
+		ResourceLoader.CACHE_MODE_IGNORE
+	) as VehicleConfig
+	_load_vehicle()
+
+
+# ─── vehicle loading ───────────────────────────────────────────────────────────
+func _load_vehicle() -> void:
+	var vehicle_scene = load(vehicle_config.scene_path)
 	if not vehicle_scene:
-		push_error("Failed to load: " + scene_path)
+		push_error("[PitUI] Failed to load scene: " + vehicle_config.scene_path)
 		return
-	
+
 	current_vehicle = vehicle_scene.instantiate()
-	
-	if current_vehicle is VehicleBody3D:
-		current_vehicle.freeze = true
-	
-	disable_scripts(current_vehicle)
-	
-	# Add to CarImage SubViewport
-	var subviewport = get_parent().get_node_or_null("PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport")
+	current_vehicle.freeze = true
+	_disable_scripts(current_vehicle)
+
+	var subviewport = get_parent().get_node_or_null(
+		"PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport"
+	)
 	if subviewport:
 		subviewport.add_child(current_vehicle)
 		current_vehicle.position = Vector3.ZERO
 		current_vehicle.rotation_degrees.y = 30
-		print("Vehicle added to SubViewport")
 	else:
-		push_error("SubViewport not found in CarImage!")
+		push_error("[PitUI] SubViewport not found.")
 		return
-	
-	wheels = find_wheels(current_vehicle)
-	
-	if wheels.size() >= 4:
-		save_original_values()
-		load_saved_modifications()
-		load_values_to_ui()
-		connect_spinbox_signals()
-		print("Loaded: " + scene_path + " with " + str(wheels.size()) + " wheels")
-	else:
-		push_error("Need 4 wheels! Found: " + str(wheels.size()))
 
-func disable_scripts(node: Node):
-	if node.has_method("set_process"):
-		node.set_process(false)
-		node.set_physics_process(false)
-		node.set_process_input(false)
-	
-	if node.get_script():
-		var path = node.get_script().resource_path
-		if "control" in path.to_lower() or "input" in path.to_lower():
-			node.set_script(null)
-	
-	for child in node.get_children():
-		disable_scripts(child)
-
-func find_wheels(node: Node) -> Array[VehicleWheel3D]:
-	var found: Array[VehicleWheel3D] = []
-	if node is VehicleWheel3D:
-		found.append(node)
-	for child in node.get_children():
-		found.append_array(find_wheels(child))
-	return found
-
-func save_original_values():
-	for i in range(wheels.size()):
-		var w = wheels[i]
-		original_values[i] = {
-			"engine_force": w.engine_force,
-			"brake": w.brake,
-			"steering": w.steering,
-			"wheel_roll_influence": w.wheel_roll_influence,
-			"wheel_radius": w.wheel_radius,
-			"wheel_rest_length": w.wheel_rest_length,
-			"wheel_friction_slip": w.wheel_friction_slip,
-			"suspension_travel": w.suspension_travel,
-			"suspension_stiffness": w.suspension_stiffness,
-			"suspension_max_force": w.suspension_max_force,
-			"damping_compression": w.damping_compression,
-			"damping_relaxation": w.damping_relaxation
-		}
-
-func load_saved_modifications():
-	"""Load previously saved modifications from file or GameManager"""
-	if not GameManager.player_car_data.has("name"):
-		print("No vehicle name available")
-		current_modifications = {}
+	wheels = _find_wheels(current_vehicle)
+	if wheels.size() < 4:
+		push_error("[PitUI] Need 4 wheels, found: %d" % wheels.size())
 		return
-	
-	var vehicle_name = GameManager.player_car_data["name"]
-	
-	# First check if modifications exist in GameManager (for immediate use)
-	if GameManager.has("wheel_modifications") and GameManager.wheel_modifications.has(vehicle_name):
-		current_modifications = GameManager.wheel_modifications[vehicle_name]
-		
-		# Apply saved modifications to wheels
-		for wheel_idx_str in current_modifications:
-			var wheel_idx = int(wheel_idx_str)
-			if wheel_idx < wheels.size():
-				for property in current_modifications[wheel_idx_str]:
-					wheels[wheel_idx].set(property, current_modifications[wheel_idx_str][property])
-		
-		print("Loaded modifications from GameManager for " + vehicle_name)
-		return
-	
-	# If not in GameManager, try loading from file
-	var save_path = "user://wheel_mods_%s.json" % vehicle_name
-	
-	if FileAccess.file_exists(save_path):
-		var file = FileAccess.open(save_path, FileAccess.READ)
-		if file:
-			var json = JSON.new()
-			var parse_result = json.parse(file.get_as_text())
-			file.close()
-			
-			if parse_result == OK and json.data is Dictionary:
-				current_modifications = json.data
-				
-				# Apply saved modifications to wheels
-				for wheel_idx_str in current_modifications:
-					var wheel_idx = int(wheel_idx_str)
-					if wheel_idx < wheels.size():
-						for property in current_modifications[wheel_idx_str]:
-							wheels[wheel_idx].set(property, current_modifications[wheel_idx_str][property])
-				
-				print("Loaded saved modifications from file for " + vehicle_name)
-				return
-	
-	# No saved mods, start fresh
-	current_modifications = {}
-	print("No saved modifications found for " + vehicle_name)
 
-func load_values_to_ui():
+	vehicle_config.apply_to_vehicle(current_vehicle)
+
+	var locked = not vehicle_config.is_tunable
+	_set_spinboxes_editable(not locked)
+	_load_spinboxes()
+	_connect_spinboxes()
+
+# ─── spinbox population ────────────────────────────────────────────────────────
+## Read current wheel values into the spinboxes.
+## Wheels are already set from the config, so just read the nodes.
+func _load_spinboxes() -> void:
 	var base = $"../PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"
-	
-	# Engine Force row
-	set_spinbox_row(base.get_node("EngineForceContainer"), "engine_force")
-	# Brake row
-	set_spinbox_row(base.get_node("BrakeContainer"), "brake")
-	# Steering row
-	set_spinbox_row(base.get_node("SteeringContainer"), "steering")
-	
-	# Wheel section
-	var wheel_section = base.get_node("Wheel/WheelSection")
-	set_spinbox_row(wheel_section.get_node("RollContainer"), "wheel_roll_influence")
-	set_spinbox_row(wheel_section.get_node("RadiusContainer"), "wheel_radius")
-	set_spinbox_row(wheel_section.get_node("RestContainer"), "wheel_rest_length")
-	set_spinbox_row(wheel_section.get_node("FrictionContainer"), "wheel_friction_slip")
-	
-	# Suspension section
-	var susp = wheel_section.get_node("Suspension/SuspensionSection")
-	set_spinbox_row(susp.get_node("TravelContainer"), "suspension_travel")
-	set_spinbox_row(susp.get_node("StifnessContainer"), "suspension_stiffness")
-	set_spinbox_row(susp.get_node("MaxForceContainer"), "suspension_max_force")
-	
-	# Damping section
-	var damp = susp.get_node("Damping/DampingSection")
-	set_spinbox_row(damp.get_node("CompressionContainer"), "damping_compression")
-	set_spinbox_row(damp.get_node("RelaxationContainer"), "damping_relaxation")
 
-func set_spinbox_row(container: HBoxContainer, property: String):
-	var boxes = [
-		container.get_node_or_null("SpinBox4"),  # FL
-		container.get_node_or_null("SpinBox3"),  # FR
-		container.get_node_or_null("SpinBox"),   # RL
-		container.get_node_or_null("SpinBox2")   # RR
-	]
-	
-	for i in range(min(4, wheels.size())):
-		if boxes[i]:
-			boxes[i].set_value_no_signal(wheels[i].get(property))
+	_set_row(base.get_node("EngineForceContainer"), "engine_force")
+	_set_row(base.get_node("BrakeContainer"),       "brake")
+	_set_row(base.get_node("SteeringContainer"),    "steering")
 
-func connect_spinbox_signals():
-	var base = $"../PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"
-	
-	connect_row(base.get_node("EngineForceContainer"), "engine_force")
-	connect_row(base.get_node("BrakeContainer"), "brake")
-	connect_row(base.get_node("SteeringContainer"), "steering")
-	
-	var wheel_section = base.get_node("Wheel/WheelSection")
-	connect_row(wheel_section.get_node("RollContainer"), "wheel_roll_influence")
-	connect_row(wheel_section.get_node("RadiusContainer"), "wheel_radius")
-	connect_row(wheel_section.get_node("RestContainer"), "wheel_rest_length")
-	connect_row(wheel_section.get_node("FrictionContainer"), "wheel_friction_slip")
-	
-	var susp = wheel_section.get_node("Suspension/SuspensionSection")
-	connect_row(susp.get_node("TravelContainer"), "suspension_travel")
-	connect_row(susp.get_node("StifnessContainer"), "suspension_stiffness")
-	connect_row(susp.get_node("MaxForceContainer"), "suspension_max_force")
-	
-	var damp = susp.get_node("Damping/DampingSection")
-	connect_row(damp.get_node("CompressionContainer"), "damping_compression")
-	connect_row(damp.get_node("RelaxationContainer"), "damping_relaxation")
+	var ws = base.get_node("Wheel/WheelSection")
+	_set_row(ws.get_node("RollContainer"),      "wheel_roll_influence")
+	_set_row(ws.get_node("RadiusContainer"),    "wheel_radius")
+	_set_row(ws.get_node("RestContainer"),      "wheel_rest_length")
+	_set_row(ws.get_node("FrictionContainer"),  "wheel_friction_slip")
 
-func connect_row(container: HBoxContainer, property: String):
+	var ss = ws.get_node("Suspension/SuspensionSection")
+	_set_row(ss.get_node("TravelContainer"),    "suspension_travel")
+	_set_row(ss.get_node("StifnessContainer"),  "suspension_stiffness")
+	_set_row(ss.get_node("MaxForceContainer"),  "suspension_max_force")
+
+	var ds = ss.get_node("Damping/DampingSection")
+	_set_row(ds.get_node("CompressionContainer"), "damping_compression")
+	_set_row(ds.get_node("RelaxationContainer"),  "damping_relaxation")
+
+
+func _set_row(container: HBoxContainer, wheel_property: String) -> void:
+	# SpinBox4=FL, SpinBox3=FR, SpinBox=RL, SpinBox2=RR
 	var boxes = [
 		container.get_node_or_null("SpinBox4"),
 		container.get_node_or_null("SpinBox3"),
 		container.get_node_or_null("SpinBox"),
-		container.get_node_or_null("SpinBox2")
+		container.get_node_or_null("SpinBox2"),
 	]
-	
+	for i in range(min(4, wheels.size())):
+		if boxes[i]:
+			boxes[i].set_value_no_signal(wheels[i].get(wheel_property))
+
+
+# ─── spinbox signals ───────────────────────────────────────────────────────────
+func _connect_spinboxes() -> void:
+	var base = $"../PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion/MotionSection"
+
+	_connect_row(base.get_node("EngineForceContainer"), "engine_force")
+	_connect_row(base.get_node("BrakeContainer"),       "brake")
+	_connect_row(base.get_node("SteeringContainer"),    "steering")
+
+	var ws = base.get_node("Wheel/WheelSection")
+	_connect_row(ws.get_node("RollContainer"),      "wheel_roll_influence")
+	_connect_row(ws.get_node("RadiusContainer"),    "wheel_radius")
+	_connect_row(ws.get_node("RestContainer"),      "wheel_rest_length")
+	_connect_row(ws.get_node("FrictionContainer"),  "wheel_friction_slip")
+
+	var ss = ws.get_node("Suspension/SuspensionSection")
+	_connect_row(ss.get_node("TravelContainer"),    "suspension_travel")
+	_connect_row(ss.get_node("StifnessContainer"),  "suspension_stiffness")
+	_connect_row(ss.get_node("MaxForceContainer"),  "suspension_max_force")
+
+	var ds = ss.get_node("Damping/DampingSection")
+	_connect_row(ds.get_node("CompressionContainer"), "damping_compression")
+	_connect_row(ds.get_node("RelaxationContainer"),  "damping_relaxation")
+
+
+func _connect_row(container: HBoxContainer, wheel_property: String) -> void:
+	var boxes = [
+		container.get_node_or_null("SpinBox4"),
+		container.get_node_or_null("SpinBox3"),
+		container.get_node_or_null("SpinBox"),
+		container.get_node_or_null("SpinBox2"),
+	]
 	for i in range(min(4, boxes.size())):
 		if boxes[i]:
-			boxes[i].value_changed.connect(func(val): on_value_changed(i, property, val))
+			boxes[i].value_changed.connect(
+				func(val: float): _on_value_changed(i, wheel_property, val)
+			)
 
-func on_value_changed(wheel_idx: int, property: String, value: float):
-	if wheel_idx < wheels.size():
-		wheels[wheel_idx].set(property, value)
-		
-		# Track modification
-		if not current_modifications.has(str(wheel_idx)):
-			current_modifications[str(wheel_idx)] = {}
-		current_modifications[str(wheel_idx)][property] = value
-		
-		print("Wheel %d: %s = %.2f" % [wheel_idx, property, value])
 
-func _on_save_pressed():
-	"""Save current modifications to file and GameManager"""
-	if not GameManager.player_car_data.has("name"):
-		push_error("No vehicle name in player_car_data!")
+# ─── live edit ────────────────────────────────────────────────────────────────
+## Called every time a spinbox changes.
+## Writes to the wheel node (preview) AND the WheelConfig resource.
+## The resource is dirty but not saved until the player hits SAVE.
+func _on_value_changed(wheel_idx: int, wheel_property: String, value: float) -> void:
+	if wheel_idx >= wheels.size():
 		return
-	
-	var vehicle_name = GameManager.player_car_data["name"]
-	
-	# Save to file for persistence across sessions
-	var save_path = "user://wheel_mods_%s.json" % vehicle_name
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(current_modifications, "\t"))
-		file.close()
-		print("✓ Saved modifications to: " + save_path)
-	else:
-		push_error("Failed to save modifications!")
-	
-	# Also save to GameManager for immediate use in race
-	if not "wheel_modifications" in GameManager:
-		GameManager.wheel_modifications = {}
-	GameManager.wheel_modifications[vehicle_name] = current_modifications.duplicate()
-	
-	print("✓ Modifications ready for racing!")
 
-func _on_reset_pressed():
-	for i in range(wheels.size()):
-		if original_values.has(i):
-			for prop in original_values[i]:
-				wheels[i].set(prop, original_values[i][prop])
-	
-	# Clear current modifications
-	current_modifications = {}
-	
-	load_values_to_ui()
-	print("Reset to original values")
+	# Write to the preview wheel node
+	wheels[wheel_idx].set(wheel_property, value)
 
-func _on_race_pressed():
-	# Ensure modifications are saved to GameManager before racing
-	if GameManager.player_car_data.has("name"):
-		var vehicle_name = GameManager.player_car_data["name"]
-		if not "wheel_modifications" in GameManager:
-			GameManager.wheel_modifications = {}
-		GameManager.wheel_modifications[vehicle_name] = current_modifications.duplicate()
-	
-	get_tree().change_scene_to_file("res://scenes/raceway.tscn")
+	# Write to the correct WheelConfig (front = steering wheels, rear = traction wheels)
+	# Map wheel_property (VehicleWheel3D name) → WheelConfig property name
+	var config_property = _wheel_prop_to_config_prop(wheel_property)
+	if config_property.is_empty():
+		return
 
-func _on_select_pressed():
-	get_tree().change_scene_to_file("res://scenes/car_selection_screen.tscn")
+	var cfg = _config_for_wheel(wheel_idx)
+	if cfg:
+		cfg.set(config_property, value)
+
+
+## Returns the WheelConfig that owns wheel at index.
+func _config_for_wheel(wheel_idx: int) -> WheelConfig:
+	if wheel_idx >= wheels.size():
+		return null
+	return vehicle_config.front_wheel_config if wheels[wheel_idx].use_as_steering \
+		else vehicle_config.rear_wheel_config
+
+
+## VehicleWheel3D property names differ from WheelConfig property names.
+## This is the only place that mapping lives.
+func _wheel_prop_to_config_prop(wheel_property: String) -> String:
+	match wheel_property:
+		"engine_force":         return "engine_force"
+		"brake":                return "brake"
+		"steering":             return "steering"
+		"wheel_roll_influence": return "roll_influence"
+		"wheel_radius":         return "radius"
+		"wheel_rest_length":    return "rest_length"
+		"wheel_friction_slip":  return "friction_slip"
+		"suspension_travel":    return "suspension_travel"
+		"suspension_stiffness": return "suspension_stiffness"
+		"suspension_max_force": return "suspension_max_force"
+		"damping_compression":  return "damping_compression"
+		"damping_relaxation":   return "damping_relaxation"
+	push_error("[PitUI] Unknown wheel property: " + wheel_property)
+	return ""
+
+
+# ─── buttons ──────────────────────────────────────────────────────────────────
+func _on_save_pressed() -> void:
+	if not vehicle_config:
+		push_error("[PitUI] No vehicle_config to save.")
+		return
+	vehicle_config.save()
+	print("[PitUI] Saved.")
+
+
+func _on_reset_pressed() -> void:
+	if not vehicle_config:
+		return
+	vehicle_config.reset_to_class_stock()
+	vehicle_config.apply_to_vehicle(current_vehicle)
+	_load_spinboxes()
+	print("[PitUI] Reset to class stock.")
+
+
+func _on_race_pressed() -> void:
+	# Config is already up to date in memory.
+	# Vehicle script will call vehicle_config.apply_to_vehicle() on _ready().
+	get_tree().change_scene_to_file("res://scenes/pluto_raceway.tscn")
+
+
+func _on_select_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/new_car_selection_screen.tscn")
+
+
+# ─── helpers ──────────────────────────────────────────────────────────────────
+func _find_wheels(node: Node) -> Array[VehicleWheel3D]:
+	var found: Array[VehicleWheel3D] = []
+	if node is VehicleWheel3D:
+		found.append(node)
+	for child in node.get_children():
+		found.append_array(_find_wheels(child))
+	return found
+
+
+func _disable_scripts(node: Node) -> void:
+	if node.has_method("set_process"):
+		node.set_process(false)
+		node.set_physics_process(false)
+		node.set_process_input(false)
+	if node.get_script():
+		var path: String = node.get_script().resource_path
+		if "control" in path.to_lower() or "input" in path.to_lower():
+			node.set_script(null)
+	for child in node.get_children():
+		_disable_scripts(child)
+
+
+func _set_spinboxes_editable(editable: bool) -> void:
+	# Walk every SpinBox under the pit UI and set editability
+	var root = get_parent().get_node_or_null(
+		"PropertyLabels/HBoxContainer/PropertyLabels/ColorRect/3dMotion"
+	)
+	if not root:
+		return
+	for node in root.find_children("SpinBox*", "SpinBox", true, false):
+		(node as SpinBox).editable = editable

@@ -196,6 +196,7 @@ func _on_pit_pressed() -> void:
 	get_tree().change_scene_to_file(PIT_SCENE)
 
 func _on_details_pressed() -> void:
+	# this will be the stats. all the stats
 	pass
 
 func _on_back_pressed() -> void:

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://devnw7i0wx155"]
 
-[ext_resource type="Script" uid="uid://dir7brfyxkdd8" path="res://ui/pit_area_ui_controller.gd" id="1_wqs8n"]
+[ext_resource type="Script" uid="uid://dir7brfyxkdd8" path="res://assets/components/pit_area_ui_controller.gd" id="1_wqs8n"]
 
 [node name="PitAreaUI" type="Control"]
 layout_mode = 3
@@ -605,3 +605,8 @@ render_target_update_mode = 4
 transform = Transform3D(0.9848077, -0.015134435, -0.1729874, 0, 0.9961947, -0.08715574, 0.17364818, 0.08583164, 0.98106027, 0, 1, 9)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="PropertyLabels/HBoxContainer/Panel/CarImage/SubViewport"]
+
+[connection signal="pressed" from="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Select" to="Controller" method="_on_select_pressed"]
+[connection signal="pressed" from="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Start" to="Controller" method="_on_race_pressed"]
+[connection signal="pressed" from="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Reset" to="Controller" method="_on_reset_pressed"]
+[connection signal="pressed" from="PropertyLabels/HBoxContainer/Panel/ColorRect/GridContainer/Save" to="Controller" method="_on_save_pressed"]

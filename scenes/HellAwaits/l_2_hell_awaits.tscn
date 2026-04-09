@@ -106,5 +106,4 @@ patch_radius = 300.0
 use_patch = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 shape = SubResource("ConcavePolygonShape3D_jg2l0")
