@@ -10,16 +10,18 @@
 [ext_resource type="Script" uid="uid://c6dia2q16ws4c" path="res://camera_3d.gd" id="7_uk5hu"]
 [ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="10_uk5hu"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jys5f"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uk5hu"]
+sky_top_color = Color(0.22745098, 0.48235294, 0.8352941, 1)
+sky_horizon_color = Color(0.78431374, 0.8784314, 1, 1)
+ground_bottom_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+ground_horizon_color = Color(0.5411765, 0.627451, 0.6901961, 1)
 
-[sub_resource type="Sky" id="Sky_uk5hu"]
-sky_material = SubResource("ProceduralSkyMaterial_jys5f")
+[sub_resource type="Sky" id="Sky_73ebb"]
+sky_material = SubResource("ProceduralSkyMaterial_uk5hu")
 
 [sub_resource type="Environment" id="Environment_73ebb"]
 background_mode = 2
-sky = SubResource("Sky_uk5hu")
+sky = SubResource("Sky_73ebb")
 tonemap_mode = 2
 glow_enabled = true
 

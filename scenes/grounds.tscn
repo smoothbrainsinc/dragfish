@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bbssvd4xrvryt"]
 
 [ext_resource type="PackedScene" uid="uid://cpbnq5wrwbb18" path="res://scenes/grand_stands.tscn" id="2_k0iur"]
-[ext_resource type="PackedScene" uid="uid://dt66hoswffsjh" path="res://lake_hell.tscn" id="2_tbi4r"]
+[ext_resource type="PackedScene" uid="uid://dppkh5m72ttv6" path="res://scenes/HellAwaits/LakeMyHell.tscn" id="3_k0iur"]
 
 [node name="grounds" type="Node3D"]
 
@@ -11,4 +11,4 @@ transform = Transform3D(-0.42893505, 0.7453542, -0.51035464, 0, 0.564967, 0.8251
 [node name="grandstands" parent="." instance=ExtResource("2_k0iur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.136536, -0.0028686523, -352.42172)
 
-[node name="lake_hell" parent="." instance=ExtResource("2_tbi4r")]
+[node name="DANlAKE" parent="." instance=ExtResource("3_k0iur")]
