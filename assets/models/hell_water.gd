@@ -27,6 +27,7 @@ func _bake_depth_map() -> void:
 
 			var query := PhysicsRayQueryParameters3D.create(from, to)
 			query.collide_with_areas = false
+			query.collision_mask = 2
 			var result := space.intersect_ray(query)
 
 			var depth_value := 0.0

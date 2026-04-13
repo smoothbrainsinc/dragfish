@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dd2q7ajfxovqj" path="res://DANlAKE.glb" id="1_kr85g"]
 [ext_resource type="Script" uid="uid://3vlueg5gjc6r" path="res://scenes/weed_spawner.gd" id="2_h5oq4"]
-[ext_resource type="PackedScene" uid="uid://blcq1ttgmm53v" path="res://assets/models/hell_water.tscn" id="3_1g88r"]
+[ext_resource type="PackedScene" uid="uid://c4fh26fd6dtgf" path="res://assets/models/subdivided_lake.tscn" id="4_vta53"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1g88r"]
 albedo_color = Color(0.34580213, 0.34580213, 0, 1)
@@ -81,6 +81,8 @@ albedo_color = Color(0, 0, 0, 1)
 data = PackedVector3Array(362.21558, -177.3944, 383.9402, 362.21558, -147.3944, -383.9402, 362.21558, -147.3944, 383.9402, 362.21558, -177.3944, 383.9402, 362.21558, -177.3944, -383.9402, 362.21558, -147.3944, -383.9402, 362.21558, -177.3944, -383.9402, -362.21558, -147.3944, -383.9402, 362.21558, -147.3944, -383.9402, 362.21558, -177.3944, -383.9402, -362.21558, -177.3944, -383.9402, -362.21558, -147.3944, -383.9402, -362.21558, -177.3944, -383.9402, -362.21558, -147.3944, 383.9402, -362.21558, -147.3944, -383.9402, -362.21558, -177.3944, -383.9402, -362.21558, -177.3944, 383.9402, -362.21558, -147.3944, 383.9402, -362.21558, -177.3944, 383.9402, 362.21558, -147.3944, 383.9402, -362.21558, -147.3944, 383.9402, -362.21558, -177.3944, 383.9402, 362.21558, -177.3944, 383.9402, 362.21558, -147.3944, 383.9402, 362.21558, -177.3944, -383.9402, -362.21558, -177.3944, 383.9402, -362.21558, -177.3944, -383.9402, 362.21558, -177.3944, -383.9402, 362.21558, -177.3944, 383.9402, -362.21558, -177.3944, 383.9402, -362.21558, -147.3944, -383.9402, 362.21558, -147.3944, 383.9402, 362.21558, -147.3944, -383.9402, -362.21558, -147.3944, -383.9402, -362.21558, -147.3944, 383.9402, 362.21558, -147.3944, 383.9402)
 
 [node name="DANlAKE" groups=["lake_floor"] instance=ExtResource("1_kr85g")]
+collision_layer = 2
+collision_mask = 2
 
 [node name="L3-rocks" parent="." index="0"]
 surface_material_override/0 = SubResource("StandardMaterial3D_1g88r")
@@ -173,5 +175,5 @@ surface_material_override/0 = SubResource("StandardMaterial3D_sksu6")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 263.80472, 0.549817, -218.15631)
 shape = SubResource("ConcavePolygonShape3D_aqjs0")
 
-[node name="HellWater" parent="." index="12" instance=ExtResource("3_1g88r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51, -10, 54)
+[node name="subdivided_lake" parent="." index="12" instance=ExtResource("4_vta53")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 57)
