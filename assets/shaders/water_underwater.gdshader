@@ -11,11 +11,12 @@
 //    4. Tune height_offset so the cut-off matches the surface.
 //
 //  HOW IT WORKS:
-//    Each fragment reconstructs its world-space position from
-//    the depth buffer. If that position is above the water
-//    surface (computed from the same wave math as the surface
-//    shader), the pixel is discarded. Below the surface,
-//    Beer-Lambert absorption + refraction wobble is applied.
+//    Each fragment reconstructs the REAL scene position under
+//    it from the depth buffer (not the box mesh's own surface
+//    position). If that position is above the water surface
+//    (computed from the same wave math as the surface shader),
+//    the pixel is discarded. Below the surface, Beer-Lambert
+//    absorption + refraction wobble is applied.
 // ============================================================
 
 shader_type spatial;
@@ -91,8 +92,19 @@ void vertex() {
 // ============================================================
 
 void fragment() {
-	// Reconstruct wave height at this horizontal position
-	vec2 uv   = world_pos.xz;
+	// --- Reconstruct the ACTUAL scene position under this pixel from the
+	//     depth buffer, instead of using the box mesh's own surface position.
+	float raw_depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;
+	vec3 ndc_discard = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth);
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	ndc_discard.z = raw_depth * 2.0 - 1.0;
+#endif
+	vec4 view_space_discard = INV_PROJECTION_MATRIX * vec4(ndc_discard, 1.0);
+	view_space_discard.xyz /= view_space_discard.w;
+	vec3 scene_world_pos = (INV_VIEW_MATRIX * vec4(view_space_discard.xyz, 1.0)).xyz;
+
+	// --- Reconstruct wave height using the REAL world XZ under this pixel
+	vec2 uv   = scene_world_pos.xz;
 	uv.x     *= 0.75;
 	float freq = sea_freq;
 	float amp  = sea_height;
@@ -110,12 +122,12 @@ void fragment() {
 
 	float surface_y = height + height_offset + water_level_fudge;
 
-	// Discard pixels that are above the water surface
-	if (world_pos.y > surface_y) {
+	// Discard pixels whose REAL scene position is above the water surface
+	if (scene_world_pos.y > surface_y) {
 		discard;
 	}
 
-	// Animated screen-space wobble (refraction)
+	// --- Animated screen-space wobble (refraction)
 	vec2 uv_screen = SCREEN_UV;
 	vec2 noise_dir = vec2(
 		noise(uv_screen * 12.0 + TIME * refraction_speed * vec2(1.0, 0.4)),
@@ -125,7 +137,7 @@ void fragment() {
 	vec2 uv_distorted = uv_screen + noise_dir * refraction_amount;
 	vec3 scene_color  = texture(SCREEN_TEXTURE, uv_distorted).rgb;
 
-	// Depth-based thickness
+	// --- Depth-based thickness
 	float depth_raw = texture(DEPTH_TEXTURE, uv_distorted).x;
 	vec3 ndc        = vec3(uv_distorted * 2.0 - 1.0, depth_raw);
 #if CURRENT_RENDERER == RENDERER_COMPATIBILITY
@@ -136,12 +148,12 @@ void fragment() {
 	float scene_z    = -view_pos.z;
 	float thickness  = max(0.0, scene_z - (-VIEW_MATRIX[3].z - world_pos.y));
 
-	// Beer-Lambert absorption
+	// --- Beer-Lambert absorption
 	float transmittance = exp(-thickness * absorption_strength);
 	vec3  tinted        = mix(scene_color, underwater_color, deep_tint_strength);
 	vec3  final_color   = tinted * transmittance;
 
-	// Fog toward pure underwater color at extreme depth
+	// --- Fog toward pure underwater color at extreme depth
 	float fog   = 1.0 - exp(-thickness * absorption_strength * 0.7);
 	final_color = mix(final_color, underwater_color, fog * 0.85);
 

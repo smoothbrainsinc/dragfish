@@ -1,14 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbssvd4xrvryt"]
+[gd_scene format=3 uid="uid://bbssvd4xrvryt"]
 
 [ext_resource type="PackedScene" uid="uid://cpbnq5wrwbb18" path="res://scenes/grand_stands.tscn" id="2_k0iur"]
-[ext_resource type="PackedScene" uid="uid://dppkh5m72ttv6" path="res://scenes/HellAwaits/LakeMyHell.tscn" id="3_k0iur"]
+[ext_resource type="PackedScene" uid="uid://dtawrthm5qixw" path="res://scenes/HellAwaits/all_of_hell_lake_layers.tscn" id="2_tbi4r"]
+[ext_resource type="PackedScene" uid="uid://bhy3nhyybagef" path="res://waterFinally.tscn" id="3_k0iur"]
 
-[node name="grounds" type="Node3D"]
+[node name="grounds" type="Node3D" unique_id=683886069]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2070526401]
 transform = Transform3D(-0.42893505, 0.7453542, -0.51035464, 0, 0.564967, 0.8251135, 0.90333533, 0.3539201, -0.24233414, 92.553, 83.238, -217.345)
 
-[node name="grandstands" parent="." instance=ExtResource("2_k0iur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.136536, -0.0028686523, -352.42172)
+[node name="grandstands" parent="." unique_id=1992340835 instance=ExtResource("2_k0iur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.137, 5.93, -352.422)
 
-[node name="DANlAKE" parent="." instance=ExtResource("3_k0iur")]
+[node name="all_of_lake_hell_layers" parent="." unique_id=374858282 instance=ExtResource("2_tbi4r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.243347, 0)
+
+[node name="water" parent="." unique_id=1065069132 instance=ExtResource("3_k0iur")]

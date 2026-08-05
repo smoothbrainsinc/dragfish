@@ -25,12 +25,12 @@ albedo_color = Color(0, 1, 0.003921569, 1)
 
 [node name="Zone_A" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -250, 0, -500)
-visible = false
 mesh = SubResource("PlaneMesh_fo1gp")
 surface_material_override/0 = SubResource("StandardMaterial3D_fo1gp")
 
 [node name="Label3D11" type="Label3D" parent="Zone_A"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16, 0)
+visible = false
 pixel_size = 1.0
 billboard = 1
 text = "A"

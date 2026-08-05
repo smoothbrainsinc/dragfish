@@ -68,9 +68,9 @@ func _build_multimesh():
 		var local_pos = a * (1.0 - r1) + b * (r1 * (1.0 - r2)) + c * (r1 * r2)
 		local_pos.y += y_offset
 		var s = randf_range(min_scale, max_scale)
-		var basis = Basis().rotated(Vector3.UP, randf() * TAU)
-		basis = basis.scaled(Vector3(s, s, s))
-		mm.set_instance_transform(i, Transform3D(basis, local_pos))
+		var my_basis = Basis().rotated(Vector3.UP, randf() * TAU)
+		my_basis = my_basis.scaled(Vector3(s, s, s))
+		mm.set_instance_transform(i, Transform3D(my_basis, local_pos))
 
 	saved_multimesh = mm
 	var mmi = MultiMeshInstance3D.new()

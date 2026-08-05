@@ -1,20 +1,26 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhy3nhyybagef"]
+[gd_scene format=3 uid="uid://bhy3nhyybagef"]
 
-[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="1_8w026"]
+[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="1_jotm6"]
 [ext_resource type="Script" uid="uid://do3gkoy8kvvaf" path="res://jasscamera.gd" id="2_pk140"]
+[ext_resource type="Texture2D" uid="uid://b8qkjxfue8uls" path="res://addons/shaders/Textures/caustics.png" id="2_s8lhq"]
 [ext_resource type="Shader" uid="uid://csjbh8be0504v" path="res://assets/shaders/water_underwater.gdshader" id="3_jotm6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pk140"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_pk140"]
+size = Vector2(2000, 2000)
+subdivide_width = 100
+subdivide_depth = 100
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s8lhq"]
 render_priority = 0
-shader = ExtResource("1_8w026")
-shader_parameter/max_depth = 50.0
-shader_parameter/water_level = 0.0
+shader = ExtResource("1_jotm6")
+shader_parameter/max_depth = 10.0
+shader_parameter/water_level = 1.4901199918426755e-07
 shader_parameter/underwater_fog_color = Color(0, 0.05, 0.1, 1)
 shader_parameter/fade_start_depth = 0.5
-shader_parameter/sea_height = 1.5000000712500001
-shader_parameter/sea_choppy = 5.0000002375
+shader_parameter/sea_height = 1.3
+shader_parameter/sea_choppy = 4.0
 shader_parameter/sea_speed = 1.5
-shader_parameter/sea_freq = 0.050000002375
+shader_parameter/sea_freq = 0.08
 shader_parameter/ITER_GEOMETRY = 3
 shader_parameter/ITER_FRAGMENT = 5
 shader_parameter/refraction_strength = 1.0
@@ -27,6 +33,7 @@ shader_parameter/water_absorption = Color(0.3, 0.06, 0.02, 1)
 shader_parameter/roughness = 0.125
 shader_parameter/metallic = 0.0
 shader_parameter/specular = 0.5
+shader_parameter/caustics_texture = ExtResource("2_s8lhq")
 shader_parameter/caustics_scale = 2.0
 shader_parameter/caustics_speed = 0.1
 shader_parameter/caustics_intensity = 0.8
@@ -39,16 +46,10 @@ shader_parameter/foam_noise_speed = 1.0
 shader_parameter/foam_cutoff = 0.7
 shader_parameter/foam_crest_threshold = 0.7
 shader_parameter/foam_crest_amount = 2.0
-shader_parameter/foam_edge_color = Color(0.7030514, 0.8012295, 0.9976565, 1)
+shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
 shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
 shader_parameter/voronoi_scale = 9.0
 shader_parameter/voronoi_strength = 0.8
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_jotm6"]
-material = SubResource("ShaderMaterial_pk140")
-size = Vector2(1000, 1000)
-subdivide_width = 100
-subdivide_depth = 100
 
 [sub_resource type="BoxMesh" id="BoxMesh_s8lhq"]
 size = Vector3(2000, 2000, 2000)
@@ -56,8 +57,8 @@ size = Vector3(2000, 2000, 2000)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0bg0i"]
 render_priority = 0
 shader = ExtResource("3_jotm6")
-shader_parameter/sea_height = 1.5000000712500001
-shader_parameter/sea_choppy = 5.0000002375
+shader_parameter/sea_height = 1.30000006175
+shader_parameter/sea_choppy = 4.0
 shader_parameter/sea_speed = 1.5
 shader_parameter/sea_freq = 0.08
 shader_parameter/height_offset = 0.0
@@ -68,21 +69,24 @@ shader_parameter/refraction_amount = 0.004
 shader_parameter/refraction_speed = 0.7
 shader_parameter/water_level_fudge = 0.0
 
-[node name="Node3D" type="Node3D"]
+[node name="water_finally" type="Node3D" unique_id=1097521155]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_jotm6")
+[node name="water_surface" type="MeshInstance3D" parent="." unique_id=1565676980]
+mesh = SubResource("PlaneMesh_pk140")
+surface_material_override/0 = SubResource("ShaderMaterial_s8lhq")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1886346779]
 transform = Transform3D(-4.371139e-08, 1, 4.371139e-08, 0, -4.371139e-08, 1, 1, 4.371139e-08, 1.9106855e-15, 0, -816.0298, 0)
+visible = false
 light_energy = 10.0
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1041500466]
 transform = Transform3D(-4.371139e-08, 0.5, -0.8660254, 0, 0.8660254, 0.5, 1, 2.1855694e-08, -3.7855173e-08, -30, 17.763, 0)
+visible = false
 current = true
 script = ExtResource("2_pk140")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15759277, -2.1820068, 1.2376709)
+[node name="water_depth" type="MeshInstance3D" parent="." unique_id=508077409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25.019787, 0)
 mesh = SubResource("BoxMesh_s8lhq")
 surface_material_override/0 = SubResource("ShaderMaterial_0bg0i")

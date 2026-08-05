@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="VehicleConfig" load_steps=5 format=3]
+
+[ext_resource type="Resource" path="res://vehicles/classes/broke_fuck_front_stock.tres" id="1_1vxbq"]
+[ext_resource type="Script" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_ytpfd"]
+[ext_resource type="Resource" path="res://vehicles/classes/broke_fuck_rear_stock.tres" id="2_k1n7g"]
+[ext_resource type="Resource" path="res://vehicles/classes/broke_fuck_class.tres" id="4_3cqsi"]
+
+[resource]
+script = ExtResource("1_ytpfd")
+vehicle_class = ExtResource("4_3cqsi")
+front_wheel_config = ExtResource("1_1vxbq")
+rear_wheel_config = ExtResource("2_k1n7g")

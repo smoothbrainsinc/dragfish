@@ -234,8 +234,8 @@ float fbm_voronoi(vec2 uv) {
 
 void vertex() {
 	vec3 world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	wave_height    = -map(world_pos, TIME);
-	VERTEX.y       = wave_height;
+    wave_height    = -map(vec3(world_pos.x, 0.0, world_pos.z), TIME); // force p.y=0
+	VERTEX.y       = wave_height + water_level;
 	world_vert     = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 
 	float vertex_eps = 0.1;

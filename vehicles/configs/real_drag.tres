@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VehicleConfig" load_steps=13 format=3 uid="uid://bukpnavja76hp"]
+[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://bukpnavja76hp"]
 
 [ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]

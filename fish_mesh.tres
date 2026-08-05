@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://e3m36ee4dd4i"]
+[gd_resource type="ArrayMesh" format=4 uid="uid://e3m36ee4dd4i"]
 
 [ext_resource type="Texture2D" uid="uid://de6xobkcjn1dp" path="res://assets/models/fishes/blue_gill2_BluegiT.png" id="1_f8oqw"]
 

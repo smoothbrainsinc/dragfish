@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WheelConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Wheelconfig.gd" id="1_enflc"]
+
+[resource]
+script = ExtResource("1_enflc")
+radius = 0.3
+rest_length = 0.25
+friction_slip = 4.0
+suspension_travel = 0.2
+suspension_max_force = 5000.0
