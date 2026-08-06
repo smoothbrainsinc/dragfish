@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=4 uid="uid://c5feunj5rr6i"]
+[gd_scene format=4 uid="uid://c5feunj5rr6i"]
 
-[ext_resource type="Script" uid="uid://c6dia2q16ws4c" path="res://camera_3d.gd" id="1_v71yg"]
 [ext_resource type="Script" uid="uid://ltit38hegqiw" path="res://scripts/swimming_script.gd" id="1_vd852"]
 
 [sub_resource type="Animation" id="Animation_kkt8u"]
@@ -127,25 +126,23 @@ bind/8/name = &"Ball_L.001"
 bind/8/bone = -1
 bind/8/pose = Transform3D(0.90710765, 0.42078933, -0.00960071, 0.41938874, -0.90554816, -0.0639938, -0.03562182, 0.054022934, -0.997904, 0.21333325, -1.0295917, 0.72134733)
 
-[node name="lakeMonster" type="Node3D"]
+[node name="lakeMonster" type="Node3D" unique_id=762974452]
 script = ExtResource("1_vd852")
 swim_speed = 3.0
 turn_speed = 3.0
 dive_speed = 3.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=248328447]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MeshInstance3D" unique_id=1873461729]
 root_node = NodePath("../..")
-libraries = {
-&"": SubResource("AnimationLibrary_v3ejr")
-}
-autoplay = "Armature_002Action"
+libraries/ = SubResource("AnimationLibrary_v3ejr")
+autoplay = &"Armature_002Action"
 
-[node name="Armature_002" type="Node3D" parent="."]
+[node name="Armature_002" type="Node3D" parent="." unique_id=826067096]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.47145334, 1.504698)
 
-[node name="Skeleton3D" type="Skeleton3D" parent="Armature_002"]
+[node name="Skeleton3D" type="Skeleton3D" parent="Armature_002" unique_id=1489979583]
 bones/0/name = "B4_fluke"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 2.5578582e-14, 1.5099577e-07, 1.5099577e-07, -3.576278e-07, -1, 2.842171e-14, 0.99999976, -3.576279e-07, 3.3113692e-09, 0.4714533, -0.5120345)
@@ -210,15 +207,10 @@ bones/8/position = Vector3(-4.1909516e-08, 0.6330394, 1.0617077e-07)
 bones/8/rotation = Quaternion(0.0864029, 1.818154e-05, -0.0012498468, 0.9962595)
 bones/8/scale = Vector3(0.99999994, 1.0000001, 1)
 
-[node name="monster" type="MeshInstance3D" parent="Armature_002/Skeleton3D"]
+[node name="monster" type="MeshInstance3D" parent="Armature_002/Skeleton3D" unique_id=1422450580]
 custom_aabb = AABB(0, 0, 0, 0, 0, 0.053)
 mesh = SubResource("ArrayMesh_wf0w7")
 skin = SubResource("Skin_nnd6j")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 40.119507, 2, 5)
-visible = false
-script = ExtResource("1_v71yg")
-
-[node name="RayCast3D" type="RayCast3D" parent="."]
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=293917357]
 target_position = Vector3(0, 0, 3)

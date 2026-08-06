@@ -6,9 +6,6 @@
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=2070526401]
-transform = Transform3D(-0.42893505, 0.7453542, -0.51035464, 0, 0.564967, 0.8251135, 0.90333533, 0.3539201, -0.24233414, 92.553, 83.238, -217.345)
-
 [node name="grandstands" parent="." unique_id=1992340835 instance=ExtResource("2_k0iur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.137, 5.93, -352.422)
 

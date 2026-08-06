@@ -3,8 +3,6 @@
 [ext_resource type="ArrayMesh" uid="uid://kgofvg7edv7f" path="res://vehicles/real_drag_2_body_mesh.res" id="2_eq1hr"]
 [ext_resource type="ArrayMesh" uid="uid://cgbfy7atd2sgj" path="res://vehicles/real_drag_2_front_tire_mesh.res" id="3_a3kbq"]
 [ext_resource type="ArrayMesh" uid="uid://gixxxbhb0cyn" path="res://vehicles/real_drag_2_rear_tire_mesh.res" id="4_xbvyq"]
-[ext_resource type="PackedScene" uid="uid://duukh7matks2q" path="res://scenes/vehicle_dashboard.tscn" id="5_a3kbq"]
-[ext_resource type="PackedScene" uid="uid://i6m88u3n2y22" path="res://scenes/vehicle_hud.tscn" id="6_xbvyq"]
 [ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="7_xbvyq"]
 [ext_resource type="ArrayMesh" uid="uid://byuvm6cs3ntii" path="res://vehicles/drag_chute_mesh.res" id="8_dhbb3"]
 
@@ -51,12 +49,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343, 0.30055875, 4.914)
 use_as_steering = true
 wheel_radius = 0.2
 wheel_rest_length = 0.2
-metadata/_edit_lock_ = true
 
 [node name="tire-front_left" type="MeshInstance3D" parent="wheelFL" unique_id=254342100]
 mesh = ExtResource("3_a3kbq")
 skeleton = NodePath("")
-metadata/_edit_lock_ = true
 
 [node name="wheelFR" type="VehicleWheel3D" parent="." unique_id=665236176]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.343, 0.301, 4.914)
@@ -75,12 +71,10 @@ wheel_radius = 0.813
 wheel_rest_length = 0.2
 wheel_friction_slip = 20.0
 suspension_max_force = 10000.0
-metadata/_edit_lock_ = true
 
 [node name="tire-rear_left" type="MeshInstance3D" parent="wheelRL" unique_id=1969306371]
 mesh = ExtResource("4_xbvyq")
 skeleton = NodePath("")
-metadata/_edit_lock_ = true
 
 [node name="wheelRR" type="VehicleWheel3D" parent="." unique_id=1999316639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.819, -1.788)
@@ -94,10 +88,6 @@ suspension_max_force = 10000.0
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0)
 mesh = ExtResource("4_xbvyq")
 skeleton = NodePath("")
-
-[node name="VehicleDashboard" parent="." unique_id=306418550 instance=ExtResource("5_a3kbq")]
-
-[node name="VehicleHUD" parent="." unique_id=182180947 instance=ExtResource("6_xbvyq")]
 
 [node name="DragChute" type="Node3D" parent="." unique_id=436764381]
 transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.6720042, 0.68409836, -0.8070668)

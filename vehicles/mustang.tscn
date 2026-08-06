@@ -3,7 +3,6 @@
 [ext_resource type="ArrayMesh" uid="uid://bnfdfvkylbvvm" path="res://vehicles/mustang_body_mesh.res" id="1_cwgna"]
 [ext_resource type="ArrayMesh" uid="uid://biouoa6x36ftd" path="res://vehicles/mustang_wheel_mesh.res" id="2_cwgna"]
 [ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="3_0anve"]
-[ext_resource type="PackedScene" uid="uid://duukh7matks2q" path="res://scenes/vehicle_dashboard.tscn" id="4_0t8e4"]
 [ext_resource type="ArrayMesh" uid="uid://byuvm6cs3ntii" path="res://vehicles/drag_chute_mesh.res" id="4_ds8ym"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_4xfoi"]
@@ -75,5 +74,3 @@ transform = Transform3D(-4.1684764e-08, -0.9714374, -0.23729593, 0.9999999, -4.4
 mesh = ExtResource("4_ds8ym")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_ds8ym")
-
-[node name="VehicleDashboard" parent="." unique_id=832049305 instance=ExtResource("4_0t8e4")]
