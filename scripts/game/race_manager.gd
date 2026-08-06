@@ -21,9 +21,7 @@ func _ready():
 	print("  Player: %s" % GameManager.player_car_config.display_name)
 	print("  NPC: %s" % (GameManager.npc_car_config.display_name if GameManager.npc_car_config else "None"))
 	await spawn_vehicles()
-	var hud = get_tree().root.find_child("VehicleHUD", true, false)
-	if hud and player_vehicle:
-		hud.set_vehicle(player_vehicle)
+	
 	# Connect to green light
 	start_tree_node = get_tree().get_first_node_in_group("start_tree")
 	if start_tree_node and start_tree_node.has_signal("green_light"):

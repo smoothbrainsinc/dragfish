@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dtawrthm5qixw"]
+[gd_scene format=3 uid="uid://dtawrthm5qixw"]
 
 [ext_resource type="PackedScene" uid="uid://bwpmb2no06lf8" path="res://scenes/HellAwaits/l_1_hell_awaits.tscn" id="1_elwgs"]
 [ext_resource type="PackedScene" uid="uid://cr5506insciv1" path="res://scenes/HellAwaits/l_2_hell_awaits.tscn" id="2_cmvi0"]
@@ -7,16 +7,16 @@
 [ext_resource type="PackedScene" uid="uid://crevpph50ny3g" path="res://scenes/HellAwaits/l_5_hell_awaits.tscn" id="5_flegu"]
 [ext_resource type="PackedScene" uid="uid://c2wybv0a1bc0h" path="res://scenes/HellAwaits/l_6_hell_awaits.tscn" id="6_onms7"]
 
-[node name="all_of_lake_hell_layers" type="Node3D"]
+[node name="all_of_lake_hell_layers" type="Node3D" unique_id=1108319171]
 
-[node name="L1_HellAwaits" parent="." instance=ExtResource("1_elwgs")]
+[node name="L1_HellAwaits" parent="." unique_id=396869466 instance=ExtResource("1_elwgs")]
 
-[node name="L2_HellAwaits" parent="." instance=ExtResource("2_cmvi0")]
+[node name="L2_HellAwaits" parent="." unique_id=76403907 instance=ExtResource("2_cmvi0")]
 
-[node name="L3_HellAwaits" parent="." instance=ExtResource("3_dcyb4")]
+[node name="L3_HellAwaits" parent="." unique_id=870682829 instance=ExtResource("3_dcyb4")]
 
-[node name="L4_HellAwaits" parent="." instance=ExtResource("4_egl4v")]
+[node name="L4_HellAwaits" parent="." unique_id=1878610859 instance=ExtResource("4_egl4v")]
 
-[node name="L5_HellAwaits" parent="." instance=ExtResource("5_flegu")]
+[node name="L5_HellAwaits" parent="." unique_id=1405621093 instance=ExtResource("5_flegu")]
 
-[node name="L6_HellAwaits" parent="." instance=ExtResource("6_onms7")]
+[node name="L6_HellAwaits" parent="." unique_id=671244980 instance=ExtResource("6_onms7")]
