@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bmre0ij65ujdr"]
 
 [ext_resource type="Script" uid="uid://btlva0x46f8hi" path="res://scripts/game/race_manager.gd" id="1_62cym"]
+[ext_resource type="PackedScene" uid="uid://drpnkt1xytr3l" path="res://scenes/wheel_debug_overlay.tscn" id="1_uk5hu"]
 [ext_resource type="PackedScene" uid="uid://bbssvd4xrvryt" path="res://scenes/grounds.tscn" id="1_ye3oe"]
 [ext_resource type="Script" uid="uid://cllamoosnqa4a" path="res://scripts/game/race_controller.gd" id="2_2x6fk"]
 [ext_resource type="Script" uid="uid://c8bghfjglqhd" path="res://scenes/visual_effects_manager.gd" id="3_gkc72"]
@@ -32,6 +33,8 @@ environment = SubResource("Environment_73ebb")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=1764690186]
 transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.70710677, 0.5, -0.6123724, 0.6123724, 0, 0, 0)
 shadow_enabled = true
+
+[node name="CanvasLayer" parent="." unique_id=1672396117 instance=ExtResource("1_uk5hu")]
 
 [node name="RaceManager" type="Node" parent="." unique_id=214766947]
 script = ExtResource("1_62cym")
