@@ -20,7 +20,7 @@
 // ============================================================
 
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_test_disabled;
+render_mode unshaded, cull_disabled, depth_test_disabled, blend_mix;
 
 // ---- Wave params: MUST match water_surface.gdshader ----
 uniform float sea_height : hint_range(0.0, 5.0)  = 1.3;
