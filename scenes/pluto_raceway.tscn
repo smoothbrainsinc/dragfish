@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://ceqadahowealt" path="res://scenes/environment_manager.gd" id="5_pinsw"]
 [ext_resource type="Script" uid="uid://c6dia2q16ws4c" path="res://camera_3d.gd" id="7_uk5hu"]
 [ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="10_uk5hu"]
+[ext_resource type="Shader" uid="uid://dshq0nsg1wkgk" path="res://scenes/claudes_underwater_shader.gdshader" id="11_73ebb"]
+[ext_resource type="Texture2D" uid="uid://b8qkjxfue8uls" path="res://addons/shaders/Textures/caustics.png" id="12_x7u7o"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uk5hu"]
 sky_top_color = Color(0.22745098, 0.48235294, 0.8352941, 1)
@@ -25,6 +27,19 @@ background_mode = 2
 sky = SubResource("Sky_73ebb")
 tonemap_mode = 2
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4fu3u"]
+shader = ExtResource("11_73ebb")
+shader_parameter/caustic_texture = ExtResource("12_x7u7o")
+shader_parameter/water_tint = Color(0.05, 0.25, 0.35, 1)
+shader_parameter/tint_strength = 0.55
+shader_parameter/fog_density = 0.04
+shader_parameter/caustic_scale = 6.0
+shader_parameter/caustic_speed = 0.3
+shader_parameter/caustic_strength = 0.25
+shader_parameter/distortion_strength = 0.006
+shader_parameter/distortion_speed = 0.6
+shader_parameter/vignette_strength = 0.35
+
 [node name="Root" type="Node3D" unique_id=1567092246]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1059297213]
@@ -35,6 +50,7 @@ transform = Transform3D(0.8660254, 0.35355338, -0.35355338, 0, 0.70710677, 0.707
 shadow_enabled = true
 
 [node name="CanvasLayer" parent="." unique_id=1672396117 instance=ExtResource("1_uk5hu")]
+visible = false
 
 [node name="RaceManager" type="Node" parent="." unique_id=214766947]
 script = ExtResource("1_62cym")
@@ -97,3 +113,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.975418, 0)
 
 [node name="grounds" parent="." unique_id=1616760915 instance=ExtResource("1_ye3oe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 370.16913)
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=75274264]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer2" unique_id=981036514]
+visible = false
+material = SubResource("ShaderMaterial_4fu3u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cpbnq5wrwbb18" path="res://scenes/grand_stands.tscn" id="2_k0iur"]
 [ext_resource type="PackedScene" uid="uid://dtawrthm5qixw" path="res://scenes/HellAwaits/all_of_hell_lake_layers.tscn" id="2_tbi4r"]
 [ext_resource type="PackedScene" uid="uid://bhy3nhyybagef" path="res://waterFinally.tscn" id="3_k0iur"]
+[ext_resource type="PackedScene" uid="uid://cwrwvrop4ghsv" path="res://claudes_new_water_surface.tscn" id="4_d8sy1"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
@@ -13,3 +14,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.137, 5.93, -352.422)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.243347, 0)
 
 [node name="water" parent="." unique_id=1065069132 instance=ExtResource("3_k0iur")]
+visible = false
+
+[node name="Claudes_new_water_surface" parent="." unique_id=1137428317 instance=ExtResource("4_d8sy1")]

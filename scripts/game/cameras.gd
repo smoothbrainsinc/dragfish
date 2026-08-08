@@ -27,6 +27,10 @@ extends Node
 @export var target_group_name := "player_vehicle"
 @export var cameras: Array[Camera3D] = []
 
+@export_group("Underwater")
+@export var water_level := 0.0
+@export var underwater_overlay: CanvasLayer
+
 var follow_camera: Camera3D
 var target: Node3D
 var current_camera_index := 0
@@ -369,3 +373,7 @@ func _notification(what):
 	# Release mouse when exiting game
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+func _process(_delta):
+	if follow_camera and underwater_overlay:
+		underwater_overlay.visible = follow_camera.global_position.y < water_level

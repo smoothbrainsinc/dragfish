@@ -95,6 +95,15 @@ void fragment() {
 	// --- Reconstruct the ACTUAL scene position under this pixel from the
 	//     depth buffer, instead of using the box mesh's own surface position.
 	float raw_depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;
+
+	// Sky pixels report the far-plane sentinel depth. Reprojecting that
+	// through INV_PROJECTION_MATRIX produces garbage/huge world positions,
+	// which alias badly when fed into the wave noise below — that aliasing
+	// is the black jagged line at the waterline/horizon. Bail out early.
+	if (raw_depth >= 0.9999) {
+		discard;
+	}
+
 	vec3 ndc_discard = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth);
 #if CURRENT_RENDERER == RENDERER_COMPATIBILITY
 	ndc_discard.z = raw_depth * 2.0 - 1.0;
@@ -138,10 +147,10 @@ void fragment() {
 	vec3 scene_color  = texture(SCREEN_TEXTURE, uv_distorted).rgb;
 
 	// --- Depth-based thickness
-	float depth_raw = texture(DEPTH_TEXTURE, uv_distorted).x;
-	vec3 ndc        = vec3(uv_distorted * 2.0 - 1.0, depth_raw);
+	float thickness_raw_depth = texture(DEPTH_TEXTURE, uv_distorted).x;
+	vec3 ndc        = vec3(uv_distorted * 2.0 - 1.0, thickness_raw_depth);
 #if CURRENT_RENDERER == RENDERER_COMPATIBILITY
-	ndc.z = depth_raw * 2.0 - 1.0;
+	ndc.z = thickness_raw_depth * 2.0 - 1.0;
 #endif
 	vec4 view_pos    = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
 	view_pos.xyz    /= view_pos.w;
