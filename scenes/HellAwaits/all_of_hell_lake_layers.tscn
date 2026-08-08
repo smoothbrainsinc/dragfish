@@ -20,5 +20,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.850708, 0, -21.682312)
 [node name="L4_HellAwaits" parent="." unique_id=1878610859 instance=ExtResource("4_egl4v")]
 
 [node name="L5_HellAwaits" parent="." unique_id=1405621093 instance=ExtResource("5_flegu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0624466)
 
 [node name="L6_HellAwaits" parent="." unique_id=671244980 instance=ExtResource("6_onms7")]

@@ -36,5 +36,6 @@ shader_parameter/crest_foam_threshold = 0.6
 [node name="Claudes_new_water_surface" type="Node3D" unique_id=1137428317]
 
 [node name="new_water_from_claude3p0" type="MeshInstance3D" parent="." unique_id=2130036931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.24, 0)
 mesh = SubResource("PlaneMesh_dbiuj")
 surface_material_override/0 = SubResource("ShaderMaterial_dbiuj")
