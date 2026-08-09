@@ -87,6 +87,6 @@ current = true
 script = ExtResource("2_pk140")
 
 [node name="water_depth" type="MeshInstance3D" parent="." unique_id=508077409]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -138.72995, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -135.47745, 0)
 mesh = SubResource("BoxMesh_s8lhq")
 surface_material_override/0 = SubResource("ShaderMaterial_0bg0i")
