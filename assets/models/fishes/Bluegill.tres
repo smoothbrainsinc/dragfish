@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SpawnEntry" format=3 uid="uid://dsbdbodh5s3dy"]
+
+[ext_resource type="Script" uid="uid://lh2s4t8a4lmv" path="res://scenes/Spawn_entry.gd" id="1_vy7il"]
+
+[resource]
+script = ExtResource("1_vy7il")
+model_path = "uid://byp37dat8m6ss"
+moves = true
+metadata/_custom_type_script = "uid://lh2s4t8a4lmv"

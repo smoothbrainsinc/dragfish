@@ -53,7 +53,8 @@ func discover_vehicles() -> void:
 
 			if ResourceLoader.exists(specific_tres):
 				config = load(specific_tres) as VehicleConfig
-				print("  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
+				if config:
+					print("  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
 			else:
 				config = _create_default_config(vehicle_name, scene_path)
 				print("  ✓ %s (default config)" % vehicle_name)
@@ -109,24 +110,7 @@ func _create_default_config(vehicle_name: String, scene_path: String) -> Vehicle
 func get_available_vehicles() -> Array[VehicleConfig]:
 	return available_vehicles
 
-## Select vehicles for race
-func select_vehicles(player_config: VehicleConfig, npc_config: VehicleConfig) -> bool:
-	if not player_config or not player_config.is_valid():
-		push_error("[GameManager] Invalid player config!")
-		return false
 
-	if not npc_config or not npc_config.is_valid():
-		push_error("[GameManager] Invalid NPC config!")
-		return false
-
-	player_car_config = player_config
-	npc_car_config = npc_config
-
-	print("[GameManager] Selected vehicles:")
-	print("  Player: %s" % player_config.display_name)
-	print("  NPC: %s" % npc_config.display_name)
-
-	return true
 
 ## Set spawn point markers
 func set_spawn_markers(left_marker: Marker3D, right_marker: Marker3D) -> void:
@@ -189,14 +173,6 @@ func set_player_lane(lane: String) -> void:
 func get_player_lane() -> String:
 	return player_lane
 
-## Quick select for testing (first two vehicles)
-func quick_select_default() -> void:
-	if available_vehicles.size() >= 2:
-		select_vehicles(available_vehicles[0], available_vehicles[1])
-	elif available_vehicles.size() == 1:
-		select_vehicles(available_vehicles[0], available_vehicles[0])
-	else:
-		push_error("[GameManager] No vehicles available for quick select!")
 
 ## Debug info
 func get_debug_info() -> String:

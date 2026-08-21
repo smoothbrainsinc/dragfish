@@ -1,15 +1,47 @@
 [gd_scene format=3 uid="uid://bbssvd4xrvryt"]
 
-[ext_resource type="PackedScene" uid="uid://cpbnq5wrwbb18" path="res://scenes/grand_stands.tscn" id="2_k0iur"]
-[ext_resource type="PackedScene" uid="uid://dtawrthm5qixw" path="res://scenes/HellAwaits/all_of_hell_lake_layers.tscn" id="2_tbi4r"]
-[ext_resource type="PackedScene" uid="uid://bhy3nhyybagef" path="res://waterFinally.tscn" id="3_k0iur"]
+[ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="2_tbi4r"]
+[ext_resource type="PackedScene" uid="uid://bt1kegkmehb2h" path="res://Lakes/hell_lake/meshes/hell_lake.tscn" id="5_coijf"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
-[node name="grandstands" parent="." unique_id=1992340835 instance=ExtResource("2_k0iur")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.137, 5.93, -352.422)
+[node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
 
-[node name="all_of_lake_hell_layers" parent="." unique_id=374858282 instance=ExtResource("2_tbi4r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.243347, 0)
+[node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -344.85742, 0, -402.19376)
 
-[node name="water" parent="." unique_id=1065069132 instance=ExtResource("3_k0iur")]
+[node name="Label3D600,600" type="Label3D" parent="." unique_id=1790555498]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 600, 98.008, 600)
+pixel_size = 1.0
+billboard = 1
+text = "X = 600
+Z = 600
+"
+uppercase = true
+
+[node name="Label3D600,-600" type="Label3D" parent="." unique_id=70912312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 600, 98.008, -600)
+pixel_size = 1.0
+billboard = 1
+text = "X = 600
+Z = -600
+"
+uppercase = true
+
+[node name="Label3D-600,600" type="Label3D" parent="." unique_id=867947325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -600, 98.008, 600)
+pixel_size = 1.0
+billboard = 1
+text = "X = -600
+Z = 600
+"
+uppercase = true
+
+[node name="Label3D-600,-600" type="Label3D" parent="." unique_id=796305992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -600, 98.008, -600)
+pixel_size = 1.0
+billboard = 1
+text = "X = -600
+Z = -600
+"
+uppercase = true

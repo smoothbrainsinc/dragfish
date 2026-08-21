@@ -2,6 +2,7 @@
 extends Node3D
 
 @export var shore_y_offset: float = 0.25
+var grass_mesh: Mesh
 
 func _ready():
 	# Load grass mesh

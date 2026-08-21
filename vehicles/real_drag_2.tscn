@@ -16,8 +16,8 @@ height = 0.2
 radial_segments = 32
 rings = 16
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wlf2k"]
-size = Vector3(0.9536276, 1.6676893, 10.610779)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eq1hr"]
+points = PackedVector3Array(0.37375247, -0.20608687, 4.9037995, 0.5300581, -0.6754787, -4.954652, 1.4696381, 2.7666154, -3.7026138, -1.5039523, 2.7666154, -2.4505758, -1.5039523, -0.20608687, 0.053500175, 1.4696381, -0.20608687, 0.053500175, -0.39737785, -0.4752107, 4.921088, -1.5039523, 1.6711433, -3.7026138, 1.4696381, 2.7666154, -2.4505758, 0.5300581, -0.51912713, 5.061652, -1.4067513, 2.6541, -3.4570534, -0.4083577, -0.36277544, -4.954652, 1.4696381, 1.6711433, -3.7026138, -0.4083577, -0.6754787, -4.3281426, -0.25176102, -0.20608687, 5.061652, -0.4083577, -0.36277544, 5.061652, 1.3130414, -0.36277544, 0.053500175, 1.4696381, 0.10661632, 0.053500175, 0.5300581, -0.36277544, 5.061652, -1.190759, -0.36277544, 0.053500175, -1.5039523, -0.049735308, 0.053500175, -1.3755683, -0.098007075, -0.94709843, 0.5300581, -0.36277544, -4.954652, 0.2171558, -0.20608687, 5.061652, 0.5300581, -0.6754787, -4.3281426)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nmhu"]
 albedo_color = Color(0.025820246, 0.46639594, 0.7415135, 1)
@@ -40,9 +40,9 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, -2.2351742e-08, 0, 2.2351742e-08, 1, 0, 0.38823795, 0.8031326)
 mesh = SubResource("SphereMesh_a3kbq")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1075021392]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0006146431, 0.9251844, 0.08908082)
-shape = SubResource("BoxShape3D_wlf2k")
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=559909541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7249201, 0)
+shape = SubResource("ConvexPolygonShape3D_eq1hr")
 
 [node name="wheelFL" type="VehicleWheel3D" parent="." unique_id=1486193908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343, 0.30055875, 4.914)
@@ -94,7 +94,7 @@ transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.67
 script = ExtResource("7_xbvyq")
 
 [node name="ChuteMesh" type="MeshInstance3D" parent="DragChute" unique_id=552106168]
-transform = Transform3D(-4.1684764e-08, -0.9714374, -0.23729593, 0.9999999, -4.490391e-08, 8.161046e-09, -1.8583465e-08, -0.23729594, 0.9714373, 0.2072224, 0.6957598, -1.0150305)
+transform = Transform3D(-4.371112e-08, -0.9999938, 0.0034906506, 0.9999999, -4.3711385e-08, 0, 1.5258121e-10, 0.003490651, 0.9999937, 1.1765215, 0.6957598, -1.0150305)
 mesh = ExtResource("8_dhbb3")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_3nmhu")

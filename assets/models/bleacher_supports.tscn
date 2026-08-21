@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=4 uid="uid://dkhq2y0acbdtv"]
+[gd_scene format=4 uid="uid://dkhq2y0acbdtv"]
 
 [ext_resource type="Texture2D" uid="uid://4she87kq338y" path="res://assets/models/bleacher-supports_concrete_floor_worn_001_diff_2k.jpg" id="1_t8bg3"]
 [ext_resource type="Texture2D" uid="uid://cv1au0vu04ioy" path="res://assets/models/bleacher-supports_concrete_floor_worn_001_rough_2k.png" id="2_hsrmx"]
@@ -159,6 +159,9 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_kdjx6")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t8bg3"]
+size = Vector3(61.876133, 25.062078, 37.924183)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b14dq"]
 _surfaces = [{
@@ -574,84 +577,88 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_4ittg")
 
-[node name="bleacher-supports" type="StaticBody3D"]
+[node name="bleacher-supports" type="StaticBody3D" unique_id=642774320]
 
-[node name="steps_center" type="MeshInstance3D" parent="."]
+[node name="steps_center" type="MeshInstance3D" parent="." unique_id=191305080]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.851547, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_8jtj8")
 skeleton = NodePath("")
 
-[node name="steps_center-right" type="MeshInstance3D" parent="."]
+[node name="steps_center-right" type="MeshInstance3D" parent="." unique_id=1627018277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.83943, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_av2q1")
 skeleton = NodePath("")
 
-[node name="steps_right" type="MeshInstance3D" parent="."]
+[node name="steps_right" type="MeshInstance3D" parent="." unique_id=510984438]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 87.65791, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_e53se")
 skeleton = NodePath("")
 
-[node name="grand_stands" type="MeshInstance3D" parent="."]
+[node name="grand_stands" type="MeshInstance3D" parent="." unique_id=1355590185]
 transform = Transform3D(1.4482491, 0, 0, 0, 1, 0, 0, 0, 1, 1.5101452, 0, 0)
 mesh = SubResource("ArrayMesh_06d37")
 skeleton = NodePath("")
 
-[node name="steps_center_lefy" type="MeshInstance3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=346783514]
+transform = Transform3D(1.4482491, 0, 0, 0, 1, 0, 0, 0, 1, 44.82177, 12.791472, -20.729292)
+shape = SubResource("BoxShape3D_t8bg3")
+
+[node name="steps_center_lefy" type="MeshInstance3D" parent="." unique_id=285694683]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.973196, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_ewrxo")
 skeleton = NodePath("")
 
-[node name="steps_left" type="MeshInstance3D" parent="."]
+[node name="steps_left" type="MeshInstance3D" parent="." unique_id=1163834877]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010662079, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_wkk8g")
 skeleton = NodePath("")
 
-[node name="hand_rail" type="MeshInstance3D" parent="."]
+[node name="hand_rail" type="MeshInstance3D" parent="." unique_id=731605557]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 0.12978077, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_16bo8")
 skeleton = NodePath("")
 
-[node name="hand_rail_001" type="MeshInstance3D" parent="."]
+[node name="hand_rail_001" type="MeshInstance3D" parent="." unique_id=1197366629]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 89.47497, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_woa6i")
 skeleton = NodePath("")
 
-[node name="hand_rail_002" type="MeshInstance3D" parent="."]
+[node name="hand_rail_002" type="MeshInstance3D" parent="." unique_id=1733786074]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 66.82531, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_2i4th")
 skeleton = NodePath("")
 
-[node name="hand_rail_003" type="MeshInstance3D" parent="."]
+[node name="hand_rail_003" type="MeshInstance3D" parent="." unique_id=1652293708]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 44.81842, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_wy1ol")
 skeleton = NodePath("")
 
-[node name="hand_rail_004" type="MeshInstance3D" parent="."]
+[node name="hand_rail_004" type="MeshInstance3D" parent="." unique_id=2110497785]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 22.918896, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_lek5b")
 skeleton = NodePath("")
 
-[node name="counter" type="MeshInstance3D" parent="."]
+[node name="counter" type="MeshInstance3D" parent="." unique_id=1130730291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5689898, 19.412668, -34.034576)
 mesh = SubResource("ArrayMesh_7ey07")
 skeleton = NodePath("")
 
-[node name="hand_rail_005" type="MeshInstance3D" parent="."]
+[node name="hand_rail_005" type="MeshInstance3D" parent="." unique_id=815656565]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.6534404, -0.7133942, 1.1920929e-07, -0.700763, 89.16356, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_ahen5")
 skeleton = NodePath("")
 
-[node name="hand_rail_006" type="MeshInstance3D" parent="."]
+[node name="hand_rail_006" type="MeshInstance3D" parent="." unique_id=187254505]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.6534404, -0.7133942, 1.1920929e-07, -0.700763, 67.11557, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_08emu")
 skeleton = NodePath("")
 
-[node name="hand_rail_007" type="MeshInstance3D" parent="."]
+[node name="hand_rail_007" type="MeshInstance3D" parent="." unique_id=1792463880]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.6534404, -0.7133942, 1.1920929e-07, -0.700763, 45.281124, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_iet6s")
 skeleton = NodePath("")
 
-[node name="hand_rail_008" type="MeshInstance3D" parent="."]
+[node name="hand_rail_008" type="MeshInstance3D" parent="." unique_id=1538341963]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.6534404, -0.7133942, 1.1920929e-07, -0.700763, 23.286524, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_jbrff")
 skeleton = NodePath("")

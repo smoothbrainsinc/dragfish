@@ -11,9 +11,17 @@
 [node name="FishSchool" type="Node3D" parent="." unique_id=1080093227]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6, 0)
 script = ExtResource("1_pat3b")
-number_of_fish = 2000
-separation_weight = 0.5
+number_of_fish = 50
+separation_weight = 1.5
 alignment_weight = 1.0
+cohesion_weight = 2.5
+lake_radius = 750.0
+spawn_center = Vector3(0, 0, 0)
+inner_x = 200.0
+inner_z = 130.0
+outer_x = 400.0
+outer_z = 400.0
+max_depth = -20.0
 
 [node name="blue_gill2" parent="." unique_id=776176130 instance=ExtResource("2_sbaja")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.845, -6, 0)

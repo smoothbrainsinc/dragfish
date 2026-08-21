@@ -18,7 +18,7 @@ const COLOR_PLAYER = Color(0.3, 1.0, 0.3, 1)   # Green
 const COLOR_NPC = Color(0.3, 0.3, 1.0, 1)       # Blue
 const COLOR_BOTH = Color(1.0, 0.3, 1.0, 1)      # Purple
 
-var all_configs: Array = []
+var all_configs: Array[VehicleConfig] = []
 var player_config: VehicleConfig = null
 var npc_config: VehicleConfig = null
 var current_preview_car: Node = null
@@ -47,7 +47,7 @@ func _load_all_configs() -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
-func _populate_tree(configs: Array) -> void:
+func _populate_tree(configs: Array[VehicleConfig]) -> void:
 	tree.clear()
 	var root = tree.create_item()
 
@@ -103,6 +103,7 @@ func _on_search_changed(text: String) -> void:
 
 func _on_tree_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
+		tree.deselect_all()
 		var mouse_pos = tree.get_local_mouse_position()
 		var item = tree.get_item_at_position(mouse_pos)
 		if not item:

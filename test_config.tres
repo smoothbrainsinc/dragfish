@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VehicleConfig" load_steps=9 format=3 uid="uid://il6evspjsyb0"]
+[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://il6evspjsyb0"]
 
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_0cj1u"]
 [ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_7vyde"]
@@ -27,10 +27,10 @@ metadata/_custom_type_script = "uid://du1enhren7ngr"
 script = ExtResource("1_7vyde")
 vehicle_name = "TestCar"
 display_name = "Test Car"
-scene_path = "uid://biko607vkv00n"
 mass = 1070.0
 engine = SubResource("Resource_c43ut")
 transmission = SubResource("Resource_pt5hk")
 front_tires = SubResource("Resource_hijly")
 rear_tires = SubResource("Resource_7byd2")
+scene_path = "uid://biko607vkv00n"
 metadata/_custom_type_script = "uid://b4dutpl7gc2pl"

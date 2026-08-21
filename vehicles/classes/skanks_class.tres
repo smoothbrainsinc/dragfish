@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VehicleClassConfig" format=3]
+
+[ext_resource type="Script" uid="uid://bkxbhngwgkqb2" path="res://scripts/game/vehicle/resources/Vehicleclassconfig.gd" id="1_skcl"]
+[ext_resource type="Resource" path="res://vehicles/classes/skanks_front_stock.tres" id="2_skcl"]
+[ext_resource type="Resource" path="res://vehicles/classes/skanks_rear_stock.tres" id="3_skcl"]
+[resource]
+script = ExtResource("1_skcl")
+class_name_id = "skanks"
+display_name = "Skanks"
+description = "motorcycles"
+stock_front_wheel_config = ExtResource("2_skcl")
+stock_rear_wheel_config = ExtResource("3_skcl")
+metadata/_custom_type_script = "uid://bkxbhngwgkqb2"

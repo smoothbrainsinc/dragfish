@@ -1,14 +1,14 @@
-[gd_scene load_steps=46 format=4 uid="uid://bfe8ptvkinufx"]
+[gd_scene format=4 uid="uid://bfe8ptvkinufx"]
 
-[ext_resource type="Texture2D" uid="uid://bfvs637c5v7ou" path="res://colors/bleacher-supports_concrete_floor_worn_001_diff_2k.jpg" id="1_48j8b"]
-[ext_resource type="Texture2D" uid="uid://be6lus8niwfne" path="res://colors/bleacher-supports_concrete_floor_worn_001_rough_2k.png" id="2_wdu5p"]
-[ext_resource type="Texture2D" uid="uid://ckovwl61hmwhv" path="res://colors/bleacher-supports_concrete_floor_worn_001_nor_gl_2k.png" id="3_n7kgb"]
-[ext_resource type="Texture2D" uid="uid://dqhk6l5gjt682" path="res://colors/bleacher-supports_metal03_diffuse.jpg" id="4_u4qs5"]
-[ext_resource type="Texture2D" uid="uid://bb3owscc8f1e7" path="res://colors/bleacher-supports_metal_glossiness.png" id="5_er22n"]
-[ext_resource type="Texture2D" uid="uid://crrau4oatkokl" path="res://colors/bleacher-supports_metal_normal_opengl.jpg" id="6_ivnrg"]
-[ext_resource type="Texture2D" uid="uid://drir5tkdt4gd2" path="res://colors/bleacher-supports_metal02_diffuse.jpg" id="7_qb40n"]
-[ext_resource type="Texture2D" uid="uid://be5flb1jwtc8r" path="res://colors/bleacher-supports_metal_metallic-metal_glossiness.png" id="8_odigw"]
-[ext_resource type="Texture2D" uid="uid://dbkqy8qlq1d1q" path="res://colors/bleacher-supports_metal_normal_opengl_8.jpg" id="9_e3n5o"]
+[ext_resource type="Texture2D" uid="uid://bfvs637c5v7ou" path="res://assets/materials/bleacher-supports_concrete_floor_worn_001_diff_2k.jpg" id="1_48j8b"]
+[ext_resource type="Texture2D" uid="uid://be6lus8niwfne" path="res://assets/materials/bleacher-supports_concrete_floor_worn_001_rough_2k.png" id="2_wdu5p"]
+[ext_resource type="Texture2D" uid="uid://ckovwl61hmwhv" path="res://assets/materials/bleacher-supports_concrete_floor_worn_001_nor_gl_2k.png" id="3_n7kgb"]
+[ext_resource type="Texture2D" uid="uid://dqhk6l5gjt682" path="res://assets/materials/bleacher-supports_metal03_diffuse.jpg" id="4_u4qs5"]
+[ext_resource type="Texture2D" uid="uid://bb3owscc8f1e7" path="res://assets/materials/bleacher-supports_metal_glossiness.png" id="5_er22n"]
+[ext_resource type="Texture2D" uid="uid://crrau4oatkokl" path="res://assets/materials/bleacher-supports_metal_normal_opengl.jpg" id="6_ivnrg"]
+[ext_resource type="Texture2D" uid="uid://drir5tkdt4gd2" path="res://assets/materials/bleacher-supports_metal02_diffuse.jpg" id="7_qb40n"]
+[ext_resource type="Texture2D" uid="uid://be5flb1jwtc8r" path="res://assets/materials/bleacher-supports_metal_metallic-metal_glossiness.png" id="8_odigw"]
+[ext_resource type="Texture2D" uid="uid://dbkqy8qlq1d1q" path="res://assets/materials/bleacher-supports_metal_normal_opengl_8.jpg" id="9_e3n5o"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c77b6"]
 resource_name = "Concrete.004"
@@ -574,84 +574,84 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ibonv")
 
-[node name="bleachers" type="Node3D"]
+[node name="bleachers" type="Node3D" unique_id=1698512018]
 
-[node name="steps_right_001" type="MeshInstance3D" parent="."]
+[node name="steps_right_001" type="MeshInstance3D" parent="." unique_id=1056691525]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.851547, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_j4goh")
 skeleton = NodePath("")
 
-[node name="steps_right_002" type="MeshInstance3D" parent="."]
+[node name="steps_right_002" type="MeshInstance3D" parent="." unique_id=24778418]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.83943, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_i4ymo")
 skeleton = NodePath("")
 
-[node name="steps_right_003" type="MeshInstance3D" parent="."]
+[node name="steps_right_003" type="MeshInstance3D" parent="." unique_id=413132712]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 87.65791, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_vi2ir")
 skeleton = NodePath("")
 
-[node name="concrete_for_seats" type="MeshInstance3D" parent="."]
+[node name="concrete_for_seats" type="MeshInstance3D" parent="." unique_id=1179606288]
 transform = Transform3D(1.4482491, 0, 0, 0, 1, 0, 0, 0, 1, 1.5101452, 0, 0)
 mesh = SubResource("ArrayMesh_opj42")
 skeleton = NodePath("")
 
-[node name="steps_right_004" type="MeshInstance3D" parent="."]
+[node name="steps_right_004" type="MeshInstance3D" parent="." unique_id=1860254556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.973196, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_6m1ld")
 skeleton = NodePath("")
 
-[node name="steps_right_005" type="MeshInstance3D" parent="."]
+[node name="steps_right_005" type="MeshInstance3D" parent="." unique_id=604233498]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.010662079, 8.975265, -15.654019)
 mesh = SubResource("ArrayMesh_hx6r3")
 skeleton = NodePath("")
 
-[node name="safety_rails" type="MeshInstance3D" parent="."]
+[node name="safety_rails" type="MeshInstance3D" parent="." unique_id=781127946]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 0.12978077, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_ny2wb")
 skeleton = NodePath("")
 
-[node name="safety_rails_001" type="MeshInstance3D" parent="."]
+[node name="safety_rails_001" type="MeshInstance3D" parent="." unique_id=586120403]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 89.47497, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_i14au")
 skeleton = NodePath("")
 
-[node name="safety_rails_002" type="MeshInstance3D" parent="."]
+[node name="safety_rails_002" type="MeshInstance3D" parent="." unique_id=457080300]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 66.82531, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_7bylo")
 skeleton = NodePath("")
 
-[node name="safety_rails_003" type="MeshInstance3D" parent="."]
+[node name="safety_rails_003" type="MeshInstance3D" parent="." unique_id=184665129]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 44.81842, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_a2jfg")
 skeleton = NodePath("")
 
-[node name="safety_rails_004" type="MeshInstance3D" parent="."]
+[node name="safety_rails_004" type="MeshInstance3D" parent="." unique_id=1156160866]
 transform = Transform3D(0.71339417, -1.4901161e-08, 0.70076305, -0.4057191, 0.81535053, 0.41303214, -0.57136756, -0.5789677, 0.58166623, 22.918896, 0.2423061, -0.6183759)
 mesh = SubResource("ArrayMesh_p2jox")
 skeleton = NodePath("")
 
-[node name="counter_top" type="MeshInstance3D" parent="."]
+[node name="counter_top" type="MeshInstance3D" parent="." unique_id=922043146]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5689898, 19.412668, -34.034576)
 mesh = SubResource("ArrayMesh_trt8p")
 skeleton = NodePath("")
 
-[node name="safety_rails_005" type="MeshInstance3D" parent="."]
+[node name="safety_rails_005" type="MeshInstance3D" parent="." unique_id=387281870]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.65344036, -0.7133942, 8.940697e-08, -0.700763, 89.16356, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_lbvma")
 skeleton = NodePath("")
 
-[node name="safety_rails_006" type="MeshInstance3D" parent="."]
+[node name="safety_rails_006" type="MeshInstance3D" parent="." unique_id=1595044117]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.65344036, -0.7133942, 8.940697e-08, -0.700763, 67.11557, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_aqrvk")
 skeleton = NodePath("")
 
-[node name="safety_rails_007" type="MeshInstance3D" parent="."]
+[node name="safety_rails_007" type="MeshInstance3D" parent="." unique_id=534121131]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.65344036, -0.7133942, 8.940697e-08, -0.700763, 45.281124, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_h8v12")
 skeleton = NodePath("")
 
-[node name="safety_rails_008" type="MeshInstance3D" parent="."]
+[node name="safety_rails_008" type="MeshInstance3D" parent="." unique_id=1337219182]
 transform = Transform3D(-0.2811954, -0.9159597, 0.28626376, -0.6418706, 0.40127015, 0.65344036, -0.7133942, 8.940697e-08, -0.700763, 23.286524, 17.308697, -29.019009)
 mesh = SubResource("ArrayMesh_db3do")
 skeleton = NodePath("")

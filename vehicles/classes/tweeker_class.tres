@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VehicleClassConfig" format=3]
+
+[ext_resource type="Script" uid="uid://bkxbhngwgkqb2" path="res://scripts/game/vehicle/resources/Vehicleclassconfig.gd" id="1_twcl"]
+[ext_resource type="Resource" path="res://vehicles/classes/tweeker_front_stock.tres" id="2_twcl"]
+[ext_resource type="Resource" path="res://vehicles/classes/tweeker_rear_stock.tres" id="3_twcl"]
+[resource]
+script = ExtResource("1_twcl")
+class_name_id = "tweeker"
+display_name = "Tweeker"
+description = "stayed up 3 days tuning, weird franken-builds that somehow work"
+stock_front_wheel_config = ExtResource("2_twcl")
+stock_rear_wheel_config = ExtResource("3_twcl")
+metadata/_custom_type_script = "uid://bkxbhngwgkqb2"

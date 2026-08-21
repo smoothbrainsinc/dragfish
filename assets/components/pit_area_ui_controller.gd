@@ -33,6 +33,7 @@ func _ready() -> void:
 		"",
 		ResourceLoader.CACHE_MODE_IGNORE
 	) as VehicleConfig
+	GameManager.player_car_config = vehicle_config
 	_load_vehicle()
 
 
@@ -216,8 +217,7 @@ func _on_reset_pressed() -> void:
 
 
 func _on_race_pressed() -> void:
-	# Config is already up to date in memory.
-	# Vehicle script will call vehicle_config.apply_to_vehicle() on _ready().
+	# GameManager.player_car_config IS vehicle_config (same object) — always current.
 	get_tree().change_scene_to_file("res://scenes/pluto_raceway.tscn")
 
 

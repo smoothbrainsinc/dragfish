@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SpawnEntry" format=3 uid="uid://bho5rfpnoctcm"]
+
+[ext_resource type="Script" uid="uid://lh2s4t8a4lmv" path="res://scenes/Spawn_entry.gd" id="1_qf68t"]
+
+[resource]
+script = ExtResource("1_qf68t")
+model_path = "uid://bah5i4d7nwgx6"
+max_scale = 1.6
+metadata/_custom_type_script = "uid://lh2s4t8a4lmv"

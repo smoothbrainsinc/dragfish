@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dr1ngy5xddmcd"]
+[gd_scene format=3 uid="uid://dr1ngy5xddmcd"]
 
 [ext_resource type="PackedScene" uid="uid://cfp5dn5xh2jrh" path="res://mermaid/merelf.glb" id="1_psnln"]
 [ext_resource type="Script" uid="uid://ltit38hegqiw" path="res://scripts/swimming_script.gd" id="2_4g2lu"]
 
-[node name="merelf" instance=ExtResource("1_psnln")]
+[node name="merelf" unique_id=930492122 instance=ExtResource("1_psnln")]
 script = ExtResource("2_4g2lu")
 
 [node name="Armature" parent="." index="0"]
@@ -28,8 +28,8 @@ bones/18/rotation = Quaternion(-0.089720495, 0.019044548, -0.2573545, 0.96195436
 bones/19/rotation = Quaternion(-0.02342035, 0.0033773552, -0.07509331, 0.9968958)
 
 [node name="AnimationPlayer" parent="." index="1"]
-autoplay = "ArmatureAction"
+autoplay = &"ArmatureAction"
 
-[node name="RayCast3D" type="RayCast3D" parent="." index="2"]
+[node name="RayCast3D" type="RayCast3D" parent="." index="2" unique_id=218537991]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 target_position = Vector3(0, 0, 2)

@@ -1,0 +1,11 @@
+
+[gd_resource type="Resource" script_class="WheelConfig" load_steps=2 format=3]
+[ext_resource type="Script" path="res://Wheelconfig.gd" id="1_tbre"]
+[resource]
+script = ExtResource("1_tbre")
+radius = 0.4
+rest_length = 0.3
+friction_slip = 1.5
+suspension_travel = 0.25
+suspension_max_force = 6000.0
+metadata/_custom_type_script = "uid://dgwtba5ryj11c"

@@ -1,35 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq1rea4p55sum"]
+[gd_scene format=3 uid="uid://cq1rea4p55sum"]
 
 [ext_resource type="PackedScene" uid="uid://dgmbdlkkmf0uc" path="res://assets/models/track_section_with_barriers.tscn" id="1_fl3o1"]
 
-[node name="track_1000m_full_barriers" type="Node3D"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_dbiuj"]
+size = Vector2(0.25, 1000)
 
-[node name="track_section_with_barriers" parent="." instance=ExtResource("1_fl3o1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.003, 0, -0.006)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4fu3u"]
+albedo_color = Color(1, 1, 0, 1)
 
-[node name="track_section_with_barriers2" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_1000m_full_barriers" type="Node3D" unique_id=1820486977]
+
+[node name="track_section_with_barriers" parent="." unique_id=73601099 instance=ExtResource("1_fl3o1")]
+
+[node name="track_section_with_barriers2" parent="." unique_id=930838056 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
 
-[node name="track_section_with_barriers3" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers3" parent="." unique_id=1321314879 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 200)
 
-[node name="track_section_with_barriers4" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers4" parent="." unique_id=598609639 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 300)
 
-[node name="track_section_with_barriers5" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers5" parent="." unique_id=1024405468 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 400)
 
-[node name="track_section_with_barriers6" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers6" parent="." unique_id=1592744784 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500)
 
-[node name="track_section_with_barriers7" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers7" parent="." unique_id=41544626 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 600)
 
-[node name="track_section_with_barriers8" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers8" parent="." unique_id=10664978 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 700)
 
-[node name="track_section_with_barriers9" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers9" parent="." unique_id=1026811738 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 800)
 
-[node name="track_section_with_barriers10" parent="." instance=ExtResource("1_fl3o1")]
+[node name="track_section_with_barriers10" parent="." unique_id=1589942694 instance=ExtResource("1_fl3o1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 900)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1285889951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 450)
+mesh = SubResource("PlaneMesh_dbiuj")
+surface_material_override/0 = SubResource("StandardMaterial3D_4fu3u")

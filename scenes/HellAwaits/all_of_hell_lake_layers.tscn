@@ -10,7 +10,6 @@
 [node name="all_of_lake_hell_layers" type="Node3D" unique_id=1108319171]
 
 [node name="L1_HellAwaits" parent="." unique_id=396869466 instance=ExtResource("1_elwgs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.098999, -145.43237, 0)
 
 [node name="L2_HellAwaits" parent="." unique_id=76403907 instance=ExtResource("2_cmvi0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.850708, 0, -21.682312)

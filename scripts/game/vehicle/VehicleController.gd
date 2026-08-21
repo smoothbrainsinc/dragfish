@@ -35,6 +35,7 @@ func initialize(config: VehicleConfig, player: bool) -> void:
 	_cache_wheels()
 	_create_modules()
 	_setup_modules()
+	config.apply_to_vehicle(self)
 	_find_chute()
 
 	mass = config.mass
@@ -137,12 +138,14 @@ func _find_chute() -> void:
 		print("[VehicleController] No chute on: ", name)
 
 
-func _on_finish_line_entered(body: Node3D) -> void:
-	if body == self and chute:
-		chute.deploy()
+
 
 # Manual chute control for player
 func _input(event) -> void:
+	if event.is_action_pressed("deploy_chute") or event.is_action_pressed("retract_chute"):
+		var deployed_str = str(chute.is_deployed) if chute else "N/A"
+		print("[DEBUG] C pressed | is_player=", is_player, " chute=", chute, " is_deployed=", deployed_str)
+
 	if not is_player or not chute:
 		return
 	if event.is_action_pressed("deploy_chute"):
@@ -157,22 +160,19 @@ func _input(event) -> void:
 func _apply_drive_force(force: float) -> void:
 	if driven_wheels.is_empty():
 		return
-
 	var current_gear_ratio := transmission.get_current_gear_ratio()
 	if current_gear_ratio <= 0.0:
 		for w in driven_wheels:
 			w.engine_force = 0.0
 		return
-
-	var max_wheel_rpm := engine.current_rpm / current_gear_ratio
+	var wheel_rpm: float = abs(driven_wheels[0].get_rpm())
 	var wheel_radius := driven_wheels[0].wheel_radius
-	var max_vehicle_speed := (max_wheel_rpm * TAU / 60.0) * wheel_radius
-
-	if abs(forward_speed) > max_vehicle_speed * 1.02:
+	var max_vehicle_speed := (wheel_rpm * TAU / 60.0) * wheel_radius
+	if abs(forward_speed) > max_vehicle_speed * 1.15:
+		print("[Clamp] gear ", transmission.get_gear_number(), " max_speed=", max_vehicle_speed, " forward_speed=", forward_speed, " -> ZEROED")
 		for w in driven_wheels:
 			w.engine_force = 0.0
 		return
-
 	var per_wheel := force / driven_wheels.size()
 	for w in driven_wheels:
 		w.engine_force = per_wheel

@@ -16,11 +16,11 @@
 //    position). If that position is above the water surface
 //    (computed from the same wave math as the surface shader),
 //    the pixel is discarded. Below the surface, Beer-Lambert
-//    absorption + refraction wobble is applied.
+//    absorption + refraction wobble is applied, with a near-field
+//    haze floor so close-range geometry never reads fully clear.
 // ============================================================
-
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_test_disabled, blend_mix;
+render_mode unshaded, cull_disabled, depth_test_disabled;
 
 // ---- Wave params: MUST match water_surface.gdshader ----
 uniform float sea_height : hint_range(0.0, 5.0)  = 1.3;
@@ -30,9 +30,12 @@ uniform float sea_freq   : hint_range(0.0, 0.5)  = 0.08;
 uniform float height_offset = 0.0;
 
 // ---- Underwater look ----
-uniform vec3  underwater_color    : source_color = vec3(0.02, 0.18, 0.25);
-uniform float absorption_strength : hint_range(0.0, 2.0) = 0.35;
-uniform float deep_tint_strength  : hint_range(0.0, 1.0) = 0.65;
+uniform vec3  underwater_color    : source_color = vec3(0.10, 0.26, 0.13);
+uniform float absorption_strength : hint_range(0.0, 2.0) = 0.15;
+uniform float max_clarity         : hint_range(0.0, 1.0) = 0.55;
+// max_clarity is the highest transmittance ever allowed, even at
+// zero thickness. Lower = hazier close to camera. 1.0 = old behavior
+// (clear glass up close). Start around 0.5-0.6 to match murky lake refs.
 
 // ---- Screen wobble / refraction ----
 uniform float refraction_amount : hint_range(0.0, 0.015) = 0.004;
@@ -92,79 +95,84 @@ void vertex() {
 // ============================================================
 
 void fragment() {
-	// --- Reconstruct the ACTUAL scene position under this pixel from the
-	//     depth buffer, instead of using the box mesh's own surface position.
+	
 	float raw_depth = texture(DEPTH_TEXTURE, SCREEN_UV).x;
 
-	// Sky pixels report the far-plane sentinel depth. Reprojecting that
-	// through INV_PROJECTION_MATRIX produces garbage/huge world positions,
-	// which alias badly when fed into the wave noise below — that aliasing
-	// is the black jagged line at the waterline/horizon. Bail out early.
-	if (raw_depth >= 0.9999) {
-		discard;
-	}
+	vec3 camera_world_pos = INV_VIEW_MATRIX[3].xyz;
 
-	vec3 ndc_discard = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth);
-#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
-	ndc_discard.z = raw_depth * 2.0 - 1.0;
-#endif
-	vec4 view_space_discard = INV_PROJECTION_MATRIX * vec4(ndc_discard, 1.0);
-	view_space_discard.xyz /= view_space_discard.w;
-	vec3 scene_world_pos = (INV_VIEW_MATRIX * vec4(view_space_discard.xyz, 1.0)).xyz;
-
-	// --- Reconstruct wave height using the REAL world XZ under this pixel
-	vec2 uv   = scene_world_pos.xz;
-	uv.x     *= 0.75;
-	float freq = sea_freq;
-	float amp  = sea_height;
-	float chop = sea_choppy;
-	float height = 0.0;
+	vec2 cam_uv = camera_world_pos.xz;
+	cam_uv.x   *= 0.75;
+	float cam_freq   = sea_freq;
+	float cam_amp    = sea_height;
+	float cam_chop   = sea_choppy;
+	float cam_height = 0.0;
 	for (int i = 0; i < ITER_GEOMETRY; i++) {
-		float d  = sea_octave((uv + TIME * sea_speed) * freq, chop);
-		d       += sea_octave((uv - TIME * sea_speed) * freq, chop);
-		height  += d * amp;
-		uv      *= octave_m;
-		freq    *= 1.9;
-		amp     *= 0.22;
-		chop     = mix(chop, 1.0, 0.2);
+		float d  = sea_octave((cam_uv + TIME * sea_speed) * cam_freq, cam_chop);
+		d       += sea_octave((cam_uv - TIME * sea_speed) * cam_freq, cam_chop);
+		cam_height += d * cam_amp;
+		cam_uv   *= octave_m;
+		cam_freq *= 1.9;
+		cam_amp  *= 0.22;
+		cam_chop  = mix(cam_chop, 1.0, 0.2);
 	}
+	float surface_y_at_camera = cam_height + height_offset + water_level_fudge;
+	bool camera_is_underwater = camera_world_pos.y < surface_y_at_camera;
 
-	float surface_y = height + height_offset + water_level_fudge;
-
-	// Discard pixels whose REAL scene position is above the water surface
-	if (scene_world_pos.y > surface_y) {
-		discard;
-	}
-
-	// --- Animated screen-space wobble (refraction)
-	vec2 uv_screen = SCREEN_UV;
-	vec2 noise_dir = vec2(
-		noise(uv_screen * 12.0 + TIME * refraction_speed * vec2(1.0, 0.4)),
-		noise(uv_screen * 12.0 + TIME * refraction_speed * vec2(0.6, 1.0))
-	) * 2.0 - 1.0;
-
-	vec2 uv_distorted = uv_screen + noise_dir * refraction_amount;
-	vec3 scene_color  = texture(SCREEN_TEXTURE, uv_distorted).rgb;
-
-	// --- Depth-based thickness
-	float thickness_raw_depth = texture(DEPTH_TEXTURE, uv_distorted).x;
-	vec3 ndc        = vec3(uv_distorted * 2.0 - 1.0, thickness_raw_depth);
+	if (raw_depth >= 0.999) {
+		if (camera_is_underwater) {
+			ALBEDO = underwater_color;
+			ALPHA = 0.95;
+		} else {
+			discard;
+		}
+	} else {
+		vec3 ndc_discard = vec3(SCREEN_UV * 2.0 - 1.0, raw_depth);
 #if CURRENT_RENDERER == RENDERER_COMPATIBILITY
-	ndc.z = thickness_raw_depth * 2.0 - 1.0;
+		ndc_discard.z = raw_depth * 2.0 - 1.0;
 #endif
-	vec4 view_pos    = INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
-	view_pos.xyz    /= view_pos.w;
-	float scene_z    = -view_pos.z;
-	float thickness  = max(0.0, scene_z - (-VIEW_MATRIX[3].z - world_pos.y));
+		vec4 view_space_discard = INV_PROJECTION_MATRIX * vec4(ndc_discard, 1.0);
+		view_space_discard.xyz /= view_space_discard.w;
+		vec3 scene_world_pos = (INV_VIEW_MATRIX * vec4(view_space_discard.xyz, 1.0)).xyz;
 
-	// --- Beer-Lambert absorption
-	float transmittance = exp(-thickness * absorption_strength);
-	vec3  tinted        = mix(scene_color, underwater_color, deep_tint_strength);
-	vec3  final_color   = tinted * transmittance;
+		vec2 uv   = scene_world_pos.xz;
+		uv.x     *= 0.75;
+		float freq = sea_freq;
+		float amp  = sea_height;
+		float chop = sea_choppy;
+		float height = 0.0;
+		for (int i = 0; i < ITER_GEOMETRY; i++) {
+			float d  = sea_octave((uv + TIME * sea_speed) * freq, chop);
+			d       += sea_octave((uv - TIME * sea_speed) * freq, chop);
+			height  += d * amp;
+			uv      *= octave_m;
+			freq    *= 1.9;
+			amp     *= 0.22;
+			chop     = mix(chop, 1.0, 0.2);
+		}
 
-	// --- Fog toward pure underwater color at extreme depth
-	float fog   = 1.0 - exp(-thickness * absorption_strength * 0.7);
-	final_color = mix(final_color, underwater_color, fog * 0.85);
+		float surface_y = height + height_offset + water_level_fudge;
 
-	ALBEDO = final_color;
+		if (scene_world_pos.y > surface_y) {
+			discard;
+		} else {
+			vec2 uv_screen = SCREEN_UV;
+			vec2 noise_dir = vec2(
+				noise(uv_screen * 12.0 + TIME * refraction_speed * vec2(1.0, 0.4)),
+				noise(uv_screen * 12.0 + TIME * refraction_speed * vec2(0.6, 1.0))
+			) * 2.0 - 1.0;
+
+			vec2 uv_distorted = uv_screen + noise_dir * refraction_amount;
+			vec3 scene_color  = texture(SCREEN_TEXTURE, uv_distorted).rgb;
+
+			float thickness = length(scene_world_pos - camera_world_pos);
+
+			// --- Beer-Lambert absorption with near-field haze floor
+			float transmittance = exp(-thickness * absorption_strength);
+			transmittance = min(transmittance, max_clarity);
+			vec3  final_color = mix(underwater_color, scene_color, transmittance);
+
+			ALBEDO = final_color;
+			ALPHA = 0.95; 
+		}
+	}
 }

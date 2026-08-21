@@ -4,6 +4,9 @@ var speed = 80.0
 var mouse_sensitivity = 0.003
 var mouse_captured = false
 
+# Add this - reference to your underwater material
+@onready var underwater_material = $CanvasLayer/ColorRect.material
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	mouse_captured = true
@@ -25,3 +28,9 @@ func _process(delta):
 	if Input.is_key_pressed(KEY_Q): dir -= global_transform.basis.y
 	if Input.is_key_pressed(KEY_E): dir += global_transform.basis.y
 	global_position += dir.normalized() * speed * delta
+	
+	# Add this - underwater check
+	if global_position.y < 0:  # Change 0 to your water level
+		underwater_material.set_shader_parameter("underwater", true)
+	else:
+		underwater_material.set_shader_parameter("underwater", false)

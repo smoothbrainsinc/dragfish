@@ -41,17 +41,13 @@ func setup(front_config: TireConfig, rear_config: TireConfig) -> void:
 # ---------------------------------------------------------
 # Visual wheel rotation only (VehicleWheel3D handles forces)
 # ---------------------------------------------------------
-func update_wheel_slip(wheels: Array[VehicleWheel3D], forward_speed: float) -> void:
+func update_wheel_slip(wheels: Array[VehicleWheel3D], _forward_speed: float) -> void:
 	var delta := get_physics_process_delta_time()
 	if delta <= 0.0:
 		return
-
 	for w in wheels:
-		var circumference := TAU * w.wheel_radius
-		if circumference <= 0.0:
-			continue
-
-		var rotation_deg := (forward_speed / circumference) * 360.0 * delta
+		var wheel_rpm: float = w.get_rpm()
+		var rotation_deg: float = (wheel_rpm / 60.0) * 360.0 * delta
 		w.rotation_degrees.x += rotation_deg
 
 

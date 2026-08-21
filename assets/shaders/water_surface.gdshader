@@ -20,10 +20,14 @@ shader_type spatial;
 // ---- Uniforms: Depth & Fog ----
 uniform sampler2D DEPTH_TEXTURE   : hint_depth_texture, filter_linear_mipmap;
 uniform sampler2D SCREEN_TEXTURE  : hint_screen_texture, filter_linear_mipmap;
-uniform float max_depth           : hint_range(0.1, 50.0, 0.1) = 10.0;
+uniform float max_depth           : hint_range(0.1, 50.0, 0.1) = 10;
 uniform float water_level         : hint_range(-10.0, 10.0, 0.1) = 0.0;
-uniform vec3  underwater_fog_color : source_color = vec3(0.0, 0.05, 0.1);
+uniform vec3  underwater_fog_color : source_color = vec3(0.03, 0.08, 0.04);
 uniform float fade_start_depth    : hint_range(0.0, 50.0, 0.1) = 0.5;
+uniform float max_clarity         : hint_range(0.0, 1.0) = 0.55;
+// max_clarity: highest transmittance ever allowed, even at zero depth.
+// Lower = hazier even in shallow water. Matches underwater shader's
+// near-field floor so the look doesn't jump when crossing the surface.
 
 // ---- Uniforms: Wave Shape ----
 uniform float sea_height  : hint_range(0.0, 5.0)  = 1.3;
@@ -40,9 +44,9 @@ uniform float normal_epsilon           : hint_range(0.001, 1.0)       = 0.01;
 uniform float normal_smoothness_dist   : hint_range(0.0, 1000.0)      = 50.0;
 
 // ---- Uniforms: Color & Absorption ----
-uniform vec3 base_tint_color   : source_color = vec3(0.439, 0.973, 1.0);
-uniform vec3 deep_color        : source_color = vec3(0.0, 0.341, 0.29);
-uniform vec3 water_absorption  : source_color = vec3(0.3, 0.06, 0.02);
+uniform vec3 base_tint_color   : source_color = vec3(0.32, 0.42, 0.20);
+uniform vec3 deep_color        : source_color = vec3(0.04, 0.10, 0.05);
+uniform vec3 water_absorption  : source_color = vec3(0.55, 0.10, 0.35);
 
 // ---- Uniforms: PBR ----
 uniform float roughness : hint_range(0.0, 1.0) = 0.125;
@@ -167,6 +171,16 @@ float get_linear_depth(sampler2D d_tex, vec2 uv, mat4 inv_proj) {
 	return -view.z / view.w;
 }
 
+vec3 get_world_pos(sampler2D d_tex, vec2 uv, mat4 inv_view, mat4 inv_proj) {
+	float depth = texture(d_tex, uv).x;
+	vec4 ndc = vec4(uv * 2.0 - 1.0, depth, 1.0);
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	ndc.z = depth * 2.0 - 1.0;
+#endif
+	vec4 world = inv_view * inv_proj * ndc;
+	return world.xyz / world.w;
+}
+
 // ============================================================
 //  FOAM HELPERS
 // ============================================================
@@ -256,14 +270,15 @@ void fragment() {
 	float dist_to_cam  = length(VERTEX);
 	lod_epsilon        = max(normal_epsilon, dist_to_cam * 0.005);
 	vec3 detailed_normal = get_normal_detailed(world_vert, lod_epsilon, TIME);
-	float smooth_factor  = clamp((dist_to_cam - normal_smoothness_dist) / 200.0, 0.0, 1.0);
+	float smooth_factor  = clamp((dist_to_cam - normal_smoothness_dist) / 80.0, 0.0, 1.0);
 	vec3 final_normal    = mix(detailed_normal, vertex_normal_world, smooth_factor);
 	NORMAL = (VIEW_MATRIX * vec4(final_normal, 0.0)).xyz;
 
-	// --- Depth / Thickness ---
+	// --- Depth / Thickness (TRUE VERTICAL WATER DEPTH, not ray length) ---
 	float water_linear_depth = -VERTEX.z;
 	float bg_linear_depth    = get_linear_depth(DEPTH_TEXTURE, SCREEN_UV, INV_PROJECTION_MATRIX);
-	float thickness          = max(0.0, bg_linear_depth - water_linear_depth);
+	vec3  bg_world_pos_initial = get_world_pos(DEPTH_TEXTURE, SCREEN_UV, INV_VIEW_MATRIX, INV_PROJECTION_MATRIX);
+	float thickness           = max(0.0, world_vert.y - bg_world_pos_initial.y);
 
 	// --- Refraction ---
 	vec3 view_vertex_normal = (VIEW_MATRIX * vec4(vertex_normal_world, 0.0)).xyz;
@@ -281,20 +296,16 @@ void fragment() {
 	}
 
 	vec3 screen_color = texture(SCREEN_TEXTURE, distorted_uv).rgb;
-	thickness         = max(0.0, distorted_bg_depth - water_linear_depth);
+
+	// --- Recompute true vertical depth using the (possibly distorted) sample point ---
+	vec3 bg_world_pos = get_world_pos(DEPTH_TEXTURE, distorted_uv, INV_VIEW_MATRIX, INV_PROJECTION_MATRIX);
+	thickness          = max(0.0, world_vert.y - bg_world_pos.y);
 
 	// --- Depth color ratio ---
 	float fade_range  = max(0.001, max_depth - fade_start_depth);
 	float depth_ratio = clamp((thickness - fade_start_depth) / fade_range, 0.0, 1.0);
 
 	// --- Caustics ---
-	vec4 bg_ndc = vec4(distorted_uv * 2.0 - 1.0, texture(DEPTH_TEXTURE, distorted_uv).x, 1.0);
-#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
-	bg_ndc.z = bg_ndc.z * 2.0 - 1.0;
-#endif
-	vec4 bg_world     = INV_VIEW_MATRIX * INV_PROJECTION_MATRIX * bg_ndc;
-	vec3 bg_world_pos = bg_world.xyz / bg_world.w;
-
 	if (thickness > 0.0) {
 		vec2 caustics_uv1  = bg_world_pos.xz * caustics_scale;
 		caustics_uv1.x    += TIME * caustics_speed;
@@ -307,8 +318,9 @@ void fragment() {
 		screen_color       += caustics_val * caustics_intensity * caustics_fade;
 	}
 
-	// --- Beer-Lambert Absorption ---
+	// --- Beer-Lambert Absorption (with near-field clarity floor) ---
 	vec3 transmittance       = exp(-thickness * water_absorption);
+	transmittance             = min(transmittance, vec3(max_clarity));
 	vec3 water_volume_color  = mix(base_tint_color, deep_color, depth_ratio);
 	vec3 apparent_seabed     = screen_color * water_volume_color;
 	ALBEDO = mix(underwater_fog_color, apparent_seabed, transmittance);
@@ -352,7 +364,7 @@ void fragment() {
 	ALBEDO   = mix(ALBEDO, foam_color, foam_mask_primary * bubble_alpha);
 
 	// --- PBR ---
-	ROUGHNESS = mix(roughness, 0.8, (foam_mask_primary * bubble_alpha) + foam_mask_shadow);
+	ROUGHNESS = mix(roughness, 0.75, smooth_factor);
 	SPECULAR  = specular;
 	METALLIC  = metallic;
 }
