@@ -55,11 +55,16 @@ func _ready() -> void:
 	fish_button.pressed.connect(func(): fish_requested.emit())
 
 
+const RESULTS_DELAY_SEC: float = 2.5  # time to let cars slow/chute before UI pops up
+
 ## Connect directly: timing_system.both_finished.connect(finish_line.show_results)
 ## Optional portraits: pass winner_portrait if you look one up via VehicleRegistry
-## before showing this scene.
+## before showing this scene. Waits RESULTS_DELAY_SEC before revealing so the player
+## still has time to brake/coast/deploy chute without the screen in the way.
 func show_results(left_results: Dictionary, right_results: Dictionary, winner: String,
 		winner_portrait: Texture2D = null) -> void:
+	await get_tree().create_timer(RESULTS_DELAY_SEC).timeout
+
 	visible = true
 	_reset_panel(left_panel)
 	_reset_panel(right_panel)

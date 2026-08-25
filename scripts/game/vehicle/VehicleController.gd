@@ -1,6 +1,9 @@
 extends VehicleBody3D
 class_name VehicleController
 
+const WHEEL_SYNC_GRACE_TIME := 0.35  # seconds to suppress the drive-force
+									  # desync clamp after a gear shift completes
+
 # ===== Configuration =====
 var vehicle_config: VehicleConfig
 var is_player: bool
@@ -19,6 +22,8 @@ var all_wheels: Array[VehicleWheel3D] = []
 # ===== State =====
 var initialized := false
 var forward_speed := 0.0
+var wheel_sync_grace_timer := 0.0  # suppresses the drive-force desync clamp right after a shift,
+									 # giving the physical wheel time to spin back up to speed
 
 # ===== Chute =====
 var chute: DragChute = null
@@ -67,6 +72,9 @@ func stop_vehicle() -> void:
 
 # =============================================================
 func _physics_process(delta: float) -> void:
+
+	if wheel_sync_grace_timer > 0.0:
+		wheel_sync_grace_timer -= delta
 
 	if Engine.get_physics_frames() % 120 == 0:
 		print("Gear: %d | Ratio: %.2f | Speed: %.1f mph" % [
@@ -165,14 +173,26 @@ func _apply_drive_force(force: float) -> void:
 		for w in driven_wheels:
 			w.engine_force = 0.0
 		return
-	var wheel_rpm: float = abs(driven_wheels[0].get_rpm())
-	var wheel_radius := driven_wheels[0].wheel_radius
-	var max_vehicle_speed := (wheel_rpm * TAU / 60.0) * wheel_radius
-	if abs(forward_speed) > max_vehicle_speed * 1.15:
-		print("[Clamp] gear ", transmission.get_gear_number(), " max_speed=", max_vehicle_speed, " forward_speed=", forward_speed, " -> ZEROED")
-		for w in driven_wheels:
-			w.engine_force = 0.0
-		return
+
+	# Right after a shift, calculate_wheel_force() returned 0 for the whole
+	# shift window, so the physical wheel's own rotation lags actual road
+	# speed. Skip the desync check here — force is already being restored,
+	# and the wheel needs that force to spin back up. Checking it now would
+	# zero the force again and prevent it from ever catching up.
+	if wheel_sync_grace_timer <= 0.0:
+		var wheel_rpm: float = abs(driven_wheels[0].get_rpm())
+		var wheel_radius := driven_wheels[0].wheel_radius
+		var max_vehicle_speed := (wheel_rpm * TAU / 60.0) * wheel_radius
+		if abs(forward_speed) > max_vehicle_speed * 1.15:
+			# Taper toward the wheel-implied max instead of hard-zeroing.
+			# A hard zero can never recover on its own: zero force means the
+			# wheel can't spin up, so the gap never closes and next frame
+			# trips the same clamp again. Scaling the force down still lets
+			# the wheel accelerate toward the car's real speed.
+			var overspeed_ratio: float = max_vehicle_speed * 1.15 / max(abs(forward_speed), 0.01)
+			force *= clamp(overspeed_ratio, 0.15, 1.0)
+			print("[Clamp] gear ", transmission.get_gear_number(), " max_speed=", max_vehicle_speed, " forward_speed=", forward_speed, " -> tapered to ", overspeed_ratio)
+
 	var per_wheel := force / driven_wheels.size()
 	for w in driven_wheels:
 		w.engine_force = per_wheel
@@ -229,6 +249,7 @@ func _setup_modules() -> void:
 	input.setup(is_player, vehicle_config)
 
 	transmission.set_manual_mode(is_player)
+	transmission.shift_completed.connect(_on_shift_completed)
 
 	if is_player:
 		input.shift_up_requested.connect(_on_shift_up_requested)
@@ -239,6 +260,13 @@ func _on_shift_up_requested() -> void:
 
 func _on_shift_down_requested() -> void:
 	transmission.request_shift_down()
+
+func _on_shift_completed() -> void:
+	# The physical wheel's own rotation speed lags actual road speed after a
+	# force-free shift window (calculate_wheel_force returns 0 while shifting).
+	# Give it a moment to spin back up under restored force before the
+	# desync clamp in _apply_drive_force starts judging it again.
+	wheel_sync_grace_timer = WHEEL_SYNC_GRACE_TIME
 
 func get_forward_speed() -> float:
 	return forward_speed
