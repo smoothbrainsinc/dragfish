@@ -1,8 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://uuw4r85h2xby"]
+[gd_scene format=3 uid="uid://uuw4r85h2xby"]
 
-[ext_resource type="Script" path="res://scenes/finish_line.gd" id="1"]
+[ext_resource type="Script" uid="uid://bfboo886ak32t" path="res://scenes/finish_line.gd" id="1"]
 
-[node name="finishLine" type="Control"]
+[node name="finishLine" type="Control" unique_id=1480192473]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=551187256]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.30567324, 0.5750795, 0.62492436, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=87798049]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,7 +30,7 @@ grow_vertical = 2
 theme_override_constants/separation = 24
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=423613572]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 1, 0.588)
@@ -43,192 +43,192 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="LanesRow" type="HBoxContainer" parent="VBoxContainer"]
+[node name="LanesRow" type="HBoxContainer" parent="VBoxContainer" unique_id=1563415063]
 layout_mode = 2
 theme_override_constants/separation = 24
 alignment = 1
 
-[node name="LeftPanel" type="PanelContainer" parent="VBoxContainer/LanesRow"]
-layout_mode = 2
+[node name="LeftPanel" type="PanelContainer" parent="VBoxContainer/LanesRow" unique_id=1457507195]
 custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
 
-[node name="LeftVBox" type="VBoxContainer" parent="VBoxContainer/LanesRow/LeftPanel"]
+[node name="LeftVBox" type="VBoxContainer" parent="VBoxContainer/LanesRow/LeftPanel" unique_id=550499857]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LeftNameLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="LeftNameLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=1604560061]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
 text = "LEFT LANE"
-
-[node name="LeftReactionLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
-layout_mode = 2
 horizontal_alignment = 1
-text = "--"
 
-[node name="Left60Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="LeftReactionLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=2122027469]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="Left330Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="Left60Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=255312868]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="LeftEighthLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="Left330Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=1495239223]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="Left1000Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="LeftEighthLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=1324771741]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="LeftETLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="Left1000Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=206109205]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="LeftSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox"]
+[node name="LeftETLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=2031983515]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="StatLabelsColumn" type="VBoxContainer" parent="VBoxContainer/LanesRow"]
+[node name="LeftSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=41149209]
+layout_mode = 2
+text = "--"
+horizontal_alignment = 1
+
+[node name="StatLabelsColumn" type="VBoxContainer" parent="VBoxContainer/LanesRow" unique_id=1309854318]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Spacer" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
+[node name="Spacer" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=874242616]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
 text = " "
-
-[node name="ReactionLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="ReactionLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=449410683]
+layout_mode = 2
 text = "Reaction Time"
-
-[node name="SixtyLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="SixtyLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=1677738017]
+layout_mode = 2
 text = "60 ft"
-
-[node name="ThreeThirtyLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="ThreeThirtyLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=601587160]
+layout_mode = 2
 text = "330 ft"
-
-[node name="EighthLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="EighthLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=602082040]
+layout_mode = 2
 text = "1/8 mile"
-
-[node name="ThousandLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="ThousandLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=1775457009]
+layout_mode = 2
 text = "1000 ft"
-
-[node name="ETLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
+
+[node name="ETLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=1560821684]
+layout_mode = 2
 text = "ET (1/4 mile)"
-
-[node name="SpeedLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn"]
-layout_mode = 2
 horizontal_alignment = 1
-text = "Speed"
 
-[node name="RightPanel" type="PanelContainer" parent="VBoxContainer/LanesRow"]
+[node name="SpeedLabel" type="Label" parent="VBoxContainer/LanesRow/StatLabelsColumn" unique_id=821143423]
 layout_mode = 2
-custom_minimum_size = Vector2(220, 0)
+text = "Speed"
+horizontal_alignment = 1
 
-[node name="RightVBox" type="VBoxContainer" parent="VBoxContainer/LanesRow/RightPanel"]
+[node name="RightPanel" type="PanelContainer" parent="VBoxContainer/LanesRow" unique_id=241652116]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="RightVBox" type="VBoxContainer" parent="VBoxContainer/LanesRow/RightPanel" unique_id=1000182143]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="RightNameLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="RightNameLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=504050334]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
 text = "RIGHT LANE"
-
-[node name="RightReactionLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
-layout_mode = 2
 horizontal_alignment = 1
-text = "--"
 
-[node name="Right60Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="RightReactionLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1258232263]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="Right330Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="Right60Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1581679267]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="RightEighthLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="Right330Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=8436588]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="Right1000Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="RightEighthLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1137696141]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="RightETLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="Right1000Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1269382211]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="RightSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox"]
+[node name="RightETLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=686139120]
 layout_mode = 2
-horizontal_alignment = 1
 text = "--"
+horizontal_alignment = 1
 
-[node name="WinnerRow" type="VBoxContainer" parent="VBoxContainer"]
+[node name="RightSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=778417801]
+layout_mode = 2
+text = "--"
+horizontal_alignment = 1
+
+[node name="WinnerRow" type="VBoxContainer" parent="VBoxContainer" unique_id=723498390]
 layout_mode = 2
 alignment = 1
 
-[node name="WinnerImage" type="TextureRect" parent="VBoxContainer/WinnerRow"]
-layout_mode = 2
+[node name="WinnerImage" type="TextureRect" parent="VBoxContainer/WinnerRow" unique_id=496917326]
 custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+size_flags_horizontal = 4
 expand_mode = 1
 stretch_mode = 5
-size_flags_horizontal = 4
 
-[node name="WinnerLabel" type="Label" parent="VBoxContainer/WinnerRow"]
+[node name="WinnerLabel" type="Label" parent="VBoxContainer/WinnerRow" unique_id=1514773065]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
 text = "WINNER"
+horizontal_alignment = 1
 
-[node name="ButtonsRow" type="HBoxContainer" parent="VBoxContainer"]
+[node name="ButtonsRow" type="HBoxContainer" parent="VBoxContainer" unique_id=740949373]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="RematchButton" type="Button" parent="VBoxContainer/ButtonsRow"]
+[node name="RematchButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=1355462359]
 layout_mode = 2
 text = "Rematch"
 
-[node name="RematchGarageButton" type="Button" parent="VBoxContainer/ButtonsRow"]
+[node name="RematchGarageButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=635409910]
 layout_mode = 2
 text = "Rematch (Garage First)"
 
-[node name="NewButton" type="Button" parent="VBoxContainer/ButtonsRow"]
+[node name="NewButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=402982744]
 layout_mode = 2
 text = "New Race"
 
-[node name="EndButton" type="Button" parent="VBoxContainer/ButtonsRow"]
+[node name="EndButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=2025530508]
 layout_mode = 2
 text = "End"
 
-[node name="FishButton" type="Button" parent="VBoxContainer/ButtonsRow"]
+[node name="FishButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=1405667314]
 layout_mode = 2
 text = "Fish"

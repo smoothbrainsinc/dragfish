@@ -46,6 +46,9 @@ var _light_tween: Tween
 
 
 func _ready() -> void:
+	visible = false
+	add_to_group("finish_line_ui")
+	rematch_button.pressed.connect(func(): rematch_requested.emit())
 	rematch_button.pressed.connect(func(): rematch_requested.emit())
 	rematch_garage_button.pressed.connect(func(): rematch_garage_first_requested.emit())
 	new_button.pressed.connect(func(): new_race_requested.emit())
@@ -58,6 +61,7 @@ func _ready() -> void:
 ## before showing this scene.
 func show_results(left_results: Dictionary, right_results: Dictionary, winner: String,
 		winner_portrait: Texture2D = null) -> void:
+	visible = true
 	_reset_panel(left_panel)
 	_reset_panel(right_panel)
 

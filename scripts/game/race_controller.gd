@@ -9,6 +9,7 @@ signal race_complete(winner: String)
 var start_tree: Node3D
 var timing_system: Node3D
 var race_manager: Node
+var finish_line_scene: Control
 
 func _ready():
 	print("[RaceController] Initializing coordinator...")
@@ -29,6 +30,7 @@ func _find_systems() -> void:
 	start_tree = get_tree().get_first_node_in_group("start_tree")
 	timing_system = get_tree().get_first_node_in_group("timing_system")
 	race_manager = get_tree().get_first_node_in_group("race_manager")
+	finish_line_scene = get_tree().get_first_node_in_group("finish_line_ui")
 	
 	# Verify critical systems
 	if not start_tree:
@@ -45,6 +47,11 @@ func _find_systems() -> void:
 		push_warning("[RaceController] Race manager not found (optional)")
 	else:
 		print("  ✓ Race manager: %s" % race_manager.name)
+		
+	if not finish_line_scene:
+		push_warning("[RaceController] Finish line UI not found (optional)")
+	else:
+		print("  ✓ Finish line UI: %s" % finish_line_scene.name)
 
 ## Wire systems together using signals
 func _connect_systems() -> void:
@@ -68,6 +75,20 @@ func _connect_systems() -> void:
 		if timing_system.has_signal("race_finished"):
 			timing_system.race_finished.connect(_on_race_finished)
 			print("  ✓ Connected timing system → race results")
+			
+	if timing_system and finish_line_scene:
+		if timing_system.has_signal("both_finished"):
+			timing_system.both_finished.connect(finish_line_scene.show_results)
+			print("  ✓ Connected timing system → finish line UI")
+			
+	if finish_line_scene:
+		finish_line_scene.rematch_requested.connect(_on_rematch_requested)
+		finish_line_scene.rematch_garage_first_requested.connect(_on_rematch_garage_requested)
+		finish_line_scene.new_race_requested.connect(_on_new_race_requested)
+		finish_line_scene.end_requested.connect(_on_end_requested)
+		finish_line_scene.fish_requested.connect(_on_fish_requested)
+		print("  ✓ Connected finish line UI buttons")
+	
 
 ## Handle red light foul
 func _on_red_light_triggered(lane: String) -> void:
@@ -115,6 +136,25 @@ func restart_race() -> void:
 		race_manager.restart_race()
 	
 	print("[RaceController] Race restarted")
+
+func _on_rematch_requested() -> void:
+	finish_line_scene.visible = false
+	restart_race()
+
+func _on_rematch_garage_requested() -> void:
+	finish_line_scene.visible = false
+	# TODO: send player to pit_area_ui.tscn before restart_race()
+
+func _on_new_race_requested() -> void:
+	finish_line_scene.visible = false
+	# TODO: send player back to new_car_selection_screen.tscn
+
+func _on_end_requested() -> void:
+	get_tree().quit()
+
+func _on_fish_requested() -> void:
+	finish_line_scene.visible = false
+	# TODO: switch to fishing/lake gameplay mode
 
 ## Public API - Start race (for manual control)
 func start_race() -> void:

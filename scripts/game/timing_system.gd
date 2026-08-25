@@ -7,6 +7,7 @@ signal red_light_triggered(lane: String)    # Foul start detected
 signal checkpoint_crossed(lane: String, checkpoint: String, time: float)
 signal race_finished(lane: String, results: Dictionary)
 signal both_finished(left_results: Dictionary, right_results: Dictionary, winner: String)
+signal center_line_crossed(lane: String)    # Crossed into opposing lane - DNF
 
 # Checkpoint references (set in editor or found by name)
 @export var start_line: Area3D
@@ -16,9 +17,8 @@ signal both_finished(left_results: Dictionary, right_results: Dictionary, winner
 @export var checkpoint_1000ft: Area3D
 @export var finish_line: Area3D
 @export var speed_trap_start: Area3D
+@export var center_line: Area3D
 
-# Lane detection (X position threshold)
-const LANE_CENTER_THRESHOLD = -34.5
 
 # Timing data
 var timing_data = {
@@ -90,7 +90,7 @@ func _on_start_line_crossed(body: Node3D):
 	if not tree_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -132,7 +132,7 @@ func _on_60ft_crossed(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -153,7 +153,7 @@ func _on_330ft_crossed(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -174,7 +174,7 @@ func _on_660ft_crossed(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -195,7 +195,7 @@ func _on_1000ft_crossed(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -216,7 +216,7 @@ func _on_speed_trap_entered(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -233,7 +233,7 @@ func _on_finish_line_crossed(body: Node3D):
 	if not race_started or not body is VehicleBody3D:
 		return
 	
-	var lane = get_lane_from_position(body.global_position.x)
+	var lane = body.get_meta("spawn_lane", "unknown")
 	if lane == "unknown":
 		return
 	
@@ -310,15 +310,6 @@ func _print_winner_comparison():
 # UTILITIES
 # ============================================================================
 
-func get_lane_from_position(x_pos: float) -> String:
-	"""Determine lane from X position - FIXED!"""
-	if x_pos < LANE_CENTER_THRESHOLD:
-		return "right"  # Negative X = LEFT lane
-	elif x_pos > LANE_CENTER_THRESHOLD:
-		return "left"  # Positive X = RIGHT lane
-	else:
-		return "unknown"
-
 
 func get_vehicle_name(vehicle: Node) -> String:
 	"""Get display name of vehicle"""
@@ -357,7 +348,8 @@ func _create_timing_data() -> Dictionary:
 		"red_light": false,
 		"reaction_recorded": false,
 		"speed_trap_entry_time": 0.0,
-		"vehicle_name": ""
+		"vehicle_name": "",
+		"dnf": false
 	}
 
 
@@ -517,3 +509,23 @@ func _connect_checkpoints():
 	print("[Timing] Total checkpoints connected: %d/7" % connected_count)
 	print("Start position: ", start_line.global_position)
 	print("Finish position:", finish_line.global_position)
+
+func _on_center_line_crossed(body: Node3D):
+	"""Center line crossed - vehicle entered opposing lane, DNF"""
+	if not race_started or not body is VehicleBody3D:
+		return
+
+	var lane = body.get_meta("spawn_lane", "unknown")
+	if lane == "unknown":
+		return
+
+	var data = timing_data[lane]
+	if data["dnf"] or data["finished"]:
+		return
+
+	data["dnf"] = true
+	if not data["vehicle_name"]:
+		data["vehicle_name"] = get_vehicle_name(body)
+
+	print("[Timing] %s - ***** CENTERLINE CROSSED - DNF! *****" % lane.to_upper())
+	emit_signal("center_line_crossed", lane)
