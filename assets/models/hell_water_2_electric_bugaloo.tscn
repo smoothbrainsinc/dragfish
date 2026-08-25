@@ -2,6 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="1_51rat"]
 [ext_resource type="Texture2D" uid="uid://b8qkjxfue8uls" path="res://addons/shaders/Textures/caustics.png" id="2_kwt5m"]
+[ext_resource type="PackedScene" uid="uid://dctau8jc1d3b3" path="res://Lakes/hell_lake/new_hell_awaits_water.glb" id="3_kwt5m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eq0v8"]
 
@@ -86,6 +87,7 @@ data = PackedVector3Array(-655.29736, 0, -125.49709, -641.3683, 0, -139.4262, -6
 
 [node name="Water" type="MeshInstance3D" parent="." unique_id=1185488858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.434402, 0, -49.427277)
+visible = false
 mesh = SubResource("ArrayMesh_ekrpr")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_d8sy1")
@@ -94,3 +96,5 @@ surface_material_override/0 = SubResource("ShaderMaterial_d8sy1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.434402, 0, -49.427277)
 visible = false
 shape = SubResource("ConcavePolygonShape3D_51rat")
+
+[node name="new_hell_awaits_water" parent="." unique_id=10112597 instance=ExtResource("3_kwt5m")]

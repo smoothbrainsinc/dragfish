@@ -49,7 +49,7 @@ GameManager="*res://scripts/game/GameManager.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/sky_3d/plugin.cfg")
 
 [input]
 

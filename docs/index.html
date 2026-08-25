@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Realistic Shoreline Waves - documentation</title>
+<style>
+:root { --ink:#222; --dim:#555; --line:#ddd; --accent:#0b6a7a; --bg:#fdfdfc; --code:#f4f4f2; }
+* { box-sizing:border-box; }
+body { margin:0; font:16px/1.6 system-ui, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+main { max-width:920px; margin:0 auto; padding:24px 20px 80px; }
+h1 { font-size:2rem; margin:.4em 0 .2em; }
+h2 { font-size:1.45rem; margin-top:2.2em; border-bottom:1px solid var(--line); padding-bottom:.25em; }
+h3 { font-size:1.12rem; margin-top:1.6em; }
+p.lead { font-size:1.12rem; color:var(--dim); }
+img { max-width:100%; border-radius:6px; display:block; }
+figure { margin:1.4em 0; }
+figcaption { font-size:.86rem; color:var(--dim); margin-top:.4em; }
+code { background:var(--code); padding:.12em .35em; border-radius:4px; font-size:.92em; }
+pre { background:var(--code); padding:14px 16px; border-radius:6px; overflow-x:auto; line-height:1.45; }
+pre code { background:none; padding:0; }
+table { border-collapse:collapse; width:100%; margin:1em 0; font-size:.93rem; }
+th, td { border:1px solid var(--line); padding:.45em .6em; text-align:left; vertical-align:top; }
+th { background:var(--code); }
+a { color:var(--accent); }
+nav { background:var(--code); border-radius:6px; padding:12px 18px; margin:1.4em 0; font-size:.94rem; }
+nav a { margin-right:14px; white-space:nowrap; }
+.note { border-left:4px solid var(--accent); background:var(--code); padding:10px 14px; border-radius:0 6px 6px 0; margin:1.2em 0; }
+kbd { border:1px solid var(--line); border-bottom-width:2px; border-radius:4px; padding:0 .35em; background:#fff; font-size:.88em; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Realistic Shoreline Waves</h1>
+<p class="lead">A real-time shallow-water solver for Godot 4.7 that produces breaking waves, swash, foam, and wet sand from actual fluid dynamics, plus a standalone Gerstner deep-water ocean. Every visible water effect in the demos comes from physics running on the GPU; nothing is a scrolling texture pretending to move.</p>
+
+<nav>
+<a href="#quickstart">Quick start</a>
+<a href="#demos">The demos</a>
+<a href="#science">Scientific background</a>
+<a href="#gerstner">Gerstner ocean</a>
+<a href="#integrate">Using it in your project</a>
+<a href="#tuning">Tuning reference</a>
+<a href="#performance">Performance</a>
+<a href="#improve">Extending it</a>
+<a href="#files">File map</a>
+<a href="#credits">Credits and licenses</a>
+<a href="#troubleshooting">Troubleshooting</a>
+</nav>
+
+<figure>
+<img src="img/beach_side.jpg" alt="Breaking wave and foam lace running up a sandy beach">
+<figcaption>The beach demo: a solver-driven wave breaks, runs up the sand as a foam-laced sheet, and drains back. The foam pattern, the wet sand line, and the water motion all come from one simulation.</figcaption>
+</figure>
+
+<h2 id="quickstart">Quick start</h2>
+<ol>
+<li>Download Godot 4.7 stable (or newer) for Windows from <a href="https://godotengine.org/download">godotengine.org</a>.</li>
+<li>Drop the Godot <code>.exe</code> into this folder, next to the <code>.bat</code> launchers.</li>
+<li>Run one of the launchers:
+<ul>
+<li><code>launch.bat</code>: close-up beach, 30 x 30 m at 5 cm resolution.</li>
+<li><code>island.bat</code>: 2 x 2 km archipelago, 4.2 million simulation cells.</li>
+<li><code>openocean.bat</code>: deep-water Gerstner ocean, no solver, very fast.</li>
+</ul></li>
+</ol>
+<div class="note">The first start imports all textures and compiles shaders, which takes a minute or two. Later starts are fast. You can also open the folder as a project in the Godot editor and press F5.</div>
+<p>The renderer must be Forward+ (the project default). The simulation dispatches compute shaders, which the mobile and compatibility renderers do not support. Headless mode cannot run the simulation either: Godot exposes no RenderingDevice there.</p>
+
+<h2 id="demos">The demos</h2>
+
+<h3>Beach (launch.bat)</h3>
+<p>A 30.4 x 30.4 m shore strip at 5 cm cells: irregular waves shoal, break into bores, wash around photoscanned boulders, and drain back. Watch the wet sand darken and dry, and the foam arcs the backwash leaves behind. Keys inside all solver demos:</p>
+<table>
+<tr><th>Key</th><th>Action</th></tr>
+<tr><td><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd></td><td>Beach / quay wall / dam-break test scenario (same grid, switched live)</td></tr>
+<tr><td><kbd>Space</kbd></td><td>Inject a solitary wave (one clean breaker; in the island demo it is a 7.5 m monster)</td></tr>
+<tr><td><kbd>F5</kbd> / <kbd>F6</kbd> / <kbd>F7</kbd></td><td>Drone camera / shore camera / free camera (right mouse to look, WASD, Q/E, Shift)</td></tr>
+<tr><td><kbd>F3</kbd></td><td>False-color view of the raw simulation fields (depth, speed, foam)</td></tr>
+</table>
+
+<figure>
+<img src="img/beach_drone.jpg" alt="Top-down drone view of the beach demo">
+<figcaption>Drone view: ragged foam fronts and a wandering wet/dry line. The alongshore variation comes from an irregular 4-component sea, not from noise on a texture.</figcaption>
+</figure>
+
+<h3>Quay wall (key 2 inside the beach demo)</h3>
+<p>A vertical masonry wall stands in 0.5 m of water. Small waves reflect into a standing pattern (clapotis) that doubles the amplitude at the wall face, matching the textbook value. Larger waves break against the stone. The wall needs no special code: it is a step in the bathymetry, and the solver does the rest.</p>
+<figure>
+<img src="img/wall_scene.jpg" alt="Waves reflecting at a masonry quay wall">
+<figcaption>The quay wall scenario. The wall wets upward where waves strike it, driven by an impact field the simulation writes.</figcaption>
+</figure>
+
+<h3>Island archipelago (island.bat)</h3>
+<p>The same solver at map scale: 2048 x 2048 cells at 1 m over 2 x 2 km. Four islands, a submerged shoal that trips waves offshore, a breakwater whose crest sits 0.9 m above sea level so large sets pour over it, a terraced rock shelf, a boulder-field shore, and a submerged groyne. A short-crested sea (wave components arriving from several directions) crosses the map, refracts around every headland, and breaks on every coast. A visual deep-water layer adds surface character where the sea is deeper than 9 m and fades out near every shore so the solver owns the surf zone.</p>
+<figure>
+<img src="img/ocean_map.jpg" alt="Aerial view of the archipelago with surf on every coastline">
+<figcaption>Every white collar in this image is solver output: refraction, shadowing, and breaking emerge from the bathymetry.</figcaption>
+</figure>
+<figure>
+<img src="img/ocean_coast.jpg" alt="Island shore with boulders in the surf">
+<figcaption>Island shore at eye level. The rocks in the water are bathymetry bumps; the surf wraps and foams around them because the momentum equations say so.</figcaption>
+</figure>
+
+<h3>Open ocean (openocean.bat)</h3>
+<p>The standalone Gerstner scene: eight trochoidal wave components on a 3 km plane, no solver, hundreds of frames per second. Keys <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> switch calm, moderate, and storm presets. See <a href="#gerstner">the Gerstner section</a> for how to restyle it.</p>
+<figure>
+<img src="img/open_ocean_storm.jpg" alt="Backlit deep-water swell">
+<figcaption>The Gerstner ocean under the storm preset. Whitecaps appear where the wave math pinches the surface, not where a texture says so.</figcaption>
+</figure>
+
+<h3>Command-line arguments</h3>
+<p>All demos accept arguments after <code>--</code> for scripted runs and testing:</p>
+<pre><code>Godot_v4.7-stable_win64_console.exe --path . -- scenario=beach amp=0.25 period=7 cam=drone shots=30,60 out=C:/tmp prefix=test</code></pre>
+<table>
+<tr><th>Argument</th><th>Meaning</th></tr>
+<tr><td><code>scenario=</code></td><td><code>beach</code>, <code>wall</code>, <code>dambreak</code>, or <code>ocean</code></td></tr>
+<tr><td><code>amp=</code> / <code>period=</code></td><td>Primary wave amplitude (m) and period (s); 0 or absent uses the scenario default</td></tr>
+<tr><td><code>wave=0</code></td><td>Wavemaker off (still water; useful to inspect terrain or test solitary waves)</td></tr>
+<tr><td><code>solo=N</code></td><td>Fire a solitary wave N seconds after start</td></tr>
+<tr><td><code>look=debug</code></td><td>Flat materials and a plain sky; the fastest way to study the simulation itself</td></tr>
+<tr><td><code>cam=</code> / <code>shots=</code> / <code>out=</code> / <code>prefix=</code></td><td>Select a camera, save screenshots at the given times (seconds), then exit</td></tr>
+<tr><td><code>sea=</code></td><td>Open-ocean scene only: <code>calm</code>, <code>moderate</code>, or <code>storm</code></td></tr>
+</table>
+
+<h2 id="science">Scientific background: why this works</h2>
+
+<h3>The equations</h3>
+<p>Surf is shallow-water physics. When the water depth is small compared to the wavelength, the Navier-Stokes equations reduce to the nonlinear shallow water equations (NLSW): one equation for mass and two for depth-integrated momentum. The state per cell is <code>(w, hu, hv)</code>, where <code>w = B + h</code> is the free surface, <code>B</code> the bed elevation, <code>h</code> the depth, and <code>hu, hv</code> the momentum. A fourth carried quantity, <code>hc</code>, transports foam with the same machinery.</p>
+<p>NLSW has a property that is a gift for surf rendering: it steepens waves into shocks, and a shock in shallow water IS a turbulent bore, the broken white wave front that slides up a beach. The solver does not need to fake breaking; breaking is what the mathematics does in shallowing water.</p>
+
+<h3>The scheme</h3>
+<p>The kernels implement the central-upwind finite-volume scheme of Kurganov and Petrova (2007), chosen for three properties that matter at a shoreline:</p>
+<ul>
+<li><b>Positivity:</b> reconstructed water depths can never go negative, so the moving wet/dry line needs no tracking and no special cases. The swash tongue is just cells whose depth passes through zero.</li>
+<li><b>Well-balancing:</b> a lake at rest on a sloped bed stays exactly at rest. Without this, the beach slope itself drives phantom currents. The implementation detail that makes it work: when reconstruction would push a face value under the bed, the slope is shifted so that face is exactly dry, and the bed source term is built from those corrected face depths. Flux and source then cancel identically at rest.</li>
+<li><b>Shock capturing:</b> bores form with the correct propagation speed and energy loss, so waves visibly slow and shrink as they run in, following the sqrt(g h) speed law.</li>
+</ul>
+<p>Two practical additions keep the scheme quiet in hard spots. First, velocity desingularization (Kurganov's <code>u = sqrt(2) h hu / sqrt(h^4 + max(h^4, kappa^4))</code>) prevents division blow-ups in films a few millimeters thin. Second, this package raises the desingularization length where the bed steps sharply within a cell: a velocity in water thinner than the sub-cell bed relief has no physical meaning, and damping it removes phantom eddies around boulders at zero visual cost.</p>
+
+<h3>Waves in, reflections out</h3>
+<p>Waves enter through the west boundary: ghost cells carry an analytic irregular sea (four components around a primary period, each with its own approach angle, wavenumbers from the Eckart dispersion approximation). In front of the boundary, a relaxation zone pulls the state toward that analytic solution with a strength that falls off quadratically over 80 cells. One mechanism therefore does two jobs: it generates the incoming sea and it absorbs whatever travels back out, which is what keeps reflected waves from building standing patterns. Coastal engineering codes use the same construction. One rule learned the hard way: oblique components must impose their full two-component momentum in the zone. Zeroing the transverse momentum injects shear and inflates the sea within a minute.</p>
+
+<h3>Foam and the ground memory</h3>
+<p>The foam amount is physics; the foam pattern is rendering. The simulation injects foam mass where the surface rises faster than 0.35 to 0.65 of sqrt(g h) (the breaking criterion of Kennedy et al., 2000), where the flow runs supercritical (bore faces), and in fast thin swash. It decays with a 4 s time constant and advects with the same conservative flux as the water, so foam streaks follow the actual currents around rocks. A separate ground field remembers what the water did: wetness (sand darkens instantly, dries over 45 s), stranded foam (deposited when a cell dries, the lace arcs on the sand), and impact intensity at steep obstacles (used to wet walls upward).</p>
+<p>The rendering side turns smooth foam fields into believable texture with one trick used twice: a seamless Voronoi lace texture eroded from the black point, so foam tears hole-first and dies filament-last, plus a flow-advected UV scheme so the lace streams with the water without smearing.</p>
+
+<figure>
+<img src="img/runup_physics.jpg" alt="False-color view of a solitary wave wrapping around boulders">
+<figcaption>Diagnostic view of a solitary wave hitting the beach: diffraction arcs and wake shadows form behind each boulder. None of this is scripted; it is the momentum equations meeting the bathymetry.</figcaption>
+</figure>
+<figure>
+<img src="img/sim_debug.jpg" alt="False-color view of the short-crested sea crossing the archipelago">
+<figcaption>The island map in the diagnostic view (<code>look=debug</code>): a short-crested sea crossing the domain, breaking on every west-facing shore.</figcaption>
+</figure>
+
+<h3>Verification</h3>
+<p>The solver carries its own instruments. A reduction kernel sums total water volume, maximum depth, maximum speed, wet-cell count, and NaN count into a small buffer that is read back asynchronously and printed every 30 frames. In a closed test box, the dam-break scenario holds its volume constant to six digits for minutes, which is the practical proof that the twice-computed face fluxes are bit-identical on both sides. If you modify the kernels, watch that number first.</p>
+
+<h3>References worth reading</h3>
+<ul>
+<li>A. Kurganov, G. Petrova: A second-order well-balanced positivity preserving central-upwind scheme for the Saint-Venant system. Communications in Mathematical Sciences 5 (2007).</li>
+<li>A. R. Brodtkorb, M. L. Saetra, M. Altinakar: Efficient shallow water simulations on GPUs. Computers &amp; Fluids 55 (2012).</li>
+<li>A. B. Kennedy, Q. Chen, J. T. Kirby, R. A. Dalrymple: Boussinesq modeling of wave transformation, breaking, and runup. Journal of Waterway, Port, Coastal, and Ocean Engineering 126 (2000). Source of the breaking thresholds.</li>
+<li>S. Tavakkol, P. Lynett: Celeris, a GPU-accelerated open source software for real-time coastal wave simulation. Computer Physics Communications 217 (2017). A validated nearshore model with the same architecture spirit.</li>
+<li>M. Finch: Effective water simulation from physical models. GPU Gems 1, chapter 1 (2004). The Gerstner formulation used by the open-ocean layer.</li>
+</ul>
+
+<h2 id="gerstner">The Gerstner deep-water ocean</h2>
+
+<h3>What it is and where it comes from</h3>
+<p>The open-ocean layer has nothing to do with the solver. It is a sum of eight Gerstner waves, the trochoidal wave that F. J. Gerstner described in 1802: each surface point moves in a circle, which displaces the surface horizontally toward crests and vertically upward, producing the sharp-crest/flat-trough shape real swell has. A plain sine sum lacks the horizontal motion and looks like rubber; the trochoid is what reads as water.</p>
+<p>Two physical rules make the sum look like a sea instead of a pattern:</p>
+<ul>
+<li><b>Dispersion:</b> in deep water, phase speed depends on wavelength: <code>omega = sqrt(g k)</code>. Long components outrun short ones, so the surface never repeats. The shader computes each component's speed from its wavelength; nothing is keyframed.</li>
+<li><b>The cusp limit:</b> the trochoid self-intersects when steepness Q times k times amplitude exceeds 1 across the sum. The shader normalizes the per-component steepness so the total stays below the <code>steepness</code> uniform, clamped at 1. Push <code>steepness</code> toward 1 for aggressive, near-cusping crests.</li>
+</ul>
+<p>Whitecaps come from the same mathematics: where crests pinch, the horizontal displacement compresses the surface, and the Jacobian of that mapping drops below 1. The shader thresholds this value (<code>foam_threshold</code>) and erodes the Voronoi lace texture with it, so foam appears exactly on pinched crests. This is the standard technique from FFT ocean pipelines (Tessendorf-style), applied to a Gerstner sum.</p>
+
+<h3>Styling the sea</h3>
+<p>Everything is a uniform on <code>shaders/gerstner_ocean.gdshader</code>. The eight components derive from these knobs, so a handful of numbers restyles the whole ocean:</p>
+<table>
+<tr><th>Uniform</th><th>Default</th><th>What it does</th></tr>
+<tr><td><code>base_wavelength</code></td><td>90 m</td><td>Longest component; the seven below it follow a geometric series (factor 0.62)</td></tr>
+<tr><td><code>amplitude</code></td><td>1.1 m</td><td>Longest component amplitude; shorter ones scale by <code>amp_falloff</code></td></tr>
+<tr><td><code>steepness</code></td><td>0.75</td><td>Trochoid sharpness of the whole sum: 0.3 is oily swell, 1.0 is on the cusp limit</td></tr>
+<tr><td><code>wind_dir_deg</code></td><td>0</td><td>Travel direction of the sea</td></tr>
+<tr><td><code>spread_deg</code></td><td>28</td><td>Directional spread: 5 gives long-crested swell lines, 40+ a confused crossing sea</td></tr>
+<tr><td><code>speed_scale</code></td><td>1.0</td><td>1 is physically correct dispersion; lower for dreamy slow motion</td></tr>
+<tr><td><code>amp_falloff</code></td><td>0.72</td><td>Energy distribution: high values put energy into short chop, low values into clean swell</td></tr>
+<tr><td><code>foam_threshold</code> / <code>foam_amount</code></td><td>0.62 / 1.0</td><td>Where whitecaps start and how strongly they build</td></tr>
+<tr><td><code>water_color</code> / <code>sss_color</code></td><td>deep teal / green</td><td>Base absorption color and the green light bleed on thin backlit crests</td></tr>
+<tr><td><code>detail_normal_strength</code> / <code>detail_scale</code></td><td>0.4 / 6.5 m</td><td>Wind-ripple micro normals from the bundled tileable normal map</td></tr>
+</table>
+
+<h3>Pattern recipes</h3>
+<pre><code># glassy long swell from the west, no caps
+base_wavelength = 140.0, amplitude = 0.8, steepness = 0.35,
+spread_deg = 6.0, amp_falloff = 0.55, foam_amount = 0.0
+
+# trade-wind chop
+base_wavelength = 45.0, amplitude = 0.6, steepness = 0.85,
+spread_deg = 35.0, amp_falloff = 0.85, foam_threshold = 0.55
+
+# heavy weather
+base_wavelength = 170.0, amplitude = 3.0, steepness = 0.95,
+spread_deg = 40.0, foam_amount = 1.8, roughness_base = 0.12</code></pre>
+
+<h3>When to use which system</h3>
+<p>The Gerstner layer costs almost nothing and extends to the horizon, but it is a surface animation: it cannot interact with terrain, refract, or break on a shore. The solver interacts with everything but pays per cell and per meter of domain. The island demo shows the intended combination: the solver owns the map, and a Gerstner layer (built into the water shader, <code>gerstner_amp</code>) adds deep-water character that fades out below 9 m depth so the two never fight.</p>
+
+<h2 id="integrate">Using it in your project</h2>
+
+<h3>What to copy</h3>
+<p>Copy these folders into your project: <code>sim/</code> (compute kernels), <code>scripts/sim_controller.gd</code>, <code>scripts/scenario.gd</code>, <code>shaders/</code>, and whatever you need from <code>assets/</code>. The demo glue (<code>main.gd</code>, <code>dev_shots.gd</code>, <code>free_cam.gd</code>, the scenes) is replaceable; read <code>main.gd</code> once as the reference for wiring.</p>
+
+<h3>Minimal setup</h3>
+<pre><code># somewhere in your world setup
+var sim := SimController.new()
+sim.kind = SimController.Kind.BEACH   # BEACH, WALL, DAM_BREAK, OCEAN
+add_child(sim)                        # _ready builds GPU resources + scenario
+
+# water surface: a PlaneMesh with the bundled shader
+var water := MeshInstance3D.new()
+var mesh := PlaneMesh.new()
+mesh.size = Vector2(sim.domain, sim.domain)
+mesh.subdivide_width = 606
+mesh.subdivide_depth = 606
+water.mesh = mesh
+water.position = Vector3(sim.domain * 0.5, 0.0, sim.domain * 0.5)
+
+var mat := ShaderMaterial.new()
+mat.shader = load("res://shaders/water.gdshader")
+mat.set_shader_parameter("tx_state", sim.tex_state)      # zero-copy GPU textures
+mat.set_shader_parameter("tx_bottom", sim.tex_bottom)
+mat.set_shader_parameter("tx_derived", sim.tex_derived)
+mat.set_shader_parameter("lace_tex", load("res://assets/generated/voronoi_lace.png"))
+mat.set_shader_parameter("flow_noise_tex", load("res://assets/generated/flow_noise.png"))
+mat.set_shader_parameter("DOMAIN_SIZE", sim.domain)
+mat.set_shader_parameter("GRID_RES", float(sim.n))
+water.material_override = mat
+add_child(water)</code></pre>
+<p>The four <code>Texture2DRD</code> properties (<code>tex_state</code>, <code>tex_bottom</code>, <code>tex_derived</code>, <code>tex_ground</code>) are live views of GPU memory: bind them to any material and it reads the simulation with no copies. They are black for the first frame or two while the render thread initializes; the bundled shaders tolerate that, and yours should too.</p>
+
+<h3>Changing the sea state at runtime</h3>
+<pre><code>sim.wave_amp = 0.28       # metres
+sim.wave_period = 7.0     # seconds
+# takes effect immediately; the wavemaker reads these every substep</code></pre>
+
+<h3>Firing a single wave</h3>
+<pre><code>sim.trigger_solitary()    # one clean sech^2 breaker, height per scenario config</code></pre>
+
+<h3>Reacting to the water from gameplay code</h3>
+<p>The simulation lives on the GPU and there is deliberately no per-frame CPU mirror. Two patterns cover most gameplay needs:</p>
+<pre><code># cheap global signals: the debug readback (updated every 30 frames)
+print(sim.dbg_max_speed)   # e.g. trigger camera shake in heavy surf
+print(sim.dbg_wet_cells)   # how much of the map is under water
+
+# sampling the water surface at a point (occasional, not per-frame per-object):
+var img: Image = RenderingServer.get_rendering_device().texture_get_data(
+        sim.tex_state.texture_rd_rid, 0).decompress() # full-grid readback: expensive
+</code></pre>
+<p>For buoyancy on many objects, a better route is a small dedicated compute kernel that samples the state texture at object positions into a few-kilobyte buffer, read back with <code>buffer_get_data_async</code>. The debug kernel (<code>sim/pass_debug.glsl</code>) is a working template for exactly that pattern.</p>
+
+<h3>Custom bathymetry: your own shore</h3>
+<p>Option one, CPU (the beach and wall do this): edit <code>scripts/scenario.gd</code>. Its contract is small: produce a corner-height field, pack it into the bottom image (center, east face, north face, 3x3 max per cell), and build the visual terrain from the same corners. Faces must be the mean of their two corners; the solver's balance at rest depends on cell and face values coming from one consistent corner field.</p>
+<pre><code># scenario.gd, inside the corner-height loop: a custom sandbar
+var b := -1.2 + maxf(x - 6.0, 0.0) / 12.0          # base beach profile
+b = maxf(b, -0.4 - pow((x - 14.0) / 3.0, 2.0))     # add a bar crest at x = 14 m</code></pre>
+<p>Option two, GPU (the island does this): edit <code>bcorner()</code> in <code>sim/pass_genbathy.glsl</code>. Any analytic function of position works: islands, reefs, walls, terraces, boulder fields. The demo file contains all of those as commented building blocks (<code>island()</code>, <code>breakwater()</code>, <code>boulders()</code>, the terrace quantizer). Two rules: keep beach slopes gentler than about 1:10 where you want surf to run up, and give the wavemaker side deep, flat water.</p>
+
+<h3>Using the Gerstner ocean in your scene</h3>
+<pre><code>var mat := ShaderMaterial.new()
+mat.shader = load("res://shaders/gerstner_ocean.gdshader")
+mat.set_shader_parameter("detail_normal_tex", load("res://assets/generated/detail_ripple_normal.png"))
+mat.set_shader_parameter("lace_tex", load("res://assets/generated/voronoi_lace.png"))
+mat.set_shader_parameter("wind_dir_deg", 35.0)
+mat.set_shader_parameter("amplitude", 1.6)
+$OceanPlane.material_override = mat</code></pre>
+<p>Matching a floating object to the surface is analytic, no readback needed: reimplement the same eight-component sum in GDScript with the same uniforms and evaluate the displacement at the object position. The component construction is 20 lines in the shader's <code>ocean()</code> function and ports directly.</p>
+
+<h2 id="tuning">Tuning reference</h2>
+
+<h3>Simulation (scripts/sim_controller.gd and sim/*.glsl)</h3>
+<table>
+<tr><th>Knob</th><th>Value</th><th>Effect</th></tr>
+<tr><td><code>CFG</code> table</td><td>per scenario</td><td>Grid size, cell size, timestep, substep cap, depth, wavemaker mode. Add a scenario by adding a row and a bathymetry source.</td></tr>
+<tr><td><code>K_FOAM</code></td><td>1.5</td><td>Global foam production. Halve it before touching anything else if surf reads too white.</td></tr>
+<tr><td>Foam decay tau</td><td>4 s (pass_step)</td><td>Foam persistence between waves</td></tr>
+<tr><td>Kennedy onset</td><td>0.35 to 0.65 sqrt(gh)</td><td>Breaking sensitivity; below about 0.25 the open sea foams over</td></tr>
+<tr><td><code>MANNING</code></td><td>0.03</td><td>Bed friction: higher shortens swash run-up</td></tr>
+<tr><td>kappa</td><td>0.01 m (0.02 ocean)</td><td>Thin-film velocity damping; raise if shimmer appears around obstacles</td></tr>
+<tr><td>Wetness / stranded / impact taus</td><td>45 s / 10 s / 0.3 s (pass_ground)</td><td>Sand drying, lace arc decay, splash impulse decay</td></tr>
+<tr><td>Relaxation zone</td><td>80 cells, alpha 0.06</td><td>Wave generation and absorption strength at the west edge</td></tr>
+</table>
+
+<h3>Water surface (shaders/water.gdshader)</h3>
+<table>
+<tr><th>Uniform</th><th>Default</th><th>Effect</th></tr>
+<tr><td><code>absorption</code></td><td>(1.8, 0.55, 0.9) per m</td><td>Water character. The default is murky green-teal; try (0.7, 0.25, 0.35) for tropical clarity</td></tr>
+<tr><td><code>scatter_color</code> / <code>deep_scatter</code></td><td>green-teal / ocean blue</td><td>In-scatter tint in shallow and deep water (blended by depth)</td></tr>
+<tr><td><code>foam_albedo</code></td><td>0.85</td><td>Foam brightness; drop toward 0.7 if bloom blows it out</td></tr>
+<tr><td><code>lace_scale_coarse</code> / <code>_fine</code></td><td>1.2 / 0.12 m</td><td>Foam hole and filament sizes. These are screen-truth scales: do not scale them with the grid</td></tr>
+<tr><td><code>foam_breakup</code> / <code>breakup_scale</code></td><td>0 / 4.5 m</td><td>Tears smooth foam fields into patches; essential on coarse grids (the island uses 0.8 / 7.0)</td></tr>
+<tr><td><code>detail_normal_strength</code> / <code>detail_base</code></td><td>0.32 / 0</td><td>Micro-ripple strength; <code>detail_base</code> adds ripples independent of flow speed</td></tr>
+<tr><td><code>gerstner_amp</code></td><td>0 (island: 0.85)</td><td>Deep-water visual swell mixed over the solver, fading out below 9 m depth</td></tr>
+<tr><td><code>tuck_h</code></td><td>0.004 (island: 0.06)</td><td>Shoreline blend depth; scale roughly with the cell size</td></tr>
+<tr><td><code>refraction_strength</code></td><td>0.06</td><td>Underwater distortion and the aeration blur</td></tr>
+</table>
+
+<h3>Sand, wall, and island terrain</h3>
+<p><code>sand.gdshader</code>: wet darkening (0.42 with 28% desaturation), mirror-film threshold (0.85 wetness), caustic strength. <code>wall.gdshader</code>: moss band height, splash wetting height. <code>ocean_terrain.gdshader</code>: splat tiling, grass band, blend-breaking noise. All values sit at the top of each file as annotated uniforms.</p>
+
+<h2 id="performance">Performance</h2>
+<p>Measured on an RTX 4070 laptop GPU at 1920 x 1080:</p>
+<table>
+<tr><th>Demo</th><th>Cells</th><th>Frame rate</th><th>Simulation</th></tr>
+<tr><td>Beach</td><td>608 x 608 at 5 cm</td><td>60 fps</td><td>real time, under 5% of the GPU</td></tr>
+<tr><td>Island</td><td>2048 x 2048 at 1 m</td><td>about 28 fps</td><td>real time (the FPS label shows "sim x1.00")</td></tr>
+<tr><td>Open ocean</td><td>none</td><td>200+ fps</td><td>not applicable</td></tr>
+</table>
+<p>The island demo is render-bound, not solver-bound, and already ships with FSR2 upscaling at 0.77, SSIL disabled over water, and a fused solver kernel (flux and integration in one dispatch; the split kernels <code>pass_flux.glsl</code> and <code>pass_integrate.glsl</code> remain in the package as readable references and are not dispatched). If you need more:</p>
+<ul>
+<li>Lower <code>scaling_3d_scale</code> further (0.67 is still acceptable at 1080p).</li>
+<li>Reduce the water and terrain mesh densities in <code>main.gd</code>; per-pixel normals carry the detail.</li>
+<li>Shrink the ocean grid in the <code>CFG</code> table: 1448 or 1024 cells with a matching dx keeps the same map size. Halving the resolution quarters the solver cost; raise DT with the cell size (keep the Courant number, roughly <code>0.2 * dx / sqrt(9.81 * depth)</code>).</li>
+<li>The next structural win, unimplemented: workgroup shared-memory tiling in <code>pass_step.glsl</code>, which cuts the stencil's texture reads about fourfold.</li>
+</ul>
+<p>The substep cap and the 0.1 s accumulator cap in <code>sim_controller.gd</code> are load-bearing: they stop a slow frame from demanding more work and making the next frame slower. If the machine cannot keep up, the water runs in slight slow motion (the FPS label shows the factor) instead of spiraling.</p>
+
+<h2 id="improve">Extending it</h2>
+<ul>
+<li><b>Spray and splash particles:</b> the ground field's blue channel already flags wall impacts and plunging breakers. A GPUParticles3D process shader that samples it (spawn where intensity is high, die elsewhere) adds the vertical jets a depth-averaged model cannot produce. This is the highest-value addition.</li>
+<li><b>Backwash streaks:</b> stretch the lace UVs along the flow direction in thin, seaward-moving water for the classic drainage lines on the sand face.</li>
+<li><b>Dispersion offshore:</b> NLSW waves in deep water are slightly too sawtooth. Boussinesq correction terms (see the Celeris paper) fix this at the cost of tridiagonal solves per row and column.</li>
+<li><b>Buoyancy service:</b> a compute kernel sampling the state at N object positions into a small buffer, read asynchronously, gives floating props for a few microseconds per frame.</li>
+<li><b>Nested high-resolution window:</b> coastal models run a coarse global grid with a fine local grid coupled at the edges. A 5 cm window inside the 1 m island map would give the beach demo's close-up quality at one chosen shore.</li>
+<li><b>Erosion:</b> the bed is a texture; adding a sediment-transport pass that nudges it from the local velocity turns the beach into a slowly reshaping one.</li>
+</ul>
+
+<h2 id="files">File map</h2>
+<table>
+<tr><th>Path</th><th>Contents</th></tr>
+<tr><td><code>sim/pass_step.glsl</code></td><td>The solver: KP07 reconstruction, fluxes, bed source, integration, friction, foam sources (fused kernel used at runtime)</td></tr>
+<tr><td><code>sim/pass_flux.glsl</code>, <code>sim/pass_integrate.glsl</code></td><td>The same scheme as two separate, more readable kernels; reference only</td></tr>
+<tr><td><code>sim/pass_boundary.glsl</code></td><td>Wavemaker ghosts, relaxation zone, mirror walls, map-edge absorbers</td></tr>
+<tr><td><code>sim/pass_derived.glsl</code>, <code>sim/pass_ground.glsl</code></td><td>Surface normals/foam/aeration; wetness, stranded foam, impact memory</td></tr>
+<tr><td><code>sim/pass_genbathy.glsl</code>, <code>sim/pass_init.glsl</code></td><td>GPU-generated island bathymetry and lake-at-rest initialization</td></tr>
+<tr><td><code>sim/pass_solitary.glsl</code>, <code>sim/pass_debug.glsl</code></td><td>Solitary-wave injection; volume/speed/NaN reduction readback</td></tr>
+<tr><td><code>scripts/sim_controller.gd</code></td><td>All RenderingDevice plumbing: textures, uniform sets, the substep loop, scenario configs</td></tr>
+<tr><td><code>scripts/scenario.gd</code></td><td>CPU bathymetry and terrain meshes for the beach and wall scenarios</td></tr>
+<tr><td><code>scripts/main.gd</code></td><td>Demo wiring: environment, meshes, materials, cameras, keys, FPS label</td></tr>
+<tr><td><code>scripts/gerstner_ocean_demo.gd</code>, <code>scenes/gerstner_ocean.tscn</code></td><td>The standalone open-ocean demo</td></tr>
+<tr><td><code>scripts/free_cam.gd</code>, <code>scripts/dev_shots.gd</code></td><td>Fly camera; scripted screenshot/exit rig for automated testing</td></tr>
+<tr><td><code>shaders/</code></td><td>water, sand, wall, ocean terrain, Gerstner ocean, plus the flat debug materials</td></tr>
+<tr><td><code>assets/textures</code>, <code>assets/models</code>, <code>assets/hdri</code></td><td>PBR texture sets, photoscanned rocks, sky panoramas</td></tr>
+<tr><td><code>assets/generated</code>, <code>tools/gen_textures.py</code></td><td>Procedural lace/caustics/noise/ripple textures and the script that builds them</td></tr>
+</table>
+
+<h2 id="credits">Credits and licenses</h2>
+<p>Code and shaders: MIT license (see LICENSE.txt). Use them in anything, including commercial projects.</p>
+<p>Textures, rock models, and sky panoramas: <a href="https://polyhaven.com">Poly Haven</a>, CC0 (public domain). Included sets: coast_sand_01, coast_sand_rocks_02, damp_sand, aerial_beach_01, aerial_grass_rock, medieval_blocks_02, seaworn_sandstone_brick, mossy_sandstone; models coast_rocks_05, sand_rocks_small_01, namaqualand_boulder_02; HDRIs secluded_beach, spiaggia_di_mondello. No attribution required by the license; consider supporting Poly Haven anyway.</p>
+<p>The textures in <code>assets/generated</code> were produced by <code>tools/gen_textures.py</code> in this package and carry the same license as the code.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<tr><th>Symptom</th><th>Cause and fix</th></tr>
+<tr><td>Long first start</td><td>Texture import and shader compilation. One-time cost.</td></tr>
+<tr><td>Gray water, no motion</td><td>The renderer is not Forward+. Check the project setting <code>rendering/renderer/rendering_method</code>; the mobile and compatibility paths have no compute support.</td></tr>
+<tr><td>"No RenderingDevice" error in the log</td><td>The project ran headless or on the compatibility renderer. The simulation needs a window and Forward+.</td></tr>
+<tr><td>Water flashes black on the first frames</td><td>Expected: the GPU textures bind one or two frames after startup. The bundled materials guard against it.</td></tr>
+<tr><td>Console prints <code>[sim] ... nan=N</code> with N above zero</td><td>The solver is diverging, usually after edits: timestep too large for the depth (check the Courant estimate above), a bathymetry step too extreme, or a boundary imposing inconsistent momentum.</td></tr>
+<tr><td>Foam covers the whole sea</td><td>Breaking threshold edited too low, or foam decay too long. Restore the 0.35 to 0.65 window in <code>pass_step.glsl</code>.</td></tr>
+<tr><td>Low frame rate on the island</td><td>See <a href="#performance">Performance</a>; the demo is render-bound. Lower the FSR2 scale first.</td></tr>
+<tr><td>Other platforms</td><td>Developed and tested on Windows with an NVIDIA GPU. The kernels are standard Vulkan GLSL and should run wherever Godot's Forward+ runs, but only Windows has been verified.</td></tr>
+</table>
+
+</main>
+</body>
+</html>

@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://v2dax4ejvrr2"]
 
 [ext_resource type="ArrayMesh" uid="uid://cpomrp7pctuk0" path="res://vehicles/dragonDDD_body_mesh.res" id="1_2na52"]
+[ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="2_wg8fc"]
+[ext_resource type="ArrayMesh" uid="uid://byuvm6cs3ntii" path="res://vehicles/drag_chute_mesh.res" id="3_422ss"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_aqaee"]
 points = PackedVector3Array(0.17601912, -0.28407538, 4.594446, -0.41296327, -0.5197606, 4.712208, 0.4116813, -0.5197606, 4.712208, -0.2347, -0.39621475, -2.2154448, 0.88317865, 1.3657212, -2.357761, -0.8844606, 1.3066615, -1.6504803, 0.23249999, -0.3930017, -2.20179, -0.8844606, 0.65866554, -2.357761, 0.88317865, 0.65866554, -2.357761, 0.88317865, 1.3066615, -1.6504803, -0.41296327, -0.40182573, 4.88956, -0.80649996, 1.2825632, -2.0381222, 0.4116813, -0.40182573, 4.88956, 0.88317865, 0.71735615, -1.7086518, -0.8844606, 0.71735615, -1.7086518, -0.1773011, -0.28407538, 4.594446, 0.4116813, -0.5197606, 4.88956, -0.41296327, -0.5197606, 4.88956, -0.8844606, 0.65866554, -1.8271232, 0.88317865, 0.65866554, -1.8271232, 0.88317865, 0.835291, -1.6504803, -0.8844606, 0.835291, -1.6504803)
@@ -484,6 +486,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_tdyyu")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mrbvm"]
+albedo_color = Color(0.025820246, 0.46639594, 0.7415135, 1)
+
 [node name="dragonDDD" type="VehicleBody3D" unique_id=253263196]
 
 [node name="body" type="MeshInstance3D" parent="." unique_id=1571328955]
@@ -551,3 +556,13 @@ use_as_traction = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.019174814, -4.673004e-05, 7.170439e-05)
 mesh = SubResource("ArrayMesh_2sxpa")
 skeleton = NodePath("")
+
+[node name="DragChute" type="Node3D" parent="." unique_id=1092152192]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.6720042, 0.68409836, -0.8070668)
+script = ExtResource("2_wg8fc")
+
+[node name="ChuteMesh" type="MeshInstance3D" parent="DragChute" unique_id=524244574]
+transform = Transform3D(-4.371112e-08, -0.9999938, 0.0034906506, 0.9999999, -4.3711385e-08, 0, 1.5258121e-10, 0.003490651, 0.9999937, 1.1765215, 0.6957598, -1.0150305)
+mesh = ExtResource("3_422ss")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_mrbvm")

@@ -24,7 +24,7 @@ uniform float max_depth           : hint_range(0.1, 50.0, 0.1) = 10;
 uniform float water_level         : hint_range(-10.0, 10.0, 0.1) = 0.0;
 uniform vec3  underwater_fog_color : source_color = vec3(0.03, 0.08, 0.04);
 uniform float fade_start_depth    : hint_range(0.0, 50.0, 0.1) = 0.5;
-uniform float max_clarity         : hint_range(0.0, 1.0) = 0.55;
+uniform float max_clarity         : hint_range(0.0, 1.0) = 0.35;
 // max_clarity: highest transmittance ever allowed, even at zero depth.
 // Lower = hazier even in shallow water. Matches underwater shader's
 // near-field floor so the look doesn't jump when crossing the surface.
@@ -46,7 +46,7 @@ uniform float normal_smoothness_dist   : hint_range(0.0, 1000.0)      = 50.0;
 // ---- Uniforms: Color & Absorption ----
 uniform vec3 base_tint_color   : source_color = vec3(0.32, 0.42, 0.20);
 uniform vec3 deep_color        : source_color = vec3(0.04, 0.10, 0.05);
-uniform vec3 water_absorption  : source_color = vec3(0.55, 0.10, 0.35);
+uniform vec3 water_absorption  : source_color = vec3(0.45, 0.25, 0.35);
 
 // ---- Uniforms: PBR ----
 uniform float roughness : hint_range(0.0, 1.0) = 0.125;
@@ -290,7 +290,10 @@ void fragment() {
 
 	// Fix ghosting at boundaries
 	float distorted_bg_depth = get_linear_depth(DEPTH_TEXTURE, distorted_uv, INV_PROJECTION_MATRIX);
-	if (distorted_bg_depth < water_linear_depth - 0.001) {
+	float raw_bg_depth = texture(DEPTH_TEXTURE, distorted_uv).x;
+	bool hit_sky = raw_bg_depth >= 0.9999;
+	
+	if (distorted_bg_depth > water_linear_depth && !hit_sky) {
 		distorted_uv       = SCREEN_UV;
 		distorted_bg_depth = bg_linear_depth;
 	}
@@ -337,7 +340,7 @@ void fragment() {
 	vec2 flow_uv = world_vert.xz * 0.5 + TIME * 0.05 * foam_noise_speed;
 	vec2 warp    = vec2(noise(flow_uv), noise(flow_uv + vec2(5.2, 1.3))) * 0.5;
 
-	if (distorted_bg_depth > water_linear_depth) {
+	if (distorted_bg_depth > water_linear_depth && !hit_sky) {
 		vec2 foam_uv           = world_vert.xz * foam_noise_scale + warp;
 		float emergence_noise  = noise3d(vec3(world_vert.xz * 0.5, TIME * 0.2 * foam_noise_speed));
 		emergence_noise        = smoothstep(0.0, 1.0, emergence_noise * 0.5 + 0.5);

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cxyn2ve7ogk46" path="res://Lakes/hell_lake/hellLake_018_Gentle_Sand_Normal.png" id="3_1widr"]
 [ext_resource type="Script" uid="uid://x2thuuc1i0l1" path="res://Lakes/weed_spawner_3.gd" id="4_fno3g"]
 [ext_resource type="PackedScene" uid="uid://blcq1ttgmm53v" path="res://assets/models/hell_water.tscn" id="5_1widr"]
-[ext_resource type="PackedScene" uid="uid://cp077qt3yr3sw" path="res://assets/models/hell_water_2_electric_bugaloo.tscn" id="6_fno3g"]
+[ext_resource type="PackedScene" uid="uid://cldipfai7u8p1" path="res://Lakes/hell_lake/new_hell_awaits_water.tscn" id="6_fno3g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_361u1"]
 resource_name = "Material.001"
@@ -220,6 +220,5 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.01, 0.6007538, 24.995)
 visible = false
 
-[node name="HellWater2-electric_bugaloo" parent="." unique_id=1993452406 instance=ExtResource("6_fno3g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.469376, -11.177383, 20.341736)
-visible = false
+[node name="new_hell_awaits_water" parent="." unique_id=656742733 instance=ExtResource("6_fno3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.776062, 0, -58.427826)
