@@ -41,6 +41,9 @@ size = Vector3(14, 20, 0.1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_w5lx7"]
 size = Vector3(14, 20, 0.1)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_dbiuj"]
+size = Vector3(0.02, 20, 1000)
+
 [node name="Timings" type="Node3D" unique_id=1648604432 node_paths=PackedStringArray("start_line", "checkpoint_60ft", "checkpoint_330ft", "checkpoint_660ft", "checkpoint_1000ft", "finish_line", "speed_trap_start")]
 script = ExtResource("1_v7ra0")
 start_line = NodePath("timing_marks/start")
@@ -122,3 +125,9 @@ shape = SubResource("BoxShape3D_w5lx7")
 [node name="start_tree" parent="." unique_id=306340699 instance=ExtResource("3_exc3w")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 49.601196)
 script = ExtResource("4_15le1")
+
+[node name="Center_Line" type="Area3D" parent="." unique_id=2137344491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.95, 450)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Center_Line" unique_id=1984100878]
+shape = SubResource("BoxShape3D_dbiuj")
