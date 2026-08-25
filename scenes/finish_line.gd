@@ -49,7 +49,6 @@ func _ready() -> void:
 	visible = false
 	add_to_group("finish_line_ui")
 	rematch_button.pressed.connect(func(): rematch_requested.emit())
-	rematch_button.pressed.connect(func(): rematch_requested.emit())
 	rematch_garage_button.pressed.connect(func(): rematch_garage_first_requested.emit())
 	new_button.pressed.connect(func(): new_race_requested.emit())
 	end_button.pressed.connect(func(): end_requested.emit())
