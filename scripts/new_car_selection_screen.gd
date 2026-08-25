@@ -179,8 +179,10 @@ func _on_race_selected_pressed() -> void:
 	if not player_config:
 		return
 	GameManager.player_car_config = player_config
-	GameManager.npc_car_config = npc_config if npc_config != player_config else null
+	GameManager.npc_car_config = npc_config
 	GameManager.last_raced_config = player_config
+	GameManager.player_lane = 1
+	GameManager.npc_lane = 2
 	get_tree().change_scene_to_file(RACE_SCENE)
 
 func _on_race_last_pressed() -> void:
