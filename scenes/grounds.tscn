@@ -12,6 +12,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -344.85742, 0, -402.19376)
 
 [node name="Label3D600,600" type="Label3D" parent="." unique_id=1790555498]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 600, 98.008, 600)
+visible = false
 pixel_size = 1.0
 billboard = 1
 text = "X = 600
@@ -21,6 +22,7 @@ uppercase = true
 
 [node name="Label3D600,-600" type="Label3D" parent="." unique_id=70912312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 600, 98.008, -600)
+visible = false
 pixel_size = 1.0
 billboard = 1
 text = "X = 600
@@ -30,6 +32,7 @@ uppercase = true
 
 [node name="Label3D-600,600" type="Label3D" parent="." unique_id=867947325]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -600, 98.008, 600)
+visible = false
 pixel_size = 1.0
 billboard = 1
 text = "X = -600
@@ -39,6 +42,7 @@ uppercase = true
 
 [node name="Label3D-600,-600" type="Label3D" parent="." unique_id=796305992]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -600, 98.008, -600)
+visible = false
 pixel_size = 1.0
 billboard = 1
 text = "X = -600
