@@ -30,7 +30,7 @@ center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.5, 1.79)
 
 [node name="body" type="MeshInstance3D" parent="." unique_id=1330987996]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7249201, 0)
+transform = Transform3D(0.9987867, -0.040233478, 0.028398355, 0.03982095, 0.9990951, 0.01494582, -0.028973984, -0.013796818, 0.9994846, 0, 0.7249201, 0)
 mesh = ExtResource("2_eq1hr")
 skeleton = NodePath("")
 
