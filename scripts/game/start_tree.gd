@@ -25,10 +25,10 @@ const FULL_AMBER_INTERVAL = 0.5
 var race_active = false
 var tree_sequence_running = false
 
-# Light references
+# Light references, keyed by lane number (int) to match timing_system.gd
 var lights = {
-	"left": {},
-	"right": {}
+	1: {},
+	2: {}
 }
 var light_nodes = {}
 
@@ -52,10 +52,10 @@ func _input(event):
 # PUBLIC API (Can be called by other systems, but signals are preferred)
 # ============================================================================
 
-func trigger_red_light(lane: String):
+func trigger_red_light(lane: int):
 	"""Trigger red light for a lane (called by external systems via signal)"""
 	set_light(lane, "red", true)
-	print("[Tree] %s LANE - RED LIGHT (FOUL START)" % lane.to_upper())
+	print("[Tree] LANE %d - RED LIGHT (FOUL START)" % lane)
 
 
 func reset_tree():
@@ -96,28 +96,24 @@ func run_pro_tree():
 	"""Pro tree: All ambers at once, 0.4s to green"""
 	print("[Tree] PRO TREE")
 	
-	# All three ambers simultaneously
-	set_light("left", "amber3", true)
-	set_light("left", "amber2", true)
-	set_light("left", "amber1", true)
-	set_light("right", "amber3", true)
-	set_light("right", "amber2", true)
-	set_light("right", "amber1", true)
+	# All three ambers simultaneously, all lanes
+	for lane in lights.keys():
+		set_light(lane, "amber3", true)
+		set_light(lane, "amber2", true)
+		set_light(lane, "amber1", true)
 	print("[Tree] All ambers ON")
 	
 	await get_tree().create_timer(PRO_AMBER_TIME).timeout
 	
 	# Turn off ambers
-	set_light("left", "amber3", false)
-	set_light("left", "amber2", false)
-	set_light("left", "amber1", false)
-	set_light("right", "amber3", false)
-	set_light("right", "amber2", false)
-	set_light("right", "amber1", false)
+	for lane in lights.keys():
+		set_light(lane, "amber3", false)
+		set_light(lane, "amber2", false)
+		set_light(lane, "amber1", false)
 	
 	# GREEN LIGHT!
-	set_light("left", "green", true)
-	set_light("right", "green", true)
+	for lane in lights.keys():
+		set_light(lane, "green", true)
 	emit_signal("green_light")
 	print("[Tree] === GREEN LIGHT - GO! ===")
 	
@@ -131,34 +127,32 @@ func run_full_tree():
 	print("[Tree] FULL TREE (Sportsman)")
 	
 	# Top amber
-	set_light("left", "amber3", true)
-	set_light("right", "amber3", true)
+	for lane in lights.keys():
+		set_light(lane, "amber3", true)
 	print("[Tree] Top amber ON")
 	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
 	
 	# Middle amber
-	set_light("left", "amber2", true)
-	set_light("right", "amber2", true)
+	for lane in lights.keys():
+		set_light(lane, "amber2", true)
 	print("[Tree] Middle amber ON")
 	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
 	
 	# Bottom amber
-	set_light("left", "amber1", true)
-	set_light("right", "amber1", true)
+	for lane in lights.keys():
+		set_light(lane, "amber1", true)
 	print("[Tree] Bottom amber ON")
 	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
 	
 	# Turn off all ambers
-	set_light("left", "amber3", false)
-	set_light("left", "amber2", false)
-	set_light("left", "amber1", false)
-	set_light("right", "amber3", false)
-	set_light("right", "amber2", false)
-	set_light("right", "amber1", false)
+	for lane in lights.keys():
+		set_light(lane, "amber3", false)
+		set_light(lane, "amber2", false)
+		set_light(lane, "amber1", false)
 	
 	# GREEN LIGHT!
-	set_light("left", "green", true)
-	set_light("right", "green", true)
+	for lane in lights.keys():
+		set_light(lane, "green", true)
 	emit_signal("green_light")
 	print("[Tree] === GREEN LIGHT - GO! ===")
 	
@@ -174,7 +168,10 @@ func run_full_tree():
 func find_all_lights():
 	"""Scan tree for light meshes"""
 	search_for_lights(self)
-	print("[Tree] Found %d light meshes" % (lights["left"].size() + lights["right"].size()))
+	var total := 0
+	for lane in lights.keys():
+		total += lights[lane].size()
+	print("[Tree] Found %d light meshes" % total)
 
 
 func search_for_lights(node):
@@ -182,13 +179,15 @@ func search_for_lights(node):
 	var node_name = node.name.to_lower()
 	
 	if node is MeshInstance3D and "empty" not in node_name:
-		var lane = ""
-		if "left" in node_name:
-			lane = "left"
-		elif "right" in node_name:
-			lane = "right"
+		var lane := 0
+		# Matches "lane01"/"lane1" -> 1, "lane02"/"lane2" -> 2, etc.
+		var regex := RegEx.new()
+		regex.compile("lane0?(\\d+)")
+		var result := regex.search(node_name)
+		if result:
+			lane = int(result.get_string(1))
 		
-		if lane != "":
+		if lane != 0 and lane in lights:
 			if "prestage" in node_name:
 				lights[lane]["prestage"] = node
 			elif "stage" in node_name:
@@ -226,7 +225,7 @@ func search_for_empties(node):
 		search_for_empties(child)
 
 
-func set_light(lane: String, light_name: String, on: bool):
+func set_light(lane: int, light_name: String, on: bool):
 	"""Turn a specific light on/off"""
 	if lane not in lights or light_name not in lights[lane]:
 		return
@@ -257,7 +256,7 @@ func set_light(lane: String, light_name: String, on: bool):
 			mat.albedo_color = Color(0.2, 0.2, 0.2)
 	
 	# Update OmniLight if exists
-	var empty_pattern = lane + "_" + light_name
+	var empty_pattern = "lane%02d_%s" % [lane, light_name]
 	for empty_name in light_nodes.keys():
 		if empty_pattern in empty_name.to_lower():
 			var omni = light_nodes[empty_name]
@@ -277,6 +276,6 @@ func set_light(lane: String, light_name: String, on: bool):
 
 func turn_all_lights_off():
 	"""Turn off all lights"""
-	for lane in ["left", "right"]:
+	for lane in lights.keys():
 		for light_name in lights[lane].keys():
 			set_light(lane, light_name, false)

@@ -3,7 +3,6 @@
 [ext_resource type="ArrayMesh" uid="uid://cl3s805o7jday" path="res://vehicles/real_drag_body_mesh.res" id="1_d3alw"]
 [ext_resource type="ArrayMesh" uid="uid://rbbd0vfvr341" path="res://vehicles/real_drag_wheelie_bar_mesh.res" id="2_aej34"]
 [ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="3_26gc8"]
-[ext_resource type="Script" uid="uid://cqbbh5jsbho4t" path="res://vehicles/exhaust_pipes.gd" id="4_2u0vj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3alw"]
 albedo_color = Color(1, 0.34509805, 1, 1)
@@ -430,22 +429,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ifqf6")
 
-[sub_resource type="Gradient" id="Gradient_2u0vj"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_0aqc1"]
-gradient = SubResource("Gradient_2u0vj")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4fu3u"]
-transparency = 1
-blend_mode = 1
-shading_mode = 0
-albedo_texture = SubResource("GradientTexture2D_0aqc1")
-
-[sub_resource type="QuadMesh" id="QuadMesh_dbiuj"]
-material = SubResource("StandardMaterial3D_4fu3u")
+[sub_resource type="QuadMesh" id="QuadMesh_bkbyv"]
 
 [sub_resource type="Curve" id="Curve_q0wdf"]
 _data = [Vector2(0.05084745, 0.13846147), 0.0, 0.0, 0, 0, Vector2(0.17514125, 0.9384614), 0.0, 0.0, 0, 0, Vector2(0.99999994, 0), 0.0, 0.0, 0, 0]
@@ -543,7 +527,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_aej34")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00045044225, 0.29039237, 0.019587224)
 mesh = SubResource("ArrayMesh_aej34")
 skeleton = NodePath("")
-script = ExtResource("4_2u0vj")
 
 [node name="exhaust_marker_0" type="Node3D" parent="exhaust-pipes" unique_id=1758997450]
 transform = Transform3D(0.13265622, 0.11141571, 0, -0.11141571, 0.13265622, 0, 0, 0, 0.1732372, 0.7953253, 0.11596641, 0.2243923)
@@ -554,9 +537,8 @@ amount = 24
 lifetime = 0.15000000000000002
 one_shot = true
 explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
 local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
+mesh = SubResource("QuadMesh_bkbyv")
 spread = 15.0
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 3.0
@@ -568,148 +550,20 @@ color_ramp = SubResource("Gradient_r3y0l")
 [node name="exhaust_marker_1" type="Node3D" parent="exhaust-pipes" unique_id=1993762819]
 transform = Transform3D(0.073674604, -0.050394602, 0, 0.050394602, 0.073674604, 0, 0, 0, 0.08926121, -0.7993411, 0.11311069, 0.22331181)
 
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_1" unique_id=1281012589]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
-
 [node name="exhaust_marker_2" type="Node3D" parent="exhaust-pipes" unique_id=859282127]
 transform = Transform3D(0.12835906, 0.104336224, 0, -0.104336224, 0.12835906, 0, 0, 0, -0.16541493, 0.79703367, 0.11401382, 0.06463256)
-visible = false
-
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_2" unique_id=1711426360]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
 
 [node name="exhaust_marker_3" type="Node3D" parent="exhaust-pipes" unique_id=1026719686]
 transform = Transform3D(0.07466197, -0.052238893, 0, 0.052238893, 0.07466197, 0, 0, 0, 0.09112251, -0.7958614, 0.11397508, 0.06636842)
 
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_3" unique_id=202270965]
-transform = Transform3D(8.99183, 6.2913322, 0, -6.2913322, 8.99183, 0, 0, 0, 10.9742365, 6.4391956, -6.0318727, -0.7283428)
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
-
 [node name="exhaust_marker_4" type="Node3D" parent="exhaust-pipes" unique_id=1901026355]
 transform = Transform3D(0.10656312, 0.08418606, 0, -0.08418606, 0.10656312, 0, 0, 0, 0.13580498, 0.7998864, 0.111337245, -0.09220355)
-
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_4" unique_id=238862077]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
 
 [node name="exhaust_marker_5" type="Node3D" parent="exhaust-pipes" unique_id=823673992]
 transform = Transform3D(0.07592392, -0.051655263, 0, 0.051655263, 0.07592392, 0, 0, 0, 0.09182978, -0.79724616, 0.113156766, -0.093657844)
 
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_5" unique_id=78081050]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
-
 [node name="exhaust_marker_6" type="Node3D" parent="exhaust-pipes" unique_id=546022476]
 transform = Transform3D(0.118006594, 0.09769572, 0, -0.09769572, 0.118006594, 0, 0, 0, 0.15319926, 0.79588765, 0.113812, -0.24742343)
 
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_6" unique_id=946060865]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
-
 [node name="exhaust_marker_7" type="Node3D" parent="exhaust-pipes" unique_id=1897655975]
 transform = Transform3D(0.07091791, -0.04966403, 0, 0.04966403, 0.07091791, 0, 0, 0, 0.08657867, -0.7969613, 0.11287376, -0.24941166)
-
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_7" unique_id=470269534]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-visibility_aabb = AABB(0, 0, 0, 4, 4, 4)
-local_coords = true
-mesh = SubResource("QuadMesh_dbiuj")
-direction = Vector3(0, 0, 1)
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")

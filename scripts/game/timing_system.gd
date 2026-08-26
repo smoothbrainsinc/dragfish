@@ -7,7 +7,7 @@ extends Node3D
 signal red_light_triggered(lane: int)
 signal checkpoint_crossed(lane: int, checkpoint: String, time: float)
 signal race_finished(lane: int, results: Dictionary)
-signal all_finished(results: Dictionary, winner)  # winner: int lane, or "all_fouled"/"none"
+signal all_finished(left_results: Dictionary, right_results: Dictionary, winner: String)  # winner: "left"/"right"/"both_fouled"/""
 signal center_line_crossed(lane: int)
 
 # Checkpoint references (set in editor or found by name)
@@ -209,10 +209,11 @@ func _finalize_results():
 	print("=".repeat(70) + "\n")
 
 	
-	var lane1_results = timing_data.get(1, {})
-	var lane2_results = timing_data.get(2, {})
-	var winner_str = "left" if winner == 1 else "right" if winner == 2 else "both_fouled" if winner == "all_fouled" else ""
-	emit_signal("all_finished", lane1_results, lane2_results, winner_str)
+	# Lane 1 = right, lane 2 = left (per GameManager.gd lane assignment)
+	var right_results = timing_data.get(1, {})
+	var left_results = timing_data.get(2, {})
+	var winner_str = "right" if winner == 1 else "left" if winner == 2 else "both_fouled" if winner == "all_fouled" else ""
+	emit_signal("all_finished", left_results, right_results, winner_str)
 
 # ============================================================================
 # UTILITIES
