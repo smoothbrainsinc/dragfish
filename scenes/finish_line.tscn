@@ -2,6 +2,43 @@
 
 [ext_resource type="Script" uid="uid://bfboo886ak32t" path="res://scenes/finish_line.gd" id="1"]
 
+[sub_resource type="Animation" id="Animation_ojfi3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_05ejo"]
+resource_name = "blink"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.58, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0.95686275, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3p0rx"]
+_data = {
+&"RESET": SubResource("Animation_ojfi3"),
+&"blink": SubResource("Animation_05ejo")
+}
+
 [node name="finishLine" type="Control" unique_id=1480192473]
 layout_mode = 3
 anchors_preset = 15
@@ -10,6 +47,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
+
+[node name="ResultsDelayTimer" type="Timer" parent="." unique_id=1861509436]
+wait_time = 2.5
+one_shot = true
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=551187256]
 layout_mode = 1
@@ -25,9 +66,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 1
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=423613572]
@@ -45,7 +87,7 @@ uppercase = true
 
 [node name="LanesRow" type="HBoxContainer" parent="VBoxContainer" unique_id=1563415063]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 119
 alignment = 1
 
 [node name="LeftPanel" type="PanelContainer" parent="VBoxContainer/LanesRow" unique_id=1457507195]
@@ -64,38 +106,48 @@ horizontal_alignment = 1
 
 [node name="LeftReactionLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=2122027469]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Left60Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=255312868]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Left330Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=1495239223]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="LeftEighthLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=1324771741]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Left1000Label" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=206109205]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="LeftETLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=2031983515]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="LeftSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/LeftPanel/LeftVBox" unique_id=41149209]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
+
+[node name="WinnerBlink" type="AnimationPlayer" parent="VBoxContainer/LanesRow/LeftPanel" unique_id=1722740080]
+libraries/ = SubResource("AnimationLibrary_3p0rx")
 
 [node name="StatLabelsColumn" type="VBoxContainer" parent="VBoxContainer/LanesRow" unique_id=1309854318]
 layout_mode = 2
@@ -158,42 +210,59 @@ horizontal_alignment = 1
 
 [node name="RightReactionLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1258232263]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Right60Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1581679267]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Right330Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=8436588]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="RightEighthLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1137696141]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="Right1000Label" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=1269382211]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="RightETLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=686139120]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
 [node name="RightSpeedLabel" type="Label" parent="VBoxContainer/LanesRow/RightPanel/RightVBox" unique_id=778417801]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "--"
 horizontal_alignment = 1
 
+[node name="WinnerBlink" type="AnimationPlayer" parent="VBoxContainer/LanesRow/RightPanel" unique_id=480656487]
+libraries/ = SubResource("AnimationLibrary_3p0rx")
+
 [node name="WinnerRow" type="VBoxContainer" parent="VBoxContainer" unique_id=723498390]
 layout_mode = 2
+theme_override_constants/separation = 1
 alignment = 1
+
+[node name="WinnerLabel" type="Label" parent="VBoxContainer/WinnerRow" unique_id=1514773065]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "WINNER"
+horizontal_alignment = 1
 
 [node name="WinnerImage" type="TextureRect" parent="VBoxContainer/WinnerRow" unique_id=496917326]
 custom_minimum_size = Vector2(256, 256)
@@ -202,15 +271,9 @@ size_flags_horizontal = 4
 expand_mode = 1
 stretch_mode = 5
 
-[node name="WinnerLabel" type="Label" parent="VBoxContainer/WinnerRow" unique_id=1514773065]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "WINNER"
-horizontal_alignment = 1
-
 [node name="ButtonsRow" type="HBoxContainer" parent="VBoxContainer" unique_id=740949373]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 28
 alignment = 1
 
 [node name="RematchButton" type="Button" parent="VBoxContainer/ButtonsRow" unique_id=1355462359]
