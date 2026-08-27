@@ -3,6 +3,7 @@
 [ext_resource type="ArrayMesh" uid="uid://cl3s805o7jday" path="res://vehicles/real_drag_body_mesh.res" id="1_d3alw"]
 [ext_resource type="ArrayMesh" uid="uid://rbbd0vfvr341" path="res://vehicles/real_drag_wheelie_bar_mesh.res" id="2_aej34"]
 [ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="3_26gc8"]
+[ext_resource type="Script" uid="uid://b54q5ewfrcqlw" path="res://vehicles/exhaust_pipes_flames.gd" id="4_2u0vj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3alw"]
 albedo_color = Color(1, 0.34509805, 1, 1)
@@ -429,16 +430,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ifqf6")
 
-[sub_resource type="QuadMesh" id="QuadMesh_bkbyv"]
-
-[sub_resource type="Curve" id="Curve_q0wdf"]
-_data = [Vector2(0.05084745, 0.13846147), 0.0, 0.0, 0, 0, Vector2(0.17514125, 0.9384614), 0.0, 0.0, 0, 0, Vector2(0.99999994, 0), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Gradient" id="Gradient_r3y0l"]
-offsets = PackedFloat32Array(0.040625, 0.584375, 0.996875)
-colors = PackedColorArray(0.9098039, 0.9098039, 0.73333335, 1, 0.9607843, 0.5372549, 0, 1, 1, 1, 1, 0.13725491)
-
 [node name="RealDrag" type="VehicleBody3D" unique_id=1470956369]
 mass = 700.0
 center_of_mass_mode = 1
@@ -527,25 +518,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_aej34")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00045044225, 0.29039237, 0.019587224)
 mesh = SubResource("ArrayMesh_aej34")
 skeleton = NodePath("")
+script = ExtResource("4_2u0vj")
 
 [node name="exhaust_marker_0" type="Node3D" parent="exhaust-pipes" unique_id=1758997450]
 transform = Transform3D(0.13265622, 0.11141571, 0, -0.11141571, 0.13265622, 0, 0, 0, 0.1732372, 0.7953253, 0.11596641, 0.2243923)
-
-[node name="CPUParticles3D" type="CPUParticles3D" parent="exhaust-pipes/exhaust_marker_0" unique_id=701464585]
-emitting = false
-amount = 24
-lifetime = 0.15000000000000002
-one_shot = true
-explosiveness = 0.6
-local_coords = true
-mesh = SubResource("QuadMesh_bkbyv")
-spread = 15.0
-gravity = Vector3(0, 0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 6.0
-scale_amount_max = 3.0
-scale_amount_curve = SubResource("Curve_q0wdf")
-color_ramp = SubResource("Gradient_r3y0l")
 
 [node name="exhaust_marker_1" type="Node3D" parent="exhaust-pipes" unique_id=1993762819]
 transform = Transform3D(0.073674604, -0.050394602, 0, 0.050394602, 0.073674604, 0, 0, 0, 0.08926121, -0.7993411, 0.11311069, 0.22331181)
