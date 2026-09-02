@@ -120,7 +120,7 @@ shader_parameter/fade_rate = 3.5
 
 [node name="Lucy_water_special" type="Node3D" unique_id=644099363]
 script = ExtResource("1_3i3gu")
-ocean_mesh_path = NodePath(".")
+ocean_mesh_path = NodePath("Plane")
 foam_sub_viewport_path = NodePath("FoamSubViewport")
 history_a_path = NodePath("HistoryASubViewport")
 history_b_path = NodePath("HistoryBSubViewport")

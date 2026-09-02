@@ -7,7 +7,7 @@ shader_type canvas_item;
 
 uniform vec2 mesh_min = vec2(-655.5166, -639.6473);
 uniform vec2 mesh_size = vec2(1365.878, 1323.194);
-uniform float steepness : hint_range(0.0, 1.0) = 0.2;
+uniform float steepness : hint_range(0.0, 1.0) = 0.35;
 uniform sampler2D noise : repeat_enable;
 uniform float noise_intensity : hint_range(0.0, 1.0) = 0.25;
 
@@ -25,9 +25,9 @@ vec3 gerstner(vec2 position, vec2 direction, float amplitude, float steep, float
 vec3 wave(vec2 position) {
 	float t = TIME;
 
-	vec3 displacement = gerstner(position, vec2(1.0, 0.0),  6.0,  steepness, 0.008, t);
-	displacement      += gerstner(position, vec2(-1.0, 1.0), 2.5, steepness, 0.010, t);
-	displacement      += gerstner(position, vec2(1.0, 1.0),  2.5, steepness, 0.014, t);
+	vec3 displacement = gerstner(position, vec2(1.0, 0.0),  2.0,  steepness, 0.42, t);
+	displacement      += gerstner(position, vec2(-1.0, 1.0), 1.2, steepness, 0.785, t);
+	displacement      += gerstner(position, vec2(1.0, 1.0),  0.5, steepness, 1.57, t);
 
 	vec2 noise_uv = (position - mesh_min) / mesh_size;
 	noise_uv += normalize(vec2(1.0, 0.0)) * t * 0.05;

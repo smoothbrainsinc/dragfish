@@ -219,8 +219,8 @@ skeleton = NodePath("")
 [node name="hell_awaits_ocean_surface" parent="." unique_id=2007253605 instance=ExtResource("8_egwhc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.625, 0, -79.135)
 visible = false
-ocean_mesh_path = NodePath("../Lucy_water_special")
+ocean_mesh_path = NodePath("../Lucy_water_special/Plane")
 
 [node name="Lucy_water_special" parent="." unique_id=644099363 instance=ExtResource("6_fno3g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.74086, -7.123314, -69.155045)
-ocean_mesh_path = NodePath(".")
+visible = true
