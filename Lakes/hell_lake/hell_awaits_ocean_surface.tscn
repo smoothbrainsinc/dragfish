@@ -17,7 +17,7 @@ viewport_path = NodePath("HistoryA")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_ffiey")
-shader_parameter/color = Color(0.003921569, 0, 0.94509804, 0.40784314)
+shader_parameter/color = Color(0.07450981, 0.30588236, 1, 0.41568628)
 shader_parameter/roughness_val = 0.350000016625
 shader_parameter/rim_amount = 3.0000001425
 shader_parameter/mesh_size = 1366.0
@@ -64,7 +64,7 @@ resource_local_to_scene = true
 shader = ExtResource("3_47e2n")
 shader_parameter/current_foam = SubResource("ViewportTexture_4s66u")
 shader_parameter/history_foam = SubResource("ViewportTexture_ts4rc")
-shader_parameter/delta = 0.016666666666666666
+shader_parameter/delta = 0.05001666666666666
 shader_parameter/fade_rate = 3.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f8oqw"]
@@ -72,7 +72,7 @@ resource_local_to_scene = true
 shader = ExtResource("3_47e2n")
 shader_parameter/current_foam = SubResource("ViewportTexture_4s66u")
 shader_parameter/history_foam = SubResource("ViewportTexture_04bbv")
-shader_parameter/delta = 0.016666666666666666
+shader_parameter/delta = 0.05001666666666666
 shader_parameter/fade_rate = 3.5
 
 [node name="hell_awaits_ocean_surface" type="Node3D" unique_id=2007253605]
@@ -90,6 +90,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_4fu3u")
 [node name="displacementSubViewport" type="SubViewport" parent="." unique_id=1618048959]
 transparent_bg = true
 use_hdr_2d = true
+size = Vector2i(4096, 4096)
 
 [node name="ColorRect" type="ColorRect" parent="displacementSubViewport" unique_id=1964855360]
 material = SubResource("ShaderMaterial_47e2n")
@@ -103,7 +104,7 @@ grow_vertical = 2
 transparent_bg = true
 use_hdr_2d = true
 canvas_item_default_texture_repeat = 1
-size = Vector2i(1024, 1024)
+size = Vector2i(4096, 4096)
 render_target_update_mode = 0
 
 [node name="ColorRect" type="ColorRect" parent="FoamSubViewport" unique_id=1726696448]
@@ -118,7 +119,7 @@ metadata/_edit_use_anchors_ = true
 [node name="HistoryA" type="SubViewport" parent="." unique_id=1728161521]
 transparent_bg = true
 use_hdr_2d = true
-size = Vector2i(1024, 1024)
+size = Vector2i(4096, 4096)
 render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="HistoryA" unique_id=1822199493]
@@ -133,7 +134,7 @@ color = Color(0.18536793, 0, 1.2838858, 0.922)
 [node name="HistoryB" type="SubViewport" parent="." unique_id=2133884951]
 transparent_bg = true
 use_hdr_2d = true
-size = Vector2i(1024, 1024)
+size = Vector2i(4096, 4096)
 render_target_update_mode = 0
 
 [node name="ColorRect" type="ColorRect" parent="HistoryB" unique_id=938442582]
