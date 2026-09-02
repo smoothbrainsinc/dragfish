@@ -43,28 +43,33 @@ shadow_mesh = SubResource("ArrayMesh_p1xje")
 [sub_resource type="ViewportTexture" id="ViewportTexture_cw8jp"]
 viewport_path = NodePath("DisplacementSubViewport")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_fno3g"]
-viewport_path = NodePath("FoamSubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_3i3gu"]
+viewport_path = NodePath("HistoryBSubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4fu3u"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_3i3gu")
 shader_parameter/color = Color(0.06586381, 0.3264147, 0.5377491, 1)
-shader_parameter/roughness_val = 0.01
+shader_parameter/roughness_val = 0.18000000855
 shader_parameter/rim_amount = 3.0
 shader_parameter/mesh_min = Vector2(-655.5166, -639.6473)
 shader_parameter/mesh_size = Vector2(1365.878, 1323.194)
 shader_parameter/sample_distance = 0.05
 shader_parameter/displacement_map = SubResource("ViewportTexture_cw8jp")
-shader_parameter/foam_map = SubResource("ViewportTexture_fno3g")
+shader_parameter/foam_map = SubResource("ViewportTexture_3i3gu")
 shader_parameter/foam_color = Color(0.8, 0.9, 0.9, 1)
 
 [sub_resource type="Gradient" id="Gradient_04bbv"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(0.55860806, 1)
+colors = PackedColorArray(0.023809524, 0.023809524, 0.023809524, 1, 1, 1, 1, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_7iy2w"]
+resource_local_to_scene = true
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_nqao3"]
+resource_local_to_scene = true
 noise = SubResource("FastNoiseLite_7iy2w")
 color_ramp = SubResource("Gradient_04bbv")
 seamless = true
@@ -91,34 +96,31 @@ shader_parameter/mesh_size = Vector2(1365.878, 1323.194)
 shader_parameter/compression_low = 0.0
 shader_parameter/compression_high = 0.7
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_3qrdx"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_6820f"]
 viewport_path = NodePath("FoamSubViewport")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_x8ury"]
-viewport_path = NodePath("HistoryBSubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wgy18"]
 resource_local_to_scene = true
 shader = ExtResource("4_wgy18")
-shader_parameter/current_foam = SubResource("ViewportTexture_3qrdx")
-shader_parameter/history_foam = SubResource("ViewportTexture_x8ury")
-shader_parameter/delta = 0.018055555555555554
+shader_parameter/current_foam = SubResource("ViewportTexture_6820f")
+shader_parameter/history_foam = SubResource("ViewportTexture_3i3gu")
+shader_parameter/delta = 0.007091
 shader_parameter/fade_rate = 3.5
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_6820f"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_3qrdx"]
 viewport_path = NodePath("HistoryASubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3i3gu"]
 resource_local_to_scene = true
 shader = ExtResource("4_wgy18")
-shader_parameter/current_foam = SubResource("ViewportTexture_3qrdx")
-shader_parameter/history_foam = SubResource("ViewportTexture_6820f")
-shader_parameter/delta = 0.018055555555555554
+shader_parameter/current_foam = SubResource("ViewportTexture_6820f")
+shader_parameter/history_foam = SubResource("ViewportTexture_3qrdx")
+shader_parameter/delta = 0.007091
 shader_parameter/fade_rate = 3.5
 
 [node name="Lucy_water_special" type="Node3D" unique_id=644099363]
 script = ExtResource("1_3i3gu")
-ocean_mesh_path = NodePath("Plane")
+ocean_mesh_path = NodePath(".")
 foam_sub_viewport_path = NodePath("FoamSubViewport")
 history_a_path = NodePath("HistoryASubViewport")
 history_b_path = NodePath("HistoryBSubViewport")
@@ -160,7 +162,7 @@ grow_vertical = 2
 transparent_bg = true
 use_hdr_2d = true
 size = Vector2i(1024, 1024)
-render_target_update_mode = 1
+render_target_update_mode = 0
 
 [node name="ColorRect" type="ColorRect" parent="HistoryASubViewport" unique_id=1892153139]
 texture_repeat = 2
@@ -175,7 +177,7 @@ grow_vertical = 2
 transparent_bg = true
 use_hdr_2d = true
 size = Vector2i(1024, 1024)
-render_target_update_mode = 0
+render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="HistoryBSubViewport" unique_id=927120591]
 texture_repeat = 2

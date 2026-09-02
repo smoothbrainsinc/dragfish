@@ -17,8 +17,8 @@ vec3 gerstner(vec2 position, vec2 direction, float amplitude, float steep, float
 
 	vec3 displacement;
 	displacement.y = sin(phase) * amplitude;
-	displacement.x = cos(phase) * direction.x * steep;
-	displacement.z = cos(phase) * direction.y * steep;
+	displacement.x = cos(phase) * direction.x * steep * amplitude;
+	displacement.z = cos(phase) * direction.y * steep * amplitude;
 	return displacement;
 }
 

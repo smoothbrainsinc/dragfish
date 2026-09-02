@@ -59,7 +59,7 @@ shader_parameter/starmap_flip_u = false
 shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
-shader_parameter/star_rotation = -11.95949989370597
+shader_parameter/star_rotation = -6.20681601497895
 shader_parameter/star_tilt = -1.2915436464758039
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("17_gp0fs")
@@ -75,8 +75,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.05779355, 0.05779355)
-shader_parameter/cirrus_position2 = Vector2(0.05779355, 0.05779355)
+shader_parameter/cirrus_position1 = Vector2(0.10765105, 0.10765105)
+shader_parameter/cirrus_position2 = Vector2(0.10765105, 0.10765105)
 shader_parameter/cirrus_texture = ExtResource("13_8jgqo")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -86,7 +86,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(0.2889698, 0.2889698)
+shader_parameter/cumulus_position = Vector2(0.538198, 0.538198)
 shader_parameter/cumulus_texture = ExtResource("14_023cl")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -96,7 +96,7 @@ shader_parameter/azimuthal_grid_rotation_offset = 0.03
 shader_parameter/show_equatorial_grid = false
 shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
 shader_parameter/equatorial_grid_rotation_offset = 0.03
-shader_parameter/moon_matrix = Basis(0.370415, -0.8928837, -0.2560303, -0.29502392, 0.14827201, -0.9439155, 0.88076884, 0.4251755, -0.20849991)
+shader_parameter/moon_matrix = Basis(0.77672255, -0.60544384, -0.17360821, -0.20453537, 0.018236645, -0.9786893, 0.5957074, 0.7956791, -0.109669864)
 
 [sub_resource type="Sky" id="Sky_fblcv"]
 sky_material = SubResource("ShaderMaterial_1scdv")
@@ -112,7 +112,6 @@ tonemap_mode = 3
 tonemap_white = 6.0
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_w8701"]
-auto_exposure_enabled = true
 
 [node name="Root" type="Node3D" unique_id=1567092246]
 
@@ -120,29 +119,28 @@ auto_exposure_enabled = true
 environment = SubResource("Environment_i7nld")
 camera_attributes = SubResource("CameraAttributesPractical_w8701")
 script = ExtResource("19_x5deg")
-current_time = 22.741111111111113
+current_time = 0.7619444444444444
 minutes_per_day = 1440.0
-auto_exposure = true
 wind_direction = 2.35619451204804
 metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D" unique_id=784184322]
-transform = Transform3D(-0.82605475, -0.49446386, -0.2704422, 0, 0.4798564, -0.87734705, 0.5635898, -0.7247367, -0.3963877, -0.2704422, -0.87734705, -0.3963877)
+transform = Transform3D(-0.84899926, 0.46686324, 0.247465, 0, 0.4683342, -0.8835514, -0.528394, -0.7501345, -0.3976154, 0.247465, -0.8835514, -0.3976154)
 light_color = Color(0.98, 0.523, 0.294, 1)
 light_energy = 0.0
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D" unique_id=1445646232]
-transform = Transform3D(0, -0.4735466, 0.8807688, -0.44029427, 0.79080135, 0.4251755, -0.89785355, -0.38779745, -0.20849985, 0.8807688, 0.4251755, -0.20849985)
+transform = Transform3D(0, -0.8032015, 0.5957074, -0.1365409, 0.59012824, 0.7956791, -0.9906344, -0.08133843, -0.109669864, 0.5957074, 0.7956791, -0.109669864)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
-light_energy = 0.12755264
+light_energy = 0.23870373
 shadow_enabled = true
 
 [node name="SkyDome" type="Node" parent="Sky3D" unique_id=1834762654]
 script = ExtResource("20_ct7iu")
-sun_azimuth = -5.68446
-sun_altitude = -2.6411016
-moon_azimuth = -1.3383504
-moon_altitude = -1.1316406
+sun_azimuth = -0.55670786
+sun_altitude = -2.6541882
+moon_azimuth = -1.3887347
+moon_altitude = -0.65066844
 wind_direction = 2.35619451204804
 
 [node name="TimeOfDay" type="Node" parent="Sky3D" unique_id=690712443]
@@ -150,7 +148,8 @@ script = ExtResource("21_2f0hn")
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 1440.0
 system_sync = true
-current_time = 22.741111111111113
+current_time = 0.7619444444444444
+day = 2
 month = 9
 year = 2026
 
