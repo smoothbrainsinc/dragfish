@@ -28,7 +28,7 @@ func _ready():
 	print("\nSpawning: %s" % config.display_name)
 	
 	# Step 1: Spawn the vehicle (creates the scene instance)
-	test_vehicle = GameManager.spawn_vehicle(config, true)
+	test_vehicle = GameManager.spawn_vehicle(config, true, 0)
 	
 	if not test_vehicle:
 		push_error("Failed to spawn vehicle!")

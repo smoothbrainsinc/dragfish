@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bw30kfwd13c4o"]
+
+[ext_resource type="Shader" uid="uid://bp2kn8r5u757u" path="res://Lakes/Lake_Lucy/lucy_water_surface_textured.gdshader" id="1_kevbx"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6820f"]
+viewport_path = NodePath("HistoryASubViewport")
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_kevbx")
+shader_parameter/color = Color(0.08627451, 0.14509805, 0.46666667, 0.7764706)
+shader_parameter/roughness_val = 0.470000022325
+shader_parameter/rim_amount = 3.0
+shader_parameter/mesh_size = 10.0
+shader_parameter/sample_distance = 0.01
+shader_parameter/foam_map = SubResource("ViewportTexture_6820f")
+shader_parameter/foam_color = Color(0.8, 0.9, 0.9, 1)

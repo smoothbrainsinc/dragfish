@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://wgv4i2nq6evs"]
+
+[ext_resource type="PackedScene" uid="uid://j00uwbc3kh7r" path="res://assets/models/street_lamp.glb" id="1_clk6t"]
+
+[node name="street_lamp" type="Node3D" unique_id=1154661074]
+
+[node name="street_lamp" parent="." unique_id=398900702 instance=ExtResource("1_clk6t")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="street_lamp" unique_id=1029025009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6127653, 19.31383, 0)
+visible = false
+light_energy = 16.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="street_lamp" unique_id=1054710385]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 4.626669, 19.248732, 0)
+light_energy = 100.0
+light_indirect_energy = 16.0
+spot_range = 20.0

@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://bnqimmptx0c25" path="res://Lakes/hell_lake/hellLake_018_Gentle_Sand_Roughness.png" id="2_awbmy"]
 [ext_resource type="Texture2D" uid="uid://cxyn2ve7ogk46" path="res://Lakes/hell_lake/hellLake_018_Gentle_Sand_Normal.png" id="3_1widr"]
 [ext_resource type="Script" uid="uid://x2thuuc1i0l1" path="res://Lakes/weed_spawner_3.gd" id="4_fno3g"]
-[ext_resource type="PackedScene" uid="uid://blcq1ttgmm53v" path="res://assets/models/hell_water.tscn" id="5_1widr"]
-[ext_resource type="PackedScene" uid="uid://cldipfai7u8p1" path="res://Lakes/hell_lake/new_hell_awaits_water.tscn" id="6_fno3g"]
+[ext_resource type="PackedScene" uid="uid://cyv3tobbfe6a" path="res://Lakes/Lake_Lucy/lucy_water_special.tscn" id="6_fno3g"]
+[ext_resource type="PackedScene" uid="uid://1u4hu1dn2m1e" path="res://Lakes/hell_lake/hell_awaits_ocean_surface.tscn" id="8_egwhc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_361u1"]
 resource_name = "Material.001"
@@ -216,9 +216,9 @@ skeleton = NodePath("")
 mesh = SubResource("ArrayMesh_c8iyq")
 skeleton = NodePath("")
 
-[node name="HellWater" parent="." unique_id=1213187253 instance=ExtResource("5_1widr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.01, 0.6007538, 24.995)
+[node name="hell_awaits_ocean_surface" parent="." unique_id=2007253605 instance=ExtResource("8_egwhc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.625, 0, -79.135)
 visible = false
 
-[node name="new_hell_awaits_water" parent="." unique_id=656742733 instance=ExtResource("6_fno3g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.776062, 0, -58.427826)
+[node name="Lucy_water_special" parent="." unique_id=644099363 instance=ExtResource("6_fno3g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.74086, -7.123314, -69.155045)

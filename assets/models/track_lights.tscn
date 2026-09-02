@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cxb1bibkua6y8"]
+
+[ext_resource type="PackedScene" uid="uid://wgv4i2nq6evs" path="res://assets/models/street_lamp.tscn" id="1_lge7f"]
+
+[node name="track_lights" type="Node3D" unique_id=1902631075]
+
+[node name="street_lamp" parent="." unique_id=1154661074 instance=ExtResource("1_lge7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9532504, 0, 0)
+
+[node name="street_lamp2" parent="." unique_id=1720398314 instance=ExtResource("1_lge7f")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 7.953, 0, 0)
