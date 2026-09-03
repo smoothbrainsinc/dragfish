@@ -1,5 +1,9 @@
 [gd_scene format=4 uid="uid://cldipfai7u8p1"]
 
+[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="1_if2rg"]
+[ext_resource type="Shader" uid="uid://csjbh8be0504v" path="res://assets/shaders/water_underwater.gdshader" id="2_mfhla"]
+[ext_resource type="Texture2D" uid="uid://dtyd17mw3ndha" path="res://assets/generated/caustics.png" id="2_ueaw0"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h7q4p"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_p1xje"]
@@ -34,8 +38,75 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_p1xje")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uevyf"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_if2rg")
+shader_parameter/max_depth = 10.0
+shader_parameter/water_level = 0.0
+shader_parameter/underwater_fog_color = Color(0.03, 0.08, 0.04, 1)
+shader_parameter/fade_start_depth = 0.5
+shader_parameter/max_clarity = 0.35
+shader_parameter/sea_height = 1.3
+shader_parameter/sea_choppy = 4.0
+shader_parameter/sea_speed = 1.5
+shader_parameter/sea_freq = 0.08
+shader_parameter/ITER_GEOMETRY = 3
+shader_parameter/ITER_FRAGMENT = 5
+shader_parameter/refraction_strength = 1.0
+shader_parameter/refraction_distance_fade = 5.0
+shader_parameter/normal_epsilon = 0.01
+shader_parameter/normal_smoothness_dist = 50.0
+shader_parameter/base_tint_color = Color(0.32, 0.42, 0.2, 1)
+shader_parameter/deep_color = Color(0.04, 0.1, 0.05, 1)
+shader_parameter/water_absorption = Color(0.45, 0.25, 0.35, 1)
+shader_parameter/roughness = 0.125
+shader_parameter/metallic = 0.0
+shader_parameter/specular = 0.5
+shader_parameter/caustics_texture = ExtResource("2_ueaw0")
+shader_parameter/caustics_scale = 2.0
+shader_parameter/caustics_speed = 0.1
+shader_parameter/caustics_intensity = 0.8
+shader_parameter/caustics_depth_fade = 0.7
+shader_parameter/foam_color = Color(1, 1, 1, 1)
+shader_parameter/foam_depth_start = 0.8
+shader_parameter/foam_depth_end = 0.0
+shader_parameter/foam_noise_scale = 2.0
+shader_parameter/foam_noise_speed = 1.0
+shader_parameter/foam_cutoff = 0.7
+shader_parameter/foam_crest_threshold = 0.7
+shader_parameter/foam_crest_amount = 2.0
+shader_parameter/foam_edge_color = Color(0.8330335, 0.8887911, 0.998583, 1)
+shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
+shader_parameter/voronoi_scale = 9.0
+shader_parameter/voronoi_strength = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_dbiuj"]
+size = Vector3(2000, 2000, 2000)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4fu3u"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_mfhla")
+shader_parameter/sea_height = 1.3
+shader_parameter/sea_choppy = 4.0
+shader_parameter/sea_speed = 1.5
+shader_parameter/sea_freq = 0.08
+shader_parameter/height_offset = 0.0
+shader_parameter/underwater_color = Color(0.1, 0.26, 0.13, 1)
+shader_parameter/absorption_strength = 0.15
+shader_parameter/max_clarity = 0.55
+shader_parameter/refraction_amount = 0.004
+shader_parameter/refraction_speed = 0.7
+shader_parameter/water_level_fudge = 0.0
+
 [node name="new_hell_awaits_water" type="Node3D" unique_id=286069375]
 
 [node name="Plane" type="MeshInstance3D" parent="." unique_id=352320628]
 mesh = SubResource("ArrayMesh_5a17v")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("ShaderMaterial_uevyf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=401401123]
+mesh = SubResource("BoxMesh_dbiuj")
+surface_material_override/0 = SubResource("ShaderMaterial_4fu3u")
