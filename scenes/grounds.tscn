@@ -8,4 +8,4 @@
 [node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
 
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -344.85742, 36.857727, -476.19678)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -225.40448, 36.857727, -476.19678)
