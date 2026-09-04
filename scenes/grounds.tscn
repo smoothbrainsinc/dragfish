@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bbssvd4xrvryt"]
 
 [ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="2_tbi4r"]
+[ext_resource type="PackedScene" uid="uid://wgv4i2nq6evs" path="res://assets/models/street_lamp.tscn" id="3_k0iur"]
 [ext_resource type="PackedScene" uid="uid://bt1kegkmehb2h" path="res://Lakes/hell_lake/meshes/hell_lake.tscn" id="5_coijf"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
@@ -9,3 +10,6 @@
 
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -225.40448, 36.857727, -476.19678)
+
+[node name="street_lamp" parent="." unique_id=1066464497 instance=ExtResource("3_k0iur")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 3.937, 0)

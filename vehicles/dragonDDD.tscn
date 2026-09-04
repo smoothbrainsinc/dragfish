@@ -522,7 +522,7 @@ mesh = SubResource("ArrayMesh_2sxpa")
 skeleton = NodePath("")
 
 [node name="DragChute" type="Node3D" parent="." unique_id=1092152192]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.6720042, 0.68409836, -0.8070668)
+transform = Transform3D(0.998793, 0.048126914, -0.009798065, -0.048935197, 0.9921655, -0.11494932, 0.004189223, 0.11529005, 0.99332297, -0.55773497, -0.23136795, 0.14549863)
 script = ExtResource("2_wg8fc")
 
 [node name="ChuteMesh" type="MeshInstance3D" parent="DragChute" unique_id=524244574]

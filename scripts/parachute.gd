@@ -37,9 +37,11 @@ func _physics_process(delta):
 		if chute_mesh:
 			chute_mesh.visible = true
 			chute_mesh.scale = Vector3.ONE * deployment_progress
+			
 	var speed_ms = vehicle.linear_velocity.length()
 	var speed_factor = min(1.0, speed_ms / 50.0)
 	var effective_drag = drag_force * deployment_progress * speed_factor
+	
 	vehicle.apply_central_force(-vehicle.linear_velocity.normalized() * effective_drag)
 	if chute_mesh and speed_ms > 1.0:
 		chute_mesh.rotation_degrees.z = sin(Time.get_ticks_msec() * 0.01) * 10

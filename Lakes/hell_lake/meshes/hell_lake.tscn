@@ -216,4 +216,4 @@ mesh = SubResource("ArrayMesh_c8iyq")
 skeleton = NodePath("")
 
 [node name="new_hell_awaits_water" parent="." unique_id=286069375 instance=ExtResource("5_1widr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.688538, -2.9014893, -71.01828)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.516, 0, -69.573)

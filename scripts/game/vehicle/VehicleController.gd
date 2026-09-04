@@ -31,7 +31,8 @@ var chute: DragChute = null
 # =============================================================
 func _ready() -> void:
 	set_physics_process(false)
-
+	set_process_input(true)
+	
 func initialize(config: VehicleConfig, player: bool) -> void:
 	vehicle_config = config
 	is_player = player
@@ -150,13 +151,14 @@ func _find_chute() -> void:
 
 # Manual chute control for player
 func _input(event) -> void:
-	if event.is_action_pressed("deploy_chute") or event.is_action_pressed("retract_chute"):
-		var deployed_str = str(chute.is_deployed) if chute else "N/A"
-		print("[DEBUG] C pressed | is_player=", is_player, " chute=", chute, " is_deployed=", deployed_str)
-
+	print("_input called")
+	if event is InputEventKey and event.pressed and event.keycode == KEY_K:
+		print("[DEBUG] input processing enabled? ", is_processing_input())
+		print("[DEBUG] raw C keypress seen, is_player=", is_player, " chute=", chute)
 	if not is_player or not chute:
 		return
-	if event.is_action_pressed("deploy_chute"):
+	if event.is_action_pressed("deploy_chute") or event.is_action_pressed("retract_chute"):
+		print("[DEBUG] action matched | is_deployed=", chute.is_deployed)
 		if not chute.is_deployed:
 			chute.deploy()
 		else:

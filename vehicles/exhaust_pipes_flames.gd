@@ -1,49 +1,63 @@
 extends Node3D
 ## Attach to a node whose children are exhaust marker Node3Ds
 
-@export var flame_texture: Texture2D = preload("res://assets/sprites/LeLu's Noise Pack/T_fire_flipbook4_sm.png")
+@export var flame_texture: Texture2D
 @export var h_frames: int = 5
 @export var v_frames: int = 5
-@export var particle_amount: int = 16
-@export var flame_scale: float = 0.08
-@export var exhaust_direction: Vector3 = Vector3(0, 0, 1) # local space, points OUT of pipe
+@export var flame_scale: float = 0.5
+@export var exhaust_direction: Vector3 = Vector3(0, 0, -1)
 
 func _ready():
+	print("Found ", get_child_count(), " children")
 	for marker in get_children():
+		print("Child: ", marker.name, " Type: ", marker.get_class())
+		print(marker.name, " forward: ", marker.global_transform.basis.z, " up: ", marker.global_transform.basis.y)
 		if marker is Node3D:
-			add_flame(marker)
+			setup_flame(marker)
 
-func add_flame(marker: Node3D):
-	var particles = GPUParticles3D.new()
+func setup_flame(marker: Node3D):
+	if flame_texture == null:
+		push_warning("Flame texture is missing! Assign it in the Inspector.")
+		return
+
+	var particles = CPUParticles3D.new()
+	particles.name = "ExhaustFlame"
 	particles.amount = 16
-	particles.lifetime = 0.25
-	particles.local_coords = true   # locks trail behavior to marker instead of world
+	particles.lifetime = 0.3
+	particles.local_coords = true
+	particles.emitting = true
+	
+	# Simulation properties
+	particles.direction = exhaust_direction
+	particles.spread = 15.0
+	particles.initial_velocity_min = 5.0
+	particles.initial_velocity_max = 10.0
+	particles.gravity = Vector3.ZERO
+	particles.scale_amount_min = flame_scale * 0.5
+	particles.scale_amount_max = flame_scale
+	particles.color = Color(1.0, 0.7, 0.3)
+	
+	# Texture and Animation properties (Built directly into CPUParticles3D)
+	# Texture and Animation properties (CPUParticles3D draws through a mesh,
+	# so the texture + sprite-sheet animation live on the mesh's material)
+	var quad_mesh = QuadMesh.new()
+	quad_mesh.size = Vector2(flame_scale, flame_scale)
 
-	var process_mat = ParticleProcessMaterial.new()
-	process_mat.direction = exhaust_direction
-	process_mat.spread = 8.0
-	process_mat.initial_velocity_min = 4.0
-	process_mat.initial_velocity_max = 7.0
-	process_mat.gravity = Vector3.ZERO
-	process_mat.scale_min = flame_scale * 0.4
-	process_mat.scale_max = flame_scale
-	process_mat.color = Color(1.2, 1.0, 0.8)
-	particles.process_material = process_mat
+	var flame_material = StandardMaterial3D.new()
+	flame_material.albedo_texture = flame_texture
+	flame_material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	flame_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	flame_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	flame_material.particles_anim_h_frames = h_frames
+	flame_material.particles_anim_v_frames = v_frames
+	flame_material.particles_anim_loop = false
 
-	var quad = QuadMesh.new()
-	quad.size = Vector2(flame_scale * 4, flame_scale * 4)
+	quad_mesh.material = flame_material
+	particles.mesh = quad_mesh
 
-	var mat = StandardMaterial3D.new()
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	mat.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
-	mat.particles_anim_h_frames = h_frames
-	mat.particles_anim_v_frames = v_frames
-	mat.particles_anim_loop = false
-	mat.albedo_texture = flame_texture
-	mat.albedo_color = Color(1.2, 1.0, 0.8)
-	quad.material = mat
-	particles.draw_pass_1 = quad
+	particles.anim_speed_min = 15.0
+	particles.anim_speed_max = 75.0
+	particles.anim_offset_min = 0.0
+	particles.anim_offset_max = 0.0
 
 	marker.add_child(particles)
