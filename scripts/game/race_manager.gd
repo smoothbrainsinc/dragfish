@@ -64,14 +64,15 @@ func spawn_vehicles() -> void:
 		push_error("[RaceManager] Failed to spawn player!")
 		return
 
-	root.add_child(player_body)
+	
 
 	var player_spawn_marker = player_body.get_meta("spawn_marker") as Marker3D
 	var player_lane_num: int = player_body.get_meta("spawn_lane")
-
-	player_body.global_transform = player_spawn_marker.global_transform
+	
 	player_body.set_script(preload("res://scripts/game/vehicle/VehicleController.gd"))
-
+	player_body.global_transform = player_spawn_marker.global_transform
+	root.add_child(player_body)
+	
 	await get_tree().process_frame
 
 	player_vehicle = player_body as VehicleController
@@ -102,14 +103,13 @@ func spawn_vehicles() -> void:
 			GameManager.active_lanes = active
 			return
 
-		root.add_child(npc_body)
-
 		var npc_spawn_marker = npc_body.get_meta("spawn_marker") as Marker3D
 		var npc_lane_num: int = npc_body.get_meta("spawn_lane")
-
-		npc_body.global_transform = npc_spawn_marker.global_transform
+		
 		npc_body.set_script(preload("res://scripts/game/vehicle/VehicleController.gd"))
-
+		npc_body.global_transform = npc_spawn_marker.global_transform
+		root.add_child(npc_body)
+		
 		await get_tree().process_frame
 
 		npc_vehicle = npc_body as VehicleController

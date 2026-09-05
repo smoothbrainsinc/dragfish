@@ -5,7 +5,10 @@ extends Node3D
 @export var h_frames: int = 5
 @export var v_frames: int = 5
 @export var flame_scale: float = 0.5
-@export var exhaust_direction: Vector3 = Vector3(0, 0, -1)
+@export var exhaust_direction: Vector3 = Vector3(0, 1, 0)
+@export var amount: int = 16
+@export var lifetime: float = 0.3
+
 
 func _ready():
 	print("Found ", get_child_count(), " children")
@@ -24,7 +27,7 @@ func setup_flame(marker: Node3D):
 	particles.name = "ExhaustFlame"
 	particles.amount = 16
 	particles.lifetime = 0.3
-	particles.local_coords = true
+	particles.local_coords = false
 	particles.emitting = true
 	
 	# Simulation properties

@@ -152,7 +152,7 @@ func _find_chute() -> void:
 # Manual chute control for player
 func _input(event) -> void:
 	print("_input called")
-	if event is InputEventKey and event.pressed and event.keycode == KEY_K:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_C:
 		print("[DEBUG] input processing enabled? ", is_processing_input())
 		print("[DEBUG] raw C keypress seen, is_player=", is_player, " chute=", chute)
 	if not is_player or not chute:
