@@ -521,8 +521,7 @@ mesh = SubResource("ArrayMesh_aej34")
 skeleton = NodePath("")
 script = ExtResource("4_2u0vj")
 flame_texture = ExtResource("5_aej34")
-flame_scale = 1.0
-lifetime = 1.0
+flame_scale = 20.0
 
 [node name="exhaust_marker_0" type="Node3D" parent="exhaust-pipes" unique_id=1758997450]
 transform = Transform3D(0.13265622, 0.11141571, 0, -0.11141571, 0.13265622, 0, 0, 0, 0.1732372, 0.7953253, 0.11596641, 0.2243923)

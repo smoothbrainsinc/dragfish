@@ -54,7 +54,7 @@ checkpoint_1000ft = NodePath("timing_marks/1000_feet")
 finish_line = NodePath("timing_marks/finish_line")
 speed_trap_start = NodePath("timing_marks/speed_trap")
 
-[node name="track_1000m_full_barriers" parent="." unique_id=1757526372 instance=ExtResource("2_g4360")]
+[node name="track_1000m_full_barriers2" parent="." unique_id=1820486977 instance=ExtResource("2_g4360")]
 
 [node name="timing_marks" type="Node3D" parent="." unique_id=2065995929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 450)

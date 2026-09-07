@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bvb0jetmn0j1e"]
+
+[ext_resource type="Shader" uid="uid://1x3xr3agcm7f" path="res://testing_learning.gdshader" id="1_m7faq"]
+[ext_resource type="Texture2D" uid="uid://cb3m1fhs88dil" path="res://assets/textures/DaySkyHDRI066B_4K/DaySkyHDRI066B_4K_TONEMAPPED.jpg" id="2_pq5mo"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_isptx"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pq5mo"]
+noise = SubResource("FastNoiseLite_isptx")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bkbyv"]
+render_priority = 0
+shader = ExtResource("1_m7faq")
+shader_parameter/height_scale = 1.44
+shader_parameter/noise = SubResource("NoiseTexture2D_pq5mo")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f8oqw"]
+material = SubResource("ShaderMaterial_bkbyv")
+size = Vector2(10, 10)
+subdivide_width = 512
+subdivide_depth = 512
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r3y0l"]
+panorama = ExtResource("2_pq5mo")
+
+[sub_resource type="Sky" id="Sky_0aqc1"]
+sky_material = SubResource("PanoramaSkyMaterial_r3y0l")
+
+[sub_resource type="Environment" id="Environment_4fu3u"]
+background_mode = 2
+sky = SubResource("Sky_0aqc1")
+
+[node name="Node3D" type="Node3D" unique_id=1316378381]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1188022654]
+mesh = SubResource("PlaneMesh_f8oqw")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1108644490]
+environment = SubResource("Environment_4fu3u")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2129500549]
+transform = Transform3D(0.812416, 0.58307827, 0, -0.58307827, 0.812416, 0, 0, 0, 1, 2.454768, 2.8005326, 0)
+shadow_enabled = true
+distance_fade_enabled = true
+omni_range = 6.701
+omni_attenuation = -1.032
+omni_shadow_mode = 0

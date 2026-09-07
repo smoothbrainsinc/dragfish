@@ -108,5 +108,6 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_uevyf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=401401123]
+visible = false
 mesh = SubResource("BoxMesh_dbiuj")
 surface_material_override/0 = SubResource("ShaderMaterial_4fu3u")
