@@ -118,3 +118,7 @@ func _fill_lane(data: Dictionary, name_label: Label, reaction_label: Label, sixt
 
 func _fmt_time(value: float) -> String:
 	return "%.4f sec" % value if value > 0.0 else "--"
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("dismiss_results"):
+		visible = false

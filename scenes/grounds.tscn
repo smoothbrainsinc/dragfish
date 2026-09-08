@@ -4,15 +4,20 @@
 [ext_resource type="PackedScene" uid="uid://wgv4i2nq6evs" path="res://assets/models/street_lamp.tscn" id="3_k0iur"]
 [ext_resource type="PackedScene" uid="uid://cs8ir5chqkile" path="res://assets/sprites/gaggle_of_nuns.tscn" id="4_d8sy1"]
 [ext_resource type="PackedScene" uid="uid://bt1kegkmehb2h" path="res://Lakes/hell_lake/meshes/hell_lake.tscn" id="5_coijf"]
+[ext_resource type="PackedScene" uid="uid://cscff7ewanuxf" path="res://scenes/track.tscn" id="5_jbnud"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
 [node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
 
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -412.82922)
 
 [node name="street_lamp" parent="." unique_id=1066464497 instance=ExtResource("3_k0iur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 3.937, 0)
 
 [node name="Node3D" parent="." unique_id=1827689186 instance=ExtResource("4_d8sy1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.44352, 4.2390137, 0)
+
+[node name="track" parent="." unique_id=982529315 instance=ExtResource("5_jbnud")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 4, 633.545)

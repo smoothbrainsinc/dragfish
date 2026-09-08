@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cscff7ewanuxf"]
+
+[ext_resource type="PackedScene" uid="uid://be8p6bw8mtmcn" path="res://scenes/timings.tscn" id="1_s1rm4"]
+
+[node name="track" type="Node3D" unique_id=982529315]
+
+[node name="Timings" parent="." unique_id=1648604432 instance=ExtResource("1_s1rm4")]
+
+[node name="lane_02_spawn" type="Marker3D" parent="." unique_id=541452604 groups=["lane_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.722394, 1, 40)
+
+[node name="lane_01_spawn" type="Marker3D" parent="." unique_id=1360508139 groups=["lane_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5906641, 1, 40)

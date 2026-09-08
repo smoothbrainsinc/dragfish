@@ -2,6 +2,10 @@ extends Node
 ## Race Controller - Coordinates race systems via signals
 signal race_complete(winner)
 
+const RACE_SCENE = "res://scenes/pluto_raceway.tscn"
+const PIT_SCENE = "res://assets/components/pit_area_ui.tscn"
+const CAR_SELECTION_SCENE = "res://scenes/new_car_selection_screen.tscn"
+
 var start_tree: Node3D
 var timing_system: Node3D
 var race_manager: Node
@@ -95,11 +99,11 @@ func _on_rematch_requested() -> void:
 
 func _on_rematch_garage_requested() -> void:
 	finish_line_scene.visible = false
-	# TODO: send player to pit_area_ui.tscn before restart_race()
+	get_tree().change_scene_to_file(PIT_SCENE)
 
 func _on_new_race_requested() -> void:
 	finish_line_scene.visible = false
-	# TODO: send player back to new_car_selection_screen.tscn
+	get_tree().change_scene_to_file(CAR_SELECTION_SCENE)
 
 func _on_end_requested() -> void:
 	get_tree().quit()
