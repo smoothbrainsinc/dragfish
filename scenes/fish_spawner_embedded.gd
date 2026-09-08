@@ -23,6 +23,8 @@ extends Node3D
 var multi_mesh_instance: MultiMeshInstance3D
 var fish_data: Array = []
 var spatial_grid: Dictionary = {}
+var grid_pool: Array = []  # reusable PackedInt32Array buckets, avoids per-frame allocation
+var pool_index: int = 0
 
 class FishData:
 	var position: Vector3
@@ -47,9 +49,9 @@ void vertex() {
 	float distance_from_head = max(0.0, VERTEX.x);
 	float normalized_distance = clamp(distance_from_head / 0.5, 0.0, 1.0);
 	float wave_strength = normalized_distance * normalized_distance;
-	float horizontal_wave = sin(time * tail_wave_frequency - normalized_distance * 3.0) 
+	float horizontal_wave = sin(time * tail_wave_frequency - normalized_distance * 3.0)
 	                       * tail_wave_amplitude * wave_strength;
-	float vertical_wave = sin(time * tail_wave_frequency * 0.7 - normalized_distance * 2.0) 
+	float vertical_wave = sin(time * tail_wave_frequency * 0.7 - normalized_distance * 2.0)
 	                     * body_wave_amplitude * wave_strength;
 	VERTEX.z += horizontal_wave;
 	VERTEX.y += vertical_wave * 0.3;
@@ -87,74 +89,84 @@ func _get_cell(pos: Vector3) -> Vector3i:
 
 func _rebuild_grid() -> void:
 	spatial_grid.clear()
+	pool_index = 0
 	for i in fish_data.size():
 		var cell = _get_cell(fish_data[i].position)
 		if not spatial_grid.has(cell):
-			spatial_grid[cell] = []
+			spatial_grid[cell] = _get_pooled_bucket()
 		spatial_grid[cell].append(i)
 
-func _get_neighbors(index: int) -> Array:
-	var cell = _get_cell(fish_data[index].position)
-	var neighbors = []
-	for dx in [-1, 0, 1]:
-		for dy in [-1, 0, 1]:
-			for dz in [-1, 0, 1]:
-				var neighbor_cell = Vector3i(cell.x + dx, cell.y + dy, cell.z + dz)
-				if spatial_grid.has(neighbor_cell):
-					for other_index in spatial_grid[neighbor_cell]:
-						if other_index != index:
-							neighbors.append(other_index)
-	return neighbors
+# Reuse PackedInt32Array buckets across frames instead of allocating a new
+# Array for every occupied cell every frame (was the main per-frame GC cost).
+func _get_pooled_bucket() -> PackedInt32Array:
+	if pool_index < grid_pool.size():
+		var bucket: PackedInt32Array = grid_pool[pool_index]
+		bucket.resize(0)
+		pool_index += 1
+		return bucket
+	var new_bucket := PackedInt32Array()
+	grid_pool.append(new_bucket)
+	pool_index += 1
+	return new_bucket
 
 func _process(delta):
 	_rebuild_grid()
 	update_fish(delta)
+	if fish_data.size() > 0:
+		var world_pos = multi_mesh_instance.global_transform * multi_mesh_instance.multimesh.get_instance_transform(0).origin
+		print("fish0 local: ", fish_data[0].position, " | fish0 world: ", world_pos)
 
 func update_fish(delta):
 	for i in range(fish_data.size()):
 		var fish = fish_data[i]
-		var neighbors = _get_neighbors(i)
-		
-		var separation = calculate_separation(i, neighbors)
-		var alignment = calculate_alignment(i, neighbors)
-		var cohesion = calculate_cohesion(i, neighbors)
-		
+		var steer = calculate_flocking(i)
+
 		var wander = Vector3(
 			randf_range(-1, 1),
 			randf_range(-0.1, 0.1),
 			randf_range(-1, 1)
 		).normalized() * 0.5
-		
+
 		var acceleration = Vector3.ZERO
-		acceleration += separation * separation_weight
-		acceleration += alignment * alignment_weight
-		acceleration += cohesion * cohesion_weight
+		acceleration += steer.separation * separation_weight
+		acceleration += steer.alignment * alignment_weight
+		acceleration += steer.cohesion * cohesion_weight
 		acceleration += wander
-		
-		fish.velocity += acceleration * delta
-		fish.velocity = fish.velocity.normalized() * swim_speed
+
+		var desired_velocity = fish.velocity + acceleration * delta
+		desired_velocity = desired_velocity.normalized() * swim_speed
+
+		# turn_speed now actually limits how fast heading can change per frame,
+		# instead of velocity snapping instantly to the new direction.
+		var max_turn = turn_speed * delta
+		fish.velocity = fish.velocity.slerp(desired_velocity, clamp(max_turn, 0.0, 1.0))
+		if fish.velocity.length() < 0.001:
+			fish.velocity = desired_velocity
+
 		fish.position += fish.velocity * delta
-		
+
 		if fish.position.y > surface_y:
 			fish.position.y = surface_y
 			fish.velocity.y = -abs(fish.velocity.y)
 		elif fish.position.y < max_depth:
 			fish.position.y = max_depth
 			fish.velocity.y = abs(fish.velocity.y)
-		
-		var lake_center = Vector3.ZERO
+
+		# Bug fix: boundary check was against Vector3.ZERO while fish spawn
+		# and school around spawn_center — fish near the spawn ring edge were
+		# yanked toward world origin instead of staying in the lake.
 		var distance_from_center = Vector2(
-			fish.position.x - lake_center.x,
-			fish.position.z - lake_center.z
+			fish.position.x - spawn_center.x,
+			fish.position.z - spawn_center.z
 		).length()
 		if distance_from_center > lake_radius:
 			var direction_to_center = Vector3(
-				lake_center.x - fish.position.x,
+				spawn_center.x - fish.position.x,
 				0,
-				lake_center.z - fish.position.z
+				spawn_center.z - fish.position.z
 			).normalized()
 			fish.velocity += direction_to_center * 3.0 * delta
-		
+
 		var fish_transform = Transform3D()
 		fish_transform.origin = fish.position
 		var target_direction = fish.velocity.normalized()
@@ -170,58 +182,68 @@ func update_fish(delta):
 			fish_transform.basis = multi_mesh_instance.multimesh.get_instance_transform(i).basis
 		multi_mesh_instance.multimesh.set_instance_transform(i, fish_transform)
 
-func calculate_separation(index: int, neighbors: Array) -> Vector3:
-	var steering = Vector3.ZERO
-	var total = 0
+# Single neighbor pass computing distance once per pair instead of three
+# separate loops (separation/alignment/cohesion) each recomputing it.
+func calculate_flocking(index: int) -> Dictionary:
 	var fish = fish_data[index]
-	for other_index in neighbors:
-		var other = fish_data[other_index]
-		var distance = fish.position.distance_to(other.position)
-		if distance < perception_radius and distance > 0:
-			var diff = (fish.position - other.position).normalized() / distance
-			steering += diff
-			total += 1
-	if total > 0:
-		steering /= total
-		steering = steering.normalized() * swim_speed
-		steering -= fish.velocity
-		steering = steering.limit_length(1.0)
-	return steering
+	var cell = _get_cell(fish.position)
 
-func calculate_alignment(index: int, neighbors: Array) -> Vector3:
-	var steering = Vector3.ZERO
-	var total = 0
-	var fish = fish_data[index]
-	for other_index in neighbors:
-		var other = fish_data[other_index]
-		var distance = fish.position.distance_to(other.position)
-		if distance < perception_radius:
-			steering += other.velocity
-			total += 1
-	if total > 0:
-		steering /= total
-		steering = steering.normalized() * swim_speed
-		steering -= fish.velocity
-		steering = steering.limit_length(0.5)
-	return steering
+	var sep_sum = Vector3.ZERO
+	var sep_total = 0
+	var align_sum = Vector3.ZERO
+	var align_total = 0
+	var coh_sum = Vector3.ZERO
+	var coh_total = 0
 
-func calculate_cohesion(index: int, neighbors: Array) -> Vector3:
-	var steering = Vector3.ZERO
-	var total = 0
-	var fish = fish_data[index]
-	for other_index in neighbors:
-		var other = fish_data[other_index]
-		var distance = fish.position.distance_to(other.position)
-		if distance < perception_radius:
-			steering += other.position
-			total += 1
-	if total > 0:
-		steering /= total
-		steering -= fish.position
-		steering = steering.normalized() * swim_speed
-		steering -= fish.velocity
-		steering = steering.limit_length(0.5)
-	return steering
+	for dx in [-1, 0, 1]:
+		for dy in [-1, 0, 1]:
+			for dz in [-1, 0, 1]:
+				var neighbor_cell = Vector3i(cell.x + dx, cell.y + dy, cell.z + dz)
+				if not spatial_grid.has(neighbor_cell):
+					continue
+				var bucket: PackedInt32Array = spatial_grid[neighbor_cell]
+				for other_index in bucket:
+					if other_index == index:
+						continue
+					var other = fish_data[other_index]
+					var distance = fish.position.distance_to(other.position)
+					if distance >= perception_radius:
+						continue
+
+					if distance > 0.0:
+						sep_sum += (fish.position - other.position).normalized() / distance
+						sep_total += 1
+
+					align_sum += other.velocity
+					align_total += 1
+
+					coh_sum += other.position
+					coh_total += 1
+
+	var separation = Vector3.ZERO
+	if sep_total > 0:
+		separation = (sep_sum / sep_total).normalized() * swim_speed
+		separation -= fish.velocity
+		separation = separation.limit_length(1.0)
+
+	var alignment = Vector3.ZERO
+	if align_total > 0:
+		alignment = (align_sum / align_total).normalized() * swim_speed
+		alignment -= fish.velocity
+		alignment = alignment.limit_length(0.5)
+
+	var cohesion = Vector3.ZERO
+	if coh_total > 0:
+		var center = coh_sum / coh_total
+		cohesion = (center - fish.position).normalized() * swim_speed
+		cohesion -= fish.velocity
+		cohesion = cohesion.limit_length(0.5)
+
+	return {
+		"separation": separation,
+		"alignment": alignment,
+		"cohesion": cohesion
+	}
 
 func spawn_fish():
 	for i in range(number_of_fish):
@@ -329,4 +351,4 @@ func setup_multimesh(mesh: Mesh, material: Material):
 	multi_mesh.instance_count = number_of_fish
 	multi_mesh_instance.multimesh = multi_mesh
 	multi_mesh_instance.material_override = material
-	multi_mesh_instance.custom_aabb = AABB(Vector3(-2000, -50, -2000), Vector3(4000, 100, 4000))
+	multi_mesh_instance.custom_aabb = AABB(Vector3(-683, -15, -662), Vector3(1366, 20, 1323))

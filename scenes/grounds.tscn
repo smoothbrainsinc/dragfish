@@ -8,10 +8,8 @@
 [node name="grounds" type="Node3D" unique_id=683886069]
 
 [node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.028320313, -0.19073486, 0.012023926)
 
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -225.40448, 36.857727, -476.19678)
 
 [node name="street_lamp" parent="." unique_id=1066464497 instance=ExtResource("3_k0iur")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41, 3.937, 0)

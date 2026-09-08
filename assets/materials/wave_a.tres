@@ -1,10 +1,15 @@
-[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://vxa5vti6imgs"]
+[gd_resource type="NoiseTexture2D" format=3 uid="uid://vxa5vti6imgs"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_nodeq"]
+[sub_resource type="Gradient" id="Gradient_o0oxh"]
+offsets = PackedFloat32Array(0.31944445, 0.7638889)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8jgqo"]
 
 [resource]
 width = 400
 height = 425
-noise = SubResource("FastNoiseLite_nodeq")
+noise = SubResource("FastNoiseLite_8jgqo")
+color_ramp = SubResource("Gradient_o0oxh")
+seamless = true
 in_3d_space = true
 as_normal_map = true

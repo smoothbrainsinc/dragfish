@@ -177,35 +177,32 @@ func find_all_lights():
 func search_for_lights(node):
 	"""Recursively find light meshes"""
 	var node_name = node.name.to_lower()
-	
+
 	if node is MeshInstance3D and "empty" not in node_name:
 		var lane := 0
-		# Matches "lane01"/"lane1" -> 1, "lane02"/"lane2" -> 2, etc.
-		var regex := RegEx.new()
-		regex.compile("lane0?(\\d+)")
-		var result := regex.search(node_name)
-		if result:
-			lane = int(result.get_string(1))
-		
+		if "right" in node_name:
+			lane = 1
+		elif "left" in node_name:
+			lane = 2
+
 		if lane != 0 and lane in lights:
 			if "prestage" in node_name:
 				lights[lane]["prestage"] = node
 			elif "stage" in node_name:
 				lights[lane]["stage"] = node
-			elif "three" in node_name or "top" in node_name:
+			elif "three" in node_name:
 				lights[lane]["amber3"] = node
-			elif "two" in node_name or "middle" in node_name:
+			elif "two" in node_name:
 				lights[lane]["amber2"] = node
-			elif "one" in node_name or "bottom" in node_name:
+			elif "one" in node_name:
 				lights[lane]["amber1"] = node
-			elif "go" in node_name or "green" in node_name:
+			elif "go" in node_name:
 				lights[lane]["green"] = node
-			elif "foul" in node_name or "red" in node_name:
+			elif "foul" in node_name:
 				lights[lane]["red"] = node
-	
+
 	for child in node.get_children():
 		search_for_lights(child)
-
 
 func add_omni_lights():
 	"""Add OmniLight3D nodes to Empty markers"""
@@ -231,15 +228,13 @@ func set_light(lane: int, light_name: String, on: bool):
 		return
 	
 	var mesh = lights[lane][light_name]
-	var mat = mesh.get_active_material(0)
-	if mat == null:
-		mat = StandardMaterial3D.new()
-		mesh.set_surface_override_material(0, mat)
+	var mat := StandardMaterial3D.new()
+	mesh.set_surface_override_material(0, mat)
 	
 	if mat is StandardMaterial3D:
 		if on:
 			mat.emission_enabled = true
-			mat.emission_energy_multiplier = 10.0
+			mat.emission_energy_multiplier = 2.0
 			mat.albedo_color = Color.WHITE
 			
 			# Color based on light type
@@ -256,9 +251,18 @@ func set_light(lane: int, light_name: String, on: bool):
 			mat.albedo_color = Color(0.2, 0.2, 0.2)
 	
 	# Update OmniLight if exists
-	var empty_pattern = "lane%02d_%s" % [lane, light_name]
+# Map lane + light_name back to the empty's suffix
+	var side := "right" if lane == 1 else "left"
+	var suffix_map := {
+		"amber3": "three", "amber2": "two", "amber1": "one",
+		"green": "go", "red": "foul",
+		"prestage": "prestage", "stage": "stage"
+	}
+	var target_suffix: String = suffix_map.get(light_name, "")
+	var empty_pattern := "empty_%s%s" % [side, target_suffix]
+
 	for empty_name in light_nodes.keys():
-		if empty_pattern in empty_name.to_lower():
+		if empty_name.to_lower() == empty_pattern:
 			var omni = light_nodes[empty_name]
 			if on:
 				omni.light_energy = 3.0
@@ -272,6 +276,7 @@ func set_light(lane: int, light_name: String, on: bool):
 					omni.light_color = Color(1, 0.6, 0)
 			else:
 				omni.light_energy = 0
+			break
 
 
 func turn_all_lights_off():

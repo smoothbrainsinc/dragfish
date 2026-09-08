@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://cbf3o1r01qun5"]
+
+[ext_resource type="Script" uid="uid://ehpggltlcery" path="res://scenes/test_start_tree.gd" id="1_jmw4y"]
+[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="1_r7xbi"]
+[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="3_hexpq"]
+
+[node name="test_start_tree" type="Node3D" unique_id=19908151]
+script = ExtResource("1_jmw4y")
+
+[node name="start_tree" parent="." unique_id=66348709 instance=ExtResource("1_r7xbi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0136966705, 0, 0.050524473)
+script = ExtResource("3_hexpq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2067293133]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -263.5
+offset_top = -256.0
+offset_right = 263.5
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 22
+
+[node name="LeftVBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=621458143]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 33
+alignment = 1
+
+[node name="preStageButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=1114704086]
+layout_mode = 2
+text = "pre-stage
+"
+
+[node name="StageButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=15890452]
+layout_mode = 2
+text = "stage
+"
+
+[node name="ThreeButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=1209130437]
+layout_mode = 2
+text = "Three
+
+"
+
+[node name="TwoButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=524485014]
+layout_mode = 2
+text = "Two
+
+"
+
+[node name="OneButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=1835884853]
+layout_mode = 2
+text = "One"
+
+[node name="GoButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=162174357]
+layout_mode = 2
+text = "Go
+"
+
+[node name="FoulButton" type="Button" parent="HBoxContainer/LeftVBoxContainer" unique_id=1316970776]
+layout_mode = 2
+text = "Foul"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1818003935]
+layout_mode = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=1496531298]
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer" unique_id=1055684566]
+handle_input_locally = false
+size = Vector2i(295, 512)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1398435980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2008724, 1.0048828)
+
+[node name="RightVBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=1000137722]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 33
+alignment = 1
+
+[node name="preStageButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=794337211]
+layout_mode = 2
+text = "pre-stage
+"
+
+[node name="StageButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=568721104]
+layout_mode = 2
+text = "stage
+"
+
+[node name="ThreeButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=1539758215]
+layout_mode = 2
+text = "Three
+
+"
+
+[node name="TwoButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=2031382326]
+layout_mode = 2
+text = "Two
+
+"
+
+[node name="OneButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=409116338]
+layout_mode = 2
+text = "One"
+
+[node name="GoButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=1984573306]
+layout_mode = 2
+text = "Go
+"
+
+[node name="FoulButton" type="Button" parent="HBoxContainer/RightVBoxContainer2" unique_id=1105884426]
+layout_mode = 2
+text = "Foul"

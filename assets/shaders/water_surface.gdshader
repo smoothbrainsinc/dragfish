@@ -362,9 +362,10 @@ void fragment() {
 	float voronoi_val  = 1.0 - sqrt(voronoi(world_vert.xz * voronoi_scale + warp));
 	voronoi_val        = smoothstep(0.2, 0.8, voronoi_val);
 	float bubble_alpha = 1.0 - clamp((1.0 - voronoi_val) * voronoi_strength, 0.0, 1.0);
-
-	ALBEDO   = mix(ALBEDO, foam_edge_color, foam_mask_shadow);
-	ALBEDO   = mix(ALBEDO, foam_color, foam_mask_primary * bubble_alpha);
+	float foam_dist_fade = 1.0 - smoothstep(60.0, 120.0, dist_to_cam);
+	
+	ALBEDO   = mix(ALBEDO, foam_edge_color, foam_mask_shadow * foam_dist_fade);
+	ALBEDO   = mix(ALBEDO, foam_color, foam_mask_primary * bubble_alpha * foam_dist_fade);
 
 	// --- PBR ---
 	ROUGHNESS = mix(roughness, 0.75, smooth_factor);

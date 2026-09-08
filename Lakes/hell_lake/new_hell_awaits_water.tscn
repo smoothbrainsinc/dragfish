@@ -1,8 +1,7 @@
 [gd_scene format=4 uid="uid://cldipfai7u8p1"]
 
-[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="1_if2rg"]
 [ext_resource type="Shader" uid="uid://csjbh8be0504v" path="res://assets/shaders/water_underwater.gdshader" id="2_mfhla"]
-[ext_resource type="Texture2D" uid="uid://dtyd17mw3ndha" path="res://assets/generated/caustics.png" id="2_ueaw0"]
+[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="2_ueaw0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h7q4p"]
 
@@ -41,8 +40,8 @@ shadow_mesh = SubResource("ArrayMesh_p1xje")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uevyf"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("1_if2rg")
-shader_parameter/max_depth = 10.0
+shader = ExtResource("2_ueaw0")
+shader_parameter/max_depth = 50.0
 shader_parameter/water_level = 0.0
 shader_parameter/underwater_fog_color = Color(0.03, 0.08, 0.04, 1)
 shader_parameter/fade_start_depth = 0.5
@@ -60,13 +59,12 @@ shader_parameter/normal_smoothness_dist = 50.0
 shader_parameter/base_tint_color = Color(0.32, 0.42, 0.2, 1)
 shader_parameter/deep_color = Color(0.04, 0.1, 0.05, 1)
 shader_parameter/water_absorption = Color(0.45, 0.25, 0.35, 1)
-shader_parameter/roughness = 0.125
-shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.045
+shader_parameter/metallic = 0.6
 shader_parameter/specular = 0.5
-shader_parameter/caustics_texture = ExtResource("2_ueaw0")
 shader_parameter/caustics_scale = 2.0
 shader_parameter/caustics_speed = 0.1
-shader_parameter/caustics_intensity = 0.8
+shader_parameter/caustics_intensity = 15.0
 shader_parameter/caustics_depth_fade = 0.7
 shader_parameter/foam_color = Color(1, 1, 1, 1)
 shader_parameter/foam_depth_start = 0.8
@@ -76,7 +74,7 @@ shader_parameter/foam_noise_speed = 1.0
 shader_parameter/foam_cutoff = 0.7
 shader_parameter/foam_crest_threshold = 0.7
 shader_parameter/foam_crest_amount = 2.0
-shader_parameter/foam_edge_color = Color(0.8330335, 0.8887911, 0.998583, 1)
+shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
 shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
 shader_parameter/voronoi_scale = 9.0
 shader_parameter/voronoi_strength = 0.8
@@ -111,3 +109,6 @@ surface_material_override/0 = SubResource("ShaderMaterial_uevyf")
 visible = false
 mesh = SubResource("BoxMesh_dbiuj")
 surface_material_override/0 = SubResource("ShaderMaterial_4fu3u")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=783336646]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 920.687, 0)

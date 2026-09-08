@@ -34,6 +34,11 @@ signal fish_requested
 @onready var results_delay_timer: Timer = $ResultsDelayTimer
 @onready var left_blink: AnimationPlayer = $VBoxContainer/LanesRow/LeftPanel/WinnerBlink
 @onready var right_blink: AnimationPlayer = $VBoxContainer/LanesRow/RightPanel/WinnerBlink
+@onready var rematch_button: Button = $VBoxContainer/ButtonsRow/RematchButton
+@onready var rematch_garage_button: Button = $VBoxContainer/ButtonsRow/RematchGarageButton
+@onready var new_button: Button = $VBoxContainer/ButtonsRow/NewButton
+@onready var end_button: Button = $VBoxContainer/ButtonsRow/EndButton
+@onready var fish_button: Button = $VBoxContainer/ButtonsRow/FishButton
 
 const WINNER_STYLE := preload("res://scenes/panel_winner.tres")
 
@@ -43,10 +48,16 @@ var _pending_winner: String
 var _pending_portrait: Texture2D
 
 
+
 func _ready() -> void:
 	visible = false
 	add_to_group("finish_line_ui")
 	results_delay_timer.timeout.connect(_reveal_results)
+	rematch_button.pressed.connect(func(): rematch_requested.emit())
+	rematch_garage_button.pressed.connect(func(): rematch_garage_first_requested.emit())
+	new_button.pressed.connect(func(): new_race_requested.emit())
+	end_button.pressed.connect(func(): end_requested.emit())
+	fish_button.pressed.connect(func(): fish_requested.emit())
 
 
 ## Connect: timing_system.all_finished.connect(finish_line.show_results)
