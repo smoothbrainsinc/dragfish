@@ -167,8 +167,8 @@ surface_material_override/0 = SubResource("StandardMaterial3D_f8oqw")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="bulb" unique_id=1085362736]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 4.551356, 19.385614, 0)
+visible = false
 light_color = Color(0.9552056, 0.93353564, 0.86206937, 1)
-light_energy = 500.0
 spot_range = 50.0
 
 [node name="glass" type="MeshInstance3D" parent="." unique_id=1697208939]
@@ -179,3 +179,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_bkbyv")
 [node name="pole" type="MeshInstance3D" parent="." unique_id=1100770814]
 mesh = SubResource("ArrayMesh_atptu")
 skeleton = NodePath("")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=997477098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5325494, 18.001177, -0.024344683)
+light_energy = 50.0
+light_indirect_energy = 16.0
+omni_range = 50.0
+omni_attenuation = 2.0
