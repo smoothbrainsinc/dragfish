@@ -133,12 +133,19 @@ func setup_cameras():
 		print("[Camera] WARNING: No cameras found!")
 
 func _physics_process(delta):
-	if not follow_camera or not target:
+	if not follow_camera:
 		return
-	
-	# Only apply special follow logic if this is the follow camera (typically the last one)
+	if not is_instance_valid(target):
+		_refresh_vehicles()
+	if not target:
+		return
 	if is_follow_camera_active():
 		update_follow_camera(delta)
+
+func _refresh_vehicles() -> void:
+	available_vehicles = available_vehicles.filter(func(v): return is_instance_valid(v))
+	find_all_vehicles()
+	find_target()
 
 func is_follow_camera_active() -> bool:
 	"""Check if the current camera should use follow behavior"""

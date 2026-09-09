@@ -1,58 +1,39 @@
 [gd_scene format=3 uid="uid://cs8ir5chqkile"]
 
-[ext_resource type="Texture2D" uid="uid://bi46v2dp0pqun" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(6).png" id="1_cv3k1"]
-[ext_resource type="Texture2D" uid="uid://b7fagoc5vi180" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(10).png" id="2_ptrdb"]
-[ext_resource type="Texture2D" uid="uid://b47jiwuoym4du" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(19).png" id="3_7rskg"]
-[ext_resource type="Texture2D" uid="uid://brn3e7r4cdosj" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(23).png" id="4_xoyvc"]
-[ext_resource type="Texture2D" uid="uid://b08ta0wcgoaar" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(9).png" id="5_wl85o"]
-[ext_resource type="Texture2D" uid="uid://biupypa4wvixu" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(66).png" id="6_cv3k1"]
-[ext_resource type="Texture2D" uid="uid://c4pomkpkbcf46" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(11).png" id="7_13h05"]
-[ext_resource type="Texture2D" uid="uid://ry64amxhawa1" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(33).png" id="8_r0tqj"]
-[ext_resource type="Texture2D" uid="uid://che6vwte5kluj" path="res://assets/sprites/freenuns/nsfw_realistic_photo_orthograp(75).png" id="9_57mdg"]
-
 [node name="Node3D" type="Node3D" unique_id=1827689186]
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=829126542]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9130306, 3.22, -15.179258)
 billboard = 1
-texture = ExtResource("1_cv3k1")
 
 [node name="Sprite3D2" type="Sprite3D" parent="." unique_id=1707897545]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8976097, 3.22, 3.7259302)
 billboard = 1
-texture = ExtResource("2_ptrdb")
 
 [node name="Sprite3D3" type="Sprite3D" parent="." unique_id=1810341826]
 transform = Transform3D(1, 0.00019152462, 0, -0.00019152462, 1, 0, 0, 0, 1, -3.2105322, 3.22, 15.766906)
 billboard = 1
-texture = ExtResource("3_7rskg")
 
 [node name="Sprite3D4" type="Sprite3D" parent="." unique_id=2069777544]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0139065, 3.22, 10.112612)
 billboard = 1
-texture = ExtResource("4_xoyvc")
 
 [node name="Sprite3D5" type="Sprite3D" parent="." unique_id=1435632691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9433975, 3.22, -8.472794)
 billboard = 1
-texture = ExtResource("5_wl85o")
 
 [node name="Sprite3D6" type="Sprite3D" parent="." unique_id=2130153301]
 transform = Transform3D(0.62325954, 0, 0.782015, 0, 1, 0, -0.782015, 0, 0.62325954, -3.1181216, 3.22, -4.567069)
 billboard = 1
-texture = ExtResource("6_cv3k1")
 
 [node name="Sprite3D7" type="Sprite3D" parent="." unique_id=777449536]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0433826, 3.22, 13.355447)
 billboard = 1
-texture = ExtResource("7_13h05")
 
 [node name="Sprite3D8" type="Sprite3D" parent="." unique_id=1585946911]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1884284, 3.22, 6.08117)
 billboard = 1
-texture = ExtResource("8_r0tqj")
 
 [node name="Sprite3D9" type="Sprite3D" parent="." unique_id=1687997618]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7203116, 3.22, -11.478574)
 billboard = 1
-texture = ExtResource("9_57mdg")
