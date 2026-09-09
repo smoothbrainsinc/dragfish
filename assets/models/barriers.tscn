@@ -23,7 +23,6 @@ transform = Transform3D(-1, 0, 0, 0, -4.371139e-08, 1, 0, 1, 4.371139e-08, -4.53
 light_color = Color(1, 1, 0.7607843, 1)
 light_energy = 50.0
 spot_range = 40.0
-spot_angle = 90.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="barriers" unique_id=1633425189]
 shape = SubResource("ConcavePolygonShape3D_lqlfm")
