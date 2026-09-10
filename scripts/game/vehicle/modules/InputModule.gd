@@ -26,6 +26,10 @@ var ai_target_reaction_time: float = 0.0
 var ai_current_throttle: float = 0.0
 var ai_shift_timer: float = 0.0
 var ai_throttle_variation: float = 0.0  # Random performance variation
+var ai_throttle_phase: float = 0.0  # Per-vehicle random offset so AI cars don't all wobble in sync
+var ai_lane_center_x: float = 0.0
+var ai_lane_center_cached: bool = false
+var ai_lane_correction_gain: float = 0.3  # TUNE THIS - starting guess, not measured
 
 # Race state
 var race_started: bool = false
@@ -46,6 +50,7 @@ func setup(player_controlled: bool, config: VehicleConfig = null) -> void:
 			)
 			# AI consistency affects throttle variation
 			ai_throttle_variation = vehicle_config.ai_consistency
+			ai_throttle_phase = randf_range(0.0, TAU)
 		else:
 			# Fallback defaults
 			ai_target_reaction_time = randf_range(0.10, 0.25)
@@ -114,8 +119,25 @@ func get_steering() -> float:
 			return right - left  # Positive = right, negative = left
 		return 0.0
 	else:
-		# AI slight corrections to stay straight
+		return get_ai_steering()
+
+## AI steering: corrects back toward its lane center instead of pure noise,
+## which otherwise random-walks the car into a wall or the other lane over
+## a long run (uncorrelated noise every frame -> heading drifts unbounded).
+func get_ai_steering() -> float:
+	var vehicle := get_parent() as VehicleBody3D
+	if vehicle == null:
 		return randf_range(-0.02, 0.02)
+
+	if not ai_lane_center_cached:
+		var spawn_marker = vehicle.get_meta("spawn_marker", null)
+		ai_lane_center_x = spawn_marker.global_position.x if spawn_marker else vehicle.global_position.x
+		ai_lane_center_cached = true
+
+	var lateral_offset := vehicle.global_position.x - ai_lane_center_x
+	var correction := -lateral_offset * ai_lane_correction_gain
+	var noise := randf_range(-0.02, 0.02)
+	return clamp(correction + noise, -1.0, 1.0)
 
 ## Check clutch input (for manual transmission)
 func is_clutch_pressed() -> bool:
@@ -169,7 +191,7 @@ func get_ai_throttle() -> float:
 	ai_current_throttle = lerp(ai_current_throttle, 1.0, get_physics_process_delta_time() * 5.0)
 	
 	# Add consistency variation (simulates imperfect throttle control)
-	var variation = sin(Time.get_ticks_msec() * 0.001) * ai_throttle_variation
+	var variation = sin(ai_reaction_timer + ai_throttle_phase) * ai_throttle_variation
 	
 	return clamp(ai_current_throttle + variation, 0.0, 1.0)
 

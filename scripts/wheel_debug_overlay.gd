@@ -18,6 +18,13 @@ var expanded_state: Dictionary = {}  # corner -> bool
 
 func _ready() -> void:
 	visible = false
+	_bind_panels()
+
+
+func _bind_panels() -> void:
+	panels.clear()
+	compact_labels.clear()
+	expanded_labels.clear()
 
 	for corner in CORNER_NAMES:
 		var panel := find_child("Panel" + corner, true, false) as PanelContainer
@@ -36,12 +43,17 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not visible:
 		return
+
 	if player_vehicle == null or not is_instance_valid(player_vehicle):
+		player_vehicle = null
+		wheels.clear()
 		_find_player_vehicle()
 		if player_vehicle == null:
 			return
+
 	if wheels.is_empty():
 		_find_wheels()
+
 	_update_panels()
 
 
@@ -72,13 +84,20 @@ func _update_panels() -> void:
 	for corner in CORNER_NAMES:
 		if not wheels.has(corner):
 			continue
+
 		var w: VehicleWheel3D = wheels[corner]
+		if not is_instance_valid(w):
+			wheels.erase(corner)
+			continue
 
-		if compact_labels.get(corner):
-			compact_labels[corner].text = _compact_text(w)
+		var compact: Label = compact_labels.get(corner)
+		if compact and is_instance_valid(compact):
+			compact.text = _compact_text(w)
 
-		if expanded_state.get(corner, false) and expanded_labels.get(corner):
-			expanded_labels[corner].text = _expanded_text(w)
+		if expanded_state.get(corner, false):
+			var expanded: Label = expanded_labels.get(corner)
+			if expanded and is_instance_valid(expanded):
+				expanded.text = _expanded_text(w)
 
 
 func _compact_text(w: VehicleWheel3D) -> String:
