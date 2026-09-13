@@ -115,7 +115,7 @@ func apply_throttle(throttle: float, current_gear_ratio: float, vehicle_speed: f
 		else:
 			var wheel_rpm = (vehicle_speed / wheel_radius) * (60.0 / TAU)
 			var rpm_from_wheels = wheel_rpm * current_gear_ratio
-			var headroom = (config.redline_rpm - config.idle_rpm) * throttle * 0.4
+			var headroom = (config.redline_rpm - config.idle_rpm) * throttle * 0.85
 			target_rpm = clamp(
 				max(rpm_from_wheels + headroom, config.idle_rpm + headroom),
 				config.idle_rpm,
