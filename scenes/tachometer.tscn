@@ -52,7 +52,7 @@ texture = ExtResource("2_sq27j")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="SpeedContainer2" type="Control" parent="Gauges" unique_id=1325832456]
+[node name="SpeedContainer" type="Control" parent="Gauges" unique_id=1325832456]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 1
 anchors_preset = 2
@@ -67,7 +67,7 @@ script = ExtResource("1_sq27j")
 needle_angle_min_deg = 0.0
 needle_angle_max_deg = 250.0
 
-[node name="Face" type="TextureRect" parent="Gauges/SpeedContainer2" unique_id=273725747]
+[node name="Face" type="TextureRect" parent="Gauges/SpeedContainer" unique_id=273725747]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,7 +78,7 @@ texture = ExtResource("1_4u63n")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Needle" type="TextureRect" parent="Gauges/SpeedContainer2" unique_id=1568355528]
+[node name="Needle" type="TextureRect" parent="Gauges/SpeedContainer" unique_id=1568355528]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
