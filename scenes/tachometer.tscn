@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://b0ty56kl0c8ue"]
+
+[ext_resource type="Texture2D" uid="uid://c1yptr81be0g8" path="res://assets/models/tachometer.png" id="1_4u63n"]
+[ext_resource type="Script" uid="uid://bohkppfky78yg" path="res://scenes/gauge.gd" id="1_sq27j"]
+[ext_resource type="Script" uid="uid://dykfpu45luiy" path="res://scenes/hud_gauges.gd" id="1_tjsry"]
+[ext_resource type="Texture2D" uid="uid://dkg0bt7lsto2b" path="res://assets/models/tachometer-needle.png" id="2_sq27j"]
+
+[node name="HUD" type="CanvasLayer" unique_id=1320445727]
+script = ExtResource("1_tjsry")
+
+[node name="Gauges" type="Control" parent="." unique_id=2089286802]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TachContainer" type="Control" parent="Gauges" unique_id=1433131023]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_right = 200.0
+grow_vertical = 0
+script = ExtResource("1_sq27j")
+needle_angle_min_deg = 0.0
+needle_angle_max_deg = 250.0
+
+[node name="Face" type="TextureRect" parent="Gauges/TachContainer" unique_id=1930224367]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_4u63n")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Needle" type="TextureRect" parent="Gauges/TachContainer" unique_id=1111817664]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(100, 100)
+texture = ExtResource("2_sq27j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpeedContainer2" type="Control" parent="Gauges" unique_id=1325832456]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_right = 200.0
+grow_vertical = 0
+script = ExtResource("1_sq27j")
+needle_angle_min_deg = 0.0
+needle_angle_max_deg = 250.0
+
+[node name="Face" type="TextureRect" parent="Gauges/SpeedContainer2" unique_id=273725747]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_4u63n")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Needle" type="TextureRect" parent="Gauges/SpeedContainer2" unique_id=1568355528]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(100, 100)
+texture = ExtResource("2_sq27j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RPMLabel" type="Label" parent="Gauges" unique_id=94145020]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SpeedLabel" type="Label" parent="Gauges" unique_id=100478138]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="GearLabel" type="Label" parent="Gauges" unique_id=1910346488]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
