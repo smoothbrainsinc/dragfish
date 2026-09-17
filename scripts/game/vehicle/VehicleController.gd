@@ -70,6 +70,10 @@ func start_race() -> void:
 
 func stop_vehicle() -> void:
 	set_physics_process(false)
+	transmission.stop()
+	input.stop()
+	engine.stop()
+	
 
 # =============================================================
 func _physics_process(delta: float) -> void:
