@@ -26,6 +26,7 @@ offset_top = -200.0
 offset_right = 200.0
 grow_vertical = 0
 script = ExtResource("1_sq27j")
+value_max = 16900.0
 needle_angle_min_deg = 0.0
 needle_angle_max_deg = 250.0
 
@@ -64,8 +65,7 @@ offset_right = 310.0
 offset_bottom = 0.00012207031
 grow_vertical = 0
 script = ExtResource("1_sq27j")
-value_min = 1000.0
-value_max = 16900.0
+value_max = 300.0
 needle_angle_min_deg = 0.0
 needle_angle_max_deg = 250.0
 

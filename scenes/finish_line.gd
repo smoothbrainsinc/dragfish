@@ -122,3 +122,23 @@ func _fmt_time(value: float) -> String:
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event.is_action_pressed("dismiss_results"):
 		visible = false
+
+
+func _on_rematch_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_rematch_garage_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_new_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_end_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_fish_button_pressed() -> void:
+	pass # Replace with function body.

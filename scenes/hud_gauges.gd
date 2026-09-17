@@ -25,6 +25,7 @@ var vehicle: VehicleController = null
 
 func _ready() -> void:
 	vehicle = await _wait_for_player_vehicle()
+	tach.value_max = vehicle.engine.config.redline_rpm
 
 	vehicle.engine.rpm_changed.connect(_on_rpm_changed)
 	vehicle.transmission.gear_changed.connect(_on_gear_changed)
