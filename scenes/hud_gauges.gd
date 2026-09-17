@@ -24,16 +24,8 @@ const MPS_TO_MPH := 2.23694
 var vehicle: VehicleController = null
 
 func _ready() -> void:
-	vehicle = get_tree().get_first_node_in_group("player_vehicle") as VehicleController
-	if vehicle == null:
-		push_warning("HUD: no node in group 'player_vehicle' found")
-		return
+	vehicle = await _wait_for_player_vehicle()
 
-	# EngineModule and TransmissionModule are created in VehicleController's
-	# _ready-time setup, so by the time the HUD's _ready runs, vehicle.engine
-	# and vehicle.transmission should already exist — but if your HUD scene
-	# can instantiate before the vehicle spawns, connect these lazily instead
-	# (e.g. from race_manager once player_vehicle is assigned).
 	vehicle.engine.rpm_changed.connect(_on_rpm_changed)
 	vehicle.transmission.gear_changed.connect(_on_gear_changed)
 
@@ -41,6 +33,17 @@ func _ready() -> void:
 	# first signal emission.
 	_on_rpm_changed(vehicle.engine.current_rpm)
 	_on_gear_changed(vehicle.transmission.get_gear_number())
+
+func _wait_for_player_vehicle() -> VehicleController:
+	# race_manager.gd spawns and groups the vehicle asynchronously in its own
+	# _ready() (await process_frame, then await spawn_vehicles()), so it
+	# doesn't exist yet when this HUD's _ready() first runs. Poll until it
+	# does instead of failing once and giving up.
+	var v := get_tree().get_first_node_in_group("player_vehicle") as VehicleController
+	while v == null:
+		await get_tree().process_frame
+		v = get_tree().get_first_node_in_group("player_vehicle") as VehicleController
+	return v
 
 func _process(_delta: float) -> void:
 	if vehicle == null:
