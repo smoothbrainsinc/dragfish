@@ -46,6 +46,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*res://scripts/game/GameManager.gd"
+Log="*uid://blhj2ssc72n0t"
 
 [editor_plugins]
 

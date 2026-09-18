@@ -51,9 +51,10 @@ func initialize(config: VehicleConfig, player: bool) -> void:
 	initialized = true
 	set_physics_process(false)
 
-	print("[VehicleController] Initialized:", name)
-	print("Vehicle forward basis.z = ", transform.basis.z)
-	print("Speed sign = ", linear_velocity)
+	# Changed to Log.d
+	Log.d(Log.Category.GENERAL, "[VehicleController] Initialized: " + str(name))
+	Log.d(Log.Category.GENERAL, "Vehicle forward basis.z = " + str(transform.basis.z))
+	Log.d(Log.Category.GENERAL, "Speed sign = " + str(linear_velocity))
 
 func start_vehicle() -> void:
 	if not initialized:
@@ -81,8 +82,9 @@ func _physics_process(delta: float) -> void:
 	if wheel_sync_grace_timer > 0.0:
 		wheel_sync_grace_timer -= delta
 
-	if Engine.get_physics_frames() % 120 == 0:
-		print("Gear: %d | Ratio: %.2f | Speed: %.1f mph" % [
+	# Gated: Only format the string if PHYSICS logging is enabled
+	if Log.enabled[Log.Category.PHYSICS] and Engine.get_physics_frames() % 120 == 0:
+		Log.d(Log.Category.PHYSICS, "Gear: %d | Ratio: %.2f | Speed: %.1f mph" % [
 			transmission.get_gear_number(),
 			transmission.get_current_gear_ratio(),
 			forward_speed * 2.23694
@@ -126,8 +128,9 @@ func _physics_process(delta: float) -> void:
 	var wheel_radius := _get_driven_wheel_radius()
 	var drive_force: float = transmission.calculate_wheel_force(drive_torque, wheel_radius)
 
-	if is_player and Engine.get_physics_frames() % 60 == 0:
-		print("[Physics] Throttle: %.2f | RPM: %.0f | Gear: %d | Torque: %.0f Nm | Force: %.0f N | Speed: %.1f m/s" % [
+	# Gated: Only format the string if PHYSICS logging is enabled
+	if is_player and Log.enabled[Log.Category.PHYSICS] and Engine.get_physics_frames() % 60 == 0:
+		Log.d(Log.Category.PHYSICS, "[Physics] Throttle: %.2f | RPM: %.0f | Gear: %d | Torque: %.0f Nm | Force: %.0f N | Speed: %.1f m/s" % [
 			throttle, engine.current_rpm, transmission.get_gear_number(), drive_torque, drive_force, forward_speed
 		])
 
@@ -145,24 +148,30 @@ func _physics_process(delta: float) -> void:
 func _find_chute() -> void:
 	chute = find_child("DragChute", true, false) as DragChute
 	if chute:
-		print("[VehicleController] Chute found on: ", name)
+		# Changed to Log.d
+		Log.d(Log.Category.CHUTE, "[VehicleController] Chute found on: " + str(name))
 		chute.connect_to_finish_line()
 	else:
-		print("[VehicleController] No chute on: ", name)
+		# Changed to Log.d
+		Log.d(Log.Category.CHUTE, "[VehicleController] No chute on: " + str(name))
 
 
 
 
 # Manual chute control for player
 func _input(event) -> void:
-	print("_input called")
+	# REMOVED: print("_input called")  <-- This was pure spam
+	
 	if event is InputEventKey and event.pressed and event.keycode == KEY_C:
-		print("[DEBUG] input processing enabled? ", is_processing_input())
-		print("[DEBUG] raw C keypress seen, is_player=", is_player, " chute=", chute)
+		# Changed to Log.d
+		Log.d(Log.Category.GENERAL, "[DEBUG] input processing enabled? " + str(is_processing_input()))
+		Log.d(Log.Category.CHUTE, "[DEBUG] raw C keypress seen, is_player=" + str(is_player) + " chute=" + str(chute))
+		
 	if not is_player or not chute:
 		return
 	if event.is_action_pressed("deploy_chute") or event.is_action_pressed("retract_chute"):
-		print("[DEBUG] action matched | is_deployed=", chute.is_deployed)
+		# Changed to Log.d
+		Log.d(Log.Category.CHUTE, "[DEBUG] action matched | is_deployed=" + str(chute.is_deployed))
 		if not chute.is_deployed:
 			chute.deploy()
 		else:
@@ -197,7 +206,10 @@ func _apply_drive_force(force: float) -> void:
 			# the wheel accelerate toward the car's real speed.
 			var overspeed_ratio: float = max_vehicle_speed * 1.15 / max(abs(forward_speed), 0.01)
 			force *= clamp(overspeed_ratio, 0.15, 1.0)
-			print("[Clamp] gear ", transmission.get_gear_number(), " max_speed=", max_vehicle_speed, " forward_speed=", forward_speed, " -> tapered to ", overspeed_ratio)
+			
+			# Gated: Only format the string if WHEELS logging is enabled
+			if Log.enabled[Log.Category.WHEELS]:
+				Log.d(Log.Category.WHEELS, "[Clamp] gear " + str(transmission.get_gear_number()) + " max_speed=" + str(max_vehicle_speed) + " forward_speed=" + str(forward_speed) + " -> tapered to " + str(overspeed_ratio))
 
 	var per_wheel := force / driven_wheels.size()
 	for w in driven_wheels:
@@ -231,7 +243,9 @@ func _cache_wheels() -> void:
 				driven_wheels.append(child)
 
 	assert(driven_wheels.size() > 0, "No driven wheels!")
-	print("[VehicleController] Found wheels: %d total, %d driven, %d steering" % [
+	
+	# Changed to Log.d
+	Log.d(Log.Category.GENERAL, "[VehicleController] Found wheels: %d total, %d driven, %d steering" % [
 		all_wheels.size(),
 		driven_wheels.size(),
 		steering_wheels.size()

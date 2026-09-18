@@ -12,13 +12,11 @@
 [node name="L1_HellAwaits" parent="." unique_id=396869466 instance=ExtResource("1_elwgs")]
 
 [node name="L2_HellAwaits" parent="." unique_id=76403907 instance=ExtResource("2_cmvi0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.850708, 0, -21.682312)
 
 [node name="L3_HellAwaits" parent="." unique_id=870682829 instance=ExtResource("3_dcyb4")]
 
 [node name="L4_HellAwaits" parent="." unique_id=1878610859 instance=ExtResource("4_egl4v")]
 
 [node name="L5_HellAwaits" parent="." unique_id=1405621093 instance=ExtResource("5_flegu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0624466)
 
 [node name="L6_HellAwaits" parent="." unique_id=671244980 instance=ExtResource("6_onms7")]

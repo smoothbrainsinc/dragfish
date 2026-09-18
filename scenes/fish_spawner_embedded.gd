@@ -114,7 +114,6 @@ func _process(delta):
 	update_fish(delta)
 	if fish_data.size() > 0:
 		var world_pos = multi_mesh_instance.global_transform * multi_mesh_instance.multimesh.get_instance_transform(0).origin
-		print("fish0 local: ", fish_data[0].position, " | fish0 world: ", world_pos)
 
 func update_fish(delta):
 	for i in range(fish_data.size()):

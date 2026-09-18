@@ -52,7 +52,6 @@ data = PackedVector3Array(-48.8411, -60.085197, 333.306, -74.0749, -60.139698, 3
 [node name="L2_HellAwaits" type="StaticBody3D" unique_id=185632189]
 
 [node name="L2-sandy" type="MeshInstance3D" parent="." unique_id=520370891]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 mesh = SubResource("ArrayMesh_nmdhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3qd7")
@@ -63,7 +62,6 @@ patch_radius = 250.0
 use_patch = true
 
 [node name="L2-sandy3" type="MeshInstance3D" parent="." unique_id=1192486788]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 mesh = SubResource("ArrayMesh_nmdhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3qd7")
@@ -74,7 +72,6 @@ patch_radius = 250.0
 use_patch = true
 
 [node name="L2-sandy2" type="MeshInstance3D" parent="." unique_id=1007078236]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 mesh = SubResource("ArrayMesh_nmdhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3qd7")
@@ -84,7 +81,6 @@ patch_center = Vector3(300, 0, 400)
 use_patch = true
 
 [node name="L2-sandy4" type="MeshInstance3D" parent="." unique_id=265657293]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 mesh = SubResource("ArrayMesh_nmdhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3qd7")
@@ -95,7 +91,6 @@ patch_radius = 300.0
 use_patch = true
 
 [node name="L2-sandy5" type="MeshInstance3D" parent="." unique_id=1833796222]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.982254, 0.5498055, 19.832394)
 mesh = SubResource("ArrayMesh_nmdhe")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3qd7")
