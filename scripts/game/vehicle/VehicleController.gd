@@ -1,6 +1,13 @@
 extends VehicleBody3D
 class_name VehicleController
 
+# ===== Differential =====
+@export var diff_lock_strength: float = 4.0    # tune: higher = reacts harder to rpm diff
+@export var diff_max_bias: float = 0.35        # max torque shift fraction (0.5 = fully locked)
+
+var driven_wheel_left: VehicleWheel3D = null
+var driven_wheel_right: VehicleWheel3D = null
+
 const WHEEL_SYNC_GRACE_TIME := 0.35  # seconds to suppress the drive-force
 									  # desync clamp after a gear shift completes
 
@@ -206,14 +213,29 @@ func _apply_drive_force(force: float) -> void:
 			# the wheel accelerate toward the car's real speed.
 			var overspeed_ratio: float = max_vehicle_speed * 1.15 / max(abs(forward_speed), 0.01)
 			force *= clamp(overspeed_ratio, 0.15, 1.0)
-			
+
 			# Gated: Only format the string if WHEELS logging is enabled
 			if Log.enabled[Log.Category.WHEELS]:
 				Log.d(Log.Category.WHEELS, "[Clamp] gear " + str(transmission.get_gear_number()) + " max_speed=" + str(max_vehicle_speed) + " forward_speed=" + str(forward_speed) + " -> tapered to " + str(overspeed_ratio))
 
-	var per_wheel := force / driven_wheels.size()
-	for w in driven_wheels:
-		w.engine_force = per_wheel
+	if driven_wheel_left and driven_wheel_right:
+		_apply_differential_force(force)
+	else:
+		var per_wheel := force / driven_wheels.size()
+		for w in driven_wheels:
+			w.engine_force = per_wheel
+
+func _apply_differential_force(total_force: float) -> void:
+	var rpm_l := driven_wheel_left.get_rpm()
+	var rpm_r := driven_wheel_right.get_rpm()
+	var rpm_diff := rpm_l - rpm_r  # positive: left spinning faster -> less grip
+
+	var bias: float = clamp(rpm_diff * diff_lock_strength * 0.001, -diff_max_bias, diff_max_bias)
+	driven_wheel_left.engine_force = total_force * (0.5 - bias)
+	driven_wheel_right.engine_force = total_force * (0.5 + bias)
+
+	if Log.enabled[Log.Category.WHEELS] and Engine.get_physics_frames() % 30 == 0:
+		Log.d(Log.Category.WHEELS, "[Diff] rpm_l=%.0f rpm_r=%.0f bias=%.2f" % [rpm_l, rpm_r, bias])
 
 func _apply_brakes(amount: float) -> void:
 	for w in all_wheels:
@@ -243,6 +265,14 @@ func _cache_wheels() -> void:
 				driven_wheels.append(child)
 
 	assert(driven_wheels.size() > 0, "No driven wheels!")
+
+	if driven_wheels.size() == 2:
+		if driven_wheels[0].position.x > driven_wheels[1].position.x:
+			driven_wheel_left = driven_wheels[0]
+			driven_wheel_right = driven_wheels[1]
+		else:
+			driven_wheel_left = driven_wheels[1]
+			driven_wheel_right = driven_wheels[0]
 	
 	# Changed to Log.d
 	Log.d(Log.Category.GENERAL, "[VehicleController] Found wheels: %d total, %d driven, %d steering" % [
