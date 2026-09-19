@@ -4,6 +4,7 @@ class_name VehicleController
 # ===== Differential =====
 @export var diff_lock_strength: float = 4.0    # tune: higher = reacts harder to rpm diff
 @export var diff_max_bias: float = 0.35        # max torque shift fraction (0.5 = fully locked)
+@export var diff_engage_slip: float = 1.5   # m/s of avg wheelspin before diff logic kicks in
 
 var driven_wheel_left: VehicleWheel3D = null
 var driven_wheel_right: VehicleWheel3D = null
@@ -228,15 +229,28 @@ func _apply_drive_force(force: float) -> void:
 func _apply_differential_force(total_force: float) -> void:
 	var rpm_l := driven_wheel_left.get_rpm()
 	var rpm_r := driven_wheel_right.get_rpm()
-	var rpm_diff := rpm_l - rpm_r  # positive: left spinning faster -> less grip
 
+	var wheel_radius := driven_wheel_left.wheel_radius
+	var speed_l := (rpm_l * TAU / 60.0) * wheel_radius
+	var speed_r := (rpm_r * TAU / 60.0) * wheel_radius
+	var avg_wheel_speed := (speed_l + speed_r) * 0.5
+	var wheelspin: float = avg_wheel_speed - abs(forward_speed)
+
+	# Cornering makes the two wheels differ legitimately - that's not slip.
+	# Only bias torque once the wheels are outrunning the chassis.
+	if wheelspin < diff_engage_slip:
+		var per_wheel := total_force / 2.0
+		driven_wheel_left.engine_force = per_wheel
+		driven_wheel_right.engine_force = per_wheel
+		return
+
+	var rpm_diff := rpm_l - rpm_r
 	var bias: float = clamp(rpm_diff * diff_lock_strength * 0.001, -diff_max_bias, diff_max_bias)
 	driven_wheel_left.engine_force = total_force * (0.5 - bias)
 	driven_wheel_right.engine_force = total_force * (0.5 + bias)
 
 	if Log.enabled[Log.Category.WHEELS] and Engine.get_physics_frames() % 30 == 0:
-		Log.d(Log.Category.WHEELS, "[Diff] rpm_l=%.0f rpm_r=%.0f bias=%.2f" % [rpm_l, rpm_r, bias])
-
+		Log.d(Log.Category.WHEELS, "[Diff] rpm_l=%.0f rpm_r=%.0f bias=%.2f wheelspin=%.2f" % [rpm_l, rpm_r, bias, wheelspin])
 func _apply_brakes(amount: float) -> void:
 	for w in all_wheels:
 		w.brake = amount * vehicle_config.brake_force

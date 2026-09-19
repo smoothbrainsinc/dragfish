@@ -59,7 +59,7 @@ shader_parameter/starmap_flip_u = false
 shader_parameter/starmap_flip_v = false
 shader_parameter/starmap_alignment = Vector3(2.68288, -0.25891, 0.40101)
 shader_parameter/star_rotation_offset = 9.38899
-shader_parameter/star_rotation = -9.791143331861097
+shader_parameter/star_rotation = -9.823520326257388
 shader_parameter/star_tilt = -1.2915436464758039
 shader_parameter/star_field_color = Color(1, 1, 1, 1)
 shader_parameter/star_field_texture = ExtResource("17_gp0fs")
@@ -75,8 +75,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.4894136, 0.4894136)
-shader_parameter/cirrus_position2 = Vector2(0.4894136, 0.4894136)
+shader_parameter/cirrus_position1 = Vector2(0.11634832, 0.11634832)
+shader_parameter/cirrus_position2 = Vector2(0.11634832, 0.11634832)
 shader_parameter/cirrus_texture = ExtResource("13_8jgqo")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -86,7 +86,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(7.446226, 7.446226)
+shader_parameter/cumulus_position = Vector2(10.592185, 10.592185)
 shader_parameter/cumulus_texture = ExtResource("14_023cl")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -96,7 +96,7 @@ shader_parameter/azimuthal_grid_rotation_offset = 0.03
 shader_parameter/show_equatorial_grid = false
 shader_parameter/equatorial_grid_color = Color(0, 0.75, 1, 1)
 shader_parameter/equatorial_grid_rotation_offset = 0.03
-shader_parameter/moon_matrix = Basis(0.2834774, -0.92182964, -0.2643304, 0.443622, 0.37042743, -0.81607777, 0.8502, 0.114076845, 0.5139518)
+shader_parameter/moon_matrix = Basis(0.31323922, -0.9128855, -0.26176572, 0.4392425, 0.3836494, -0.81232953, 0.84199005, 0.13947482, 0.52115214)
 
 [sub_resource type="Sky" id="Sky_fblcv"]
 sky_material = SubResource("ShaderMaterial_1scdv")
@@ -119,26 +119,26 @@ environment = SubResource("Environment_i7nld")
 camera_attributes = SubResource("CameraAttributesPractical_w8701")
 script = ExtResource("19_x5deg")
 fog_enabled = false
-current_time = 13.301666666666668
+current_time = 13.424999999999999
 minutes_per_day = 1440.0
 wind_direction = 2.35619451204804
 metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 
 [node name="SunLight" type="DirectionalLight3D" parent="Sky3D" unique_id=784184322]
-transform = Transform3D(0.48958135, 0.77061605, -0.40799633, 0, 0.46790844, 0.88377696, 0.8719576, -0.43268073, 0.22907925, -0.40799633, 0.88377696, 0.22907925)
+transform = Transform3D(0.4581133, 0.7739121, -0.43725538, 0, 0.4919096, 0.8706463, 0.8888938, -0.39885467, 0.22535034, -0.43725538, 0.8706463, 0.22535034)
 shadow_enabled = true
 
 [node name="MoonLight" type="DirectionalLight3D" parent="Sky3D" unique_id=1445646232]
-transform = Transform3D(0, -0.5264599, 0.8502, 0.97624123, 0.18422703, 0.11407684, -0.2166867, 0.8300003, 0.5139518, 0.8502, 0.11407684, 0.5139518)
+transform = Transform3D(0, -0.5394931, 0.84199005, 0.96600336, 0.21767917, 0.13947482, -0.2585294, 0.8133652, 0.52115214, 0.84199005, 0.13947482, 0.52115214)
 light_color = Color(0.572549, 0.776471, 0.956863, 1)
 light_energy = 0.0
 
 [node name="SkyDome" type="Node" parent="Sky3D" unique_id=1834762654]
 script = ExtResource("20_ct7iu")
-sun_azimuth = -4.2007794
-sun_altitude = -0.48692268
-moon_azimuth = -2.1145232
-moon_altitude = -1.4564706
+sun_azimuth = -4.2365174
+sun_altitude = -0.5142817
+moon_azimuth = -2.1250353
+moon_altitude = -1.4308653
 fog_visible = false
 wind_direction = 2.35619451204804
 
@@ -147,7 +147,7 @@ script = ExtResource("21_2f0hn")
 dome_path = NodePath("../SkyDome")
 minutes_per_day = 1440.0
 system_sync = true
-current_time = 13.301666666666668
+current_time = 13.424999999999999
 day = 19
 month = 9
 year = 2026
