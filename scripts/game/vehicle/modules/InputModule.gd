@@ -138,8 +138,13 @@ func get_ai_steering() -> float:
 	var lateral_offset := vehicle.global_position.x - ai_lane_center_x
 	var local_vel := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
 	var lateral_velocity: float = local_vel.x
+	var speed: float = abs(local_vel.z)
 
-	var correction := -lateral_offset * ai_lane_correction_gain - lateral_velocity * ai_lane_damping_gain
+	# same steering angle = more yaw at higher speed, so scale gain down
+	# as speed rises or the controller destabilizes near top speed
+	var speed_factor: float = clamp(speed / 10.0, 1.0, 15.0)
+
+	var correction := (-lateral_offset * ai_lane_correction_gain - lateral_velocity * ai_lane_damping_gain) / speed_factor
 	return clamp(correction, -1.0, 1.0)
 	
 ## Check clutch input (for manual transmission)
