@@ -29,7 +29,8 @@ var ai_throttle_variation: float = 0.0  # Random performance variation
 var ai_throttle_phase: float = 0.0  # Per-vehicle random offset so AI cars don't all wobble in sync
 var ai_lane_center_x: float = 0.0
 var ai_lane_center_cached: bool = false
-var ai_lane_correction_gain: float = 0.3  # TUNE THIS - starting guess, not measured
+var ai_lane_correction_gain: float = 0.0  # TUNE THIS - starting guess, not measured
+var ai_lane_damping_gain: float = 0.6
 
 # Race state
 var race_started: bool = false
@@ -135,10 +136,12 @@ func get_ai_steering() -> float:
 		ai_lane_center_cached = true
 
 	var lateral_offset := vehicle.global_position.x - ai_lane_center_x
-	var correction := -lateral_offset * ai_lane_correction_gain
-	var noise := randf_range(-0.02, 0.02)
-	return clamp(correction + noise, -1.0, 1.0)
+	var local_vel := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
+	var lateral_velocity: float = local_vel.x
 
+	var correction := -lateral_offset * ai_lane_correction_gain - lateral_velocity * ai_lane_damping_gain
+	return clamp(correction, -1.0, 1.0)
+	
 ## Check clutch input (for manual transmission)
 func is_clutch_pressed() -> bool:
 	if not is_player_controlled:
