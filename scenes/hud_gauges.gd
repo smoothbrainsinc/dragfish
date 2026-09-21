@@ -24,39 +24,39 @@ const MPS_TO_MPH := 2.23694
 var vehicle: VehicleController = null
 
 func _ready() -> void:
-	vehicle = await _wait_for_player_vehicle()
-	tach.value_max = vehicle.engine.config.redline_rpm
+	pass  # binding now happens lazily in _process(), so it survives rematches
 
-	vehicle.engine.rpm_changed.connect(_on_rpm_changed)
-	vehicle.transmission.gear_changed.connect(_on_gear_changed)
-
-	# Prime the gauges/labels with current values instead of waiting for the
-	# first signal emission.
-	_on_rpm_changed(vehicle.engine.current_rpm)
-	_on_gear_changed(vehicle.transmission.get_gear_number())
-
-func _wait_for_player_vehicle() -> VehicleController:
-	# race_manager.gd spawns and groups the vehicle asynchronously in its own
-	# _ready() (await process_frame, then await spawn_vehicles()), so it
-	# doesn't exist yet when this HUD's _ready() first runs. Poll until it
-	# does instead of failing once and giving up.
-	var v := get_tree().get_first_node_in_group("player_vehicle") as VehicleController
-	while v == null:
-		await get_tree().process_frame
-		v = get_tree().get_first_node_in_group("player_vehicle") as VehicleController
-	return v
 
 func _process(_delta: float) -> void:
-	if vehicle == null:
-		return
-	# No speed_changed signal exists on VehicleController — poll it.
+	# Re-find the vehicle if we don't have one, or the one we had got freed
+	# (e.g. race_manager.gd deletes and respawns it on rematch).
+	if vehicle == null or not is_instance_valid(vehicle):
+		var found := get_tree().get_first_node_in_group("player_vehicle") as VehicleController
+		if found == null:
+			return
+		vehicle = found
+		_bind_vehicle(vehicle)
+
 	var speed_mph: float = vehicle.get_forward_speed() * MPS_TO_MPH
 	speedo.set_value(speed_mph)
 	speed_label.text = "%d MPH" % int(speed_mph)
 
+
+func _bind_vehicle(v: VehicleController) -> void:
+	tach.value_max = v.engine.config.redline_rpm
+	v.engine.rpm_changed.connect(_on_rpm_changed)
+	v.transmission.gear_changed.connect(_on_gear_changed)
+
+	# Prime the gauges/labels with current values instead of waiting for the
+	# first signal emission.
+	_on_rpm_changed(v.engine.current_rpm)
+	_on_gear_changed(v.transmission.get_gear_number())
+
+
 func _on_rpm_changed(rpm: float) -> void:
 	tach.set_value(rpm)
 	rpm_label.text = "%d RPM" % int(rpm)
+
 
 func _on_gear_changed(new_gear: int) -> void:
 	# TransmissionModule has no reverse/neutral state — new_gear is always
