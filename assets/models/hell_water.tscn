@@ -52,5 +52,4 @@ script = ExtResource("7_refrp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1644872006]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.434402, 0, -49.427277)
-visible = false
 shape = SubResource("ConcavePolygonShape3D_ucym0")

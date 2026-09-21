@@ -1,7 +1,12 @@
 [gd_scene format=4 uid="uid://cldipfai7u8p1"]
 
-[ext_resource type="Shader" uid="uid://csjbh8be0504v" path="res://assets/shaders/water_underwater.gdshader" id="2_mfhla"]
-[ext_resource type="Shader" uid="uid://dfjljjlvkh2ui" path="res://assets/shaders/water_surface.gdshader" id="2_ueaw0"]
+[ext_resource type="Script" uid="uid://7wdshqt1l2xm" path="res://Lakes/hell_lake/FoamScene.gd" id="1_0cwm7"]
+[ext_resource type="Shader" uid="uid://b8fa2bcid54jo" path="res://Lakes/shaders/displacement_calc.gdshader" id="1_ueaw0"]
+[ext_resource type="Shader" uid="uid://b2qhtaxq7psky" path="res://Lakes/shaders/foam_calc.gdshader" id="2_2ffk7"]
+[ext_resource type="Shader" uid="uid://caultsa30j0i6" path="res://Lakes/shaders/g_wave.gdshader" id="2_ov3te"]
+[ext_resource type="Shader" uid="uid://ck0gnrqug0ugy" path="res://Lakes/shaders/history.gdshader" id="3_0vf5e"]
+[ext_resource type="Texture2D" uid="uid://3mjxcjdo2x1p" path="res://Lakes/sea_foam_seamless_texture.png" id="4_ov3te"]
+[ext_resource type="Shader" uid="uid://b7k3nda2gn1hi" path="res://Lakes/shaders/i_depth.gdshader" id="6_8h1b5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h7q4p"]
 
@@ -37,78 +42,190 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_p1xje")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_0cwm7"]
+viewport_path = NodePath("DisplacementSubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ov3te"]
+viewport_path = NodePath("HistoryB")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uevyf"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("2_ueaw0")
-shader_parameter/max_depth = 50.0
-shader_parameter/water_level = 0.0
-shader_parameter/underwater_fog_color = Color(0.03, 0.08, 0.04, 1)
-shader_parameter/fade_start_depth = 0.5
-shader_parameter/max_clarity = 0.35
-shader_parameter/sea_height = 1.3
-shader_parameter/sea_choppy = 4.0
-shader_parameter/sea_speed = 1.5
-shader_parameter/sea_freq = 0.08
-shader_parameter/ITER_GEOMETRY = 3
-shader_parameter/ITER_FRAGMENT = 5
-shader_parameter/refraction_strength = 1.0
-shader_parameter/refraction_distance_fade = 5.0
-shader_parameter/normal_epsilon = 0.01
-shader_parameter/normal_smoothness_dist = 50.0
-shader_parameter/base_tint_color = Color(0.32, 0.42, 0.2, 1)
-shader_parameter/deep_color = Color(0.04, 0.1, 0.05, 1)
-shader_parameter/water_absorption = Color(0.45, 0.25, 0.35, 1)
-shader_parameter/roughness = 0.045
-shader_parameter/metallic = 0.6
-shader_parameter/specular = 0.5
-shader_parameter/caustics_scale = 2.0
-shader_parameter/caustics_speed = 0.1
-shader_parameter/caustics_intensity = 15.0
-shader_parameter/caustics_depth_fade = 0.7
-shader_parameter/foam_color = Color(1, 1, 1, 1)
-shader_parameter/foam_depth_start = 0.8
-shader_parameter/foam_depth_end = 0.0
-shader_parameter/foam_noise_scale = 2.0
-shader_parameter/foam_noise_speed = 1.0
-shader_parameter/foam_cutoff = 0.7
-shader_parameter/foam_crest_threshold = 0.7
-shader_parameter/foam_crest_amount = 2.0
-shader_parameter/foam_edge_color = Color(0, 0, 0.05, 1)
-shader_parameter/foam_edge_offset = Vector2(0.02, 0.02)
-shader_parameter/voronoi_scale = 9.0
-shader_parameter/voronoi_strength = 0.8
+shader = ExtResource("2_ov3te")
+shader_parameter/color = Color(0, 0, 0, 1)
+shader_parameter/sampling_distance = 0.01
+shader_parameter/displacement_map = SubResource("ViewportTexture_0cwm7")
+shader_parameter/foam_map = SubResource("ViewportTexture_ov3te")
 
-[sub_resource type="BoxMesh" id="BoxMesh_dbiuj"]
-size = Vector3(2000, 2000, 2000)
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0ytjf"]
+noise_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g007q"]
+noise = SubResource("FastNoiseLite_0ytjf")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dbiuj"]
+shader = ExtResource("1_ueaw0")
+shader_parameter/noise = SubResource("NoiseTexture2D_g007q")
+shader_parameter/noise_intensity = 0.050000002375
+shader_parameter/noise_intensity_x = 0.06000000517907
+shader_parameter/noise_intensity_z = 0.06000000517907
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_eaypw"]
+viewport_path = NodePath("BottomDepth")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3f7mg"]
+viewport_path = NodePath("TopDepth")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bdb5d"]
+viewport_path = NodePath("DisplacementSubViewport")
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1lxl2"]
+noise = SubResource("FastNoiseLite_0ytjf")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4fu3u"]
 resource_local_to_scene = true
+shader = ExtResource("2_2ffk7")
+shader_parameter/displacement_map = SubResource("ViewportTexture_bdb5d")
+shader_parameter/sea_foam = ExtResource("4_ov3te")
+shader_parameter/noise = SubResource("NoiseTexture2D_1lxl2")
+shader_parameter/depth_top = SubResource("ViewportTexture_3f7mg")
+shader_parameter/depth_bottom = SubResource("ViewportTexture_eaypw")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_r3y0l"]
+viewport_path = NodePath("FoamSubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dbiuj"]
+viewport_path = NodePath("HistoryB")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r3y0l"]
+resource_local_to_scene = true
+shader = ExtResource("3_0vf5e")
+shader_parameter/current_foam = SubResource("ViewportTexture_r3y0l")
+shader_parameter/history_foam = SubResource("ViewportTexture_dbiuj")
+shader_parameter/delta = 0.016666666666666666
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0aqc1"]
+viewport_path = NodePath("FoamSubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4fu3u"]
+viewport_path = NodePath("HistoryA")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p7waf"]
+resource_local_to_scene = true
+shader = ExtResource("3_0vf5e")
+shader_parameter/current_foam = SubResource("ViewportTexture_0aqc1")
+shader_parameter/history_foam = SubResource("ViewportTexture_4fu3u")
+shader_parameter/delta = 0.016666666666666666
+
+[sub_resource type="QuadMesh" id="QuadMesh_f8oqw"]
+size = Vector2(10, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bkbyv"]
 render_priority = 0
-shader = ExtResource("2_mfhla")
-shader_parameter/sea_height = 1.3
-shader_parameter/sea_choppy = 4.0
-shader_parameter/sea_speed = 1.5
-shader_parameter/sea_freq = 0.08
-shader_parameter/height_offset = 0.0
-shader_parameter/underwater_color = Color(0.1, 0.26, 0.13, 1)
-shader_parameter/absorption_strength = 0.15
-shader_parameter/max_clarity = 0.55
-shader_parameter/refraction_amount = 0.004
-shader_parameter/refraction_speed = 0.7
-shader_parameter/water_level_fudge = 0.0
+shader = ExtResource("6_8h1b5")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0bpmg"]
+size = Vector2(10, 10)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cwm7"]
+render_priority = 0
+shader = ExtResource("6_8h1b5")
 
 [node name="new_hell_awaits_water" type="Node3D" unique_id=286069375]
+script = ExtResource("1_0cwm7")
 
 [node name="Plane" type="MeshInstance3D" parent="." unique_id=352320628]
 mesh = SubResource("ArrayMesh_5a17v")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_uevyf")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=401401123]
-visible = false
-mesh = SubResource("BoxMesh_dbiuj")
-surface_material_override/0 = SubResource("ShaderMaterial_4fu3u")
-
 [node name="Camera3D" type="Camera3D" parent="." unique_id=783336646]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 920.687, 0)
+
+[node name="DisplacementSubViewport" type="SubViewport" parent="." unique_id=1095564096]
+disable_3d = true
+use_hdr_2d = true
+size = Vector2i(1024, 1024)
+
+[node name="ColorRect" type="ColorRect" parent="DisplacementSubViewport" unique_id=290720098]
+material = SubResource("ShaderMaterial_dbiuj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FoamSubViewport" type="SubViewport" parent="." unique_id=3602980]
+disable_3d = true
+size = Vector2i(2048, 2048)
+
+[node name="ColorRect" type="ColorRect" parent="FoamSubViewport" unique_id=1944975982]
+material = SubResource("ShaderMaterial_4fu3u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HistoryA" type="SubViewport" parent="." unique_id=1996137169]
+disable_3d = true
+use_hdr_2d = true
+size = Vector2i(2048, 2048)
+render_target_update_mode = 0
+
+[node name="ColorRect" type="ColorRect" parent="HistoryA" unique_id=357942085]
+material = SubResource("ShaderMaterial_r3y0l")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HistoryB" type="SubViewport" parent="." unique_id=1410622320]
+disable_3d = true
+use_hdr_2d = true
+size = Vector2i(2048, 2048)
+render_target_update_mode = 1
+
+[node name="ColorRect" type="ColorRect" parent="HistoryB" unique_id=1211903423]
+material = SubResource("ShaderMaterial_p7waf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopDepth" type="SubViewport" parent="." unique_id=1406910757]
+use_hdr_2d = true
+size = Vector2i(128, 128)
+
+[node name="Camera3D" type="Camera3D" parent="TopDepth" unique_id=2090441411]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10, 0)
+cull_mask = 2
+projection = 1
+size = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TopDepth/Camera3D" unique_id=593412003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+layers = 2
+cast_shadow = 0
+mesh = SubResource("QuadMesh_f8oqw")
+surface_material_override/0 = SubResource("ShaderMaterial_bkbyv")
+
+[node name="BottomDepth" type="SubViewport" parent="." unique_id=1886480939]
+use_hdr_2d = true
+size = Vector2i(128, 128)
+
+[node name="Camera3D" type="Camera3D" parent="BottomDepth" unique_id=1475857386]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -10, 0)
+cull_mask = 2
+projection = 1
+size = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="BottomDepth/Camera3D" unique_id=233061673]
+layers = 2
+cast_shadow = 0
+mesh = SubResource("QuadMesh_0bpmg")
+surface_material_override/0 = SubResource("ShaderMaterial_0cwm7")
