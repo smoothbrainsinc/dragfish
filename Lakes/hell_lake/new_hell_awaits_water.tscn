@@ -42,6 +42,7 @@ shadow_mesh = SubResource("ArrayMesh_p1xje")
 
 [node name="Plane" type="MeshInstance3D" parent="." unique_id=352320628]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.064697266, -0.526886, -0.08496094)
+visible = false
 mesh = SubResource("ArrayMesh_5a17v")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("ShaderMaterial_vnrmn")
