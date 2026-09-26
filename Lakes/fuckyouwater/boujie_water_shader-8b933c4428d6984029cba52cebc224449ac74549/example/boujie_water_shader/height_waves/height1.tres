@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="GerstnerWave" format=3 uid="uid://bavxgduu5sv2c"]
+
+[ext_resource type="Script" uid="uid://c3d6defssph0x" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/types/gerstner_wave.gd" id="1_2nfjo"]
+
+[resource]
+script = ExtResource("1_2nfjo")
+steepness = 4.0
+frequency = 0.02
