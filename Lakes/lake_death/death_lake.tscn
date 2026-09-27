@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dk1q48s5eiks4"]
+
+[ext_resource type="PackedScene" uid="uid://f1evpa1pmm88" path="res://Lakes/lake_death/death_lake.glb" id="1_y77ok"]
+[ext_resource type="PackedScene" uid="uid://cldipfai7u8p1" path="res://Lakes/hell_lake/new_hell_awaits_water.tscn" id="2_hdv0o"]
+[ext_resource type="PackedScene" uid="uid://c1x5ochbb3jg3" path="res://puddle.tscn" id="3_4e05y"]
+
+[node name="death_lake" type="Node3D" unique_id=1328485004]
+
+[node name="death_lake" parent="." unique_id=261688517 instance=ExtResource("1_y77ok")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+visible = false
+
+[node name="new_hell_awaits_water" parent="." unique_id=2005479541 instance=ExtResource("2_hdv0o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
+
+[node name="puddle" parent="." unique_id=859654909 instance=ExtResource("3_4e05y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4628677, 0)

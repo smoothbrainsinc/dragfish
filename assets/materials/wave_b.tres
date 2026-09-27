@@ -1,6 +1,0 @@
-[gd_resource type="NoiseTexture2D" format=3 uid="uid://bgvnebvgvapw1"]
-
-[resource]
-seamless = true
-in_3d_space = true
-as_normal_map = true

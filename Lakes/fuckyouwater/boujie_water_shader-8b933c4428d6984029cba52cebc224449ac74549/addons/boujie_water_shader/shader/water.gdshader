@@ -103,6 +103,7 @@ group_uniforms;
 
 group_uniforms FoamWaveParameters;
 uniform int FoamWaveCount : hint_range(0,8) = 0;
+uniform float foam_alpha_threshold : hint_range(0.0, 1.0) = 0.6;
 uniform float FoamWaveSteepnesses[8];
 uniform float FoamWaveAmplitudes[8];
 uniform float FoamWaveDirectionsDegrees[8];
@@ -461,8 +462,7 @@ void fragment() {
 
 #ifdef FOAM
 	float final_foam_alpha = foam_alpha * foam_tex.a * foam_fade_alpha;
-	float foam_alpha_threshold = 0.0;
-	final_foam_alpha = smoothstep(foam_alpha_threshold, foam_alpha_threshold + 1.0, final_foam_alpha);
+	
 	EMISSION *= (1.0-final_foam_alpha); // block emission
 	ALBEDO = mix(ALBEDO, foam_tex.rgb, final_foam_alpha);
 #endif

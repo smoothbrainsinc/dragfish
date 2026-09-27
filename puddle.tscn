@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://c1x5ochbb3jg3"]
+
+[ext_resource type="PackedScene" uid="uid://b0i2gp171v5fm" path="res://Lakes/puddle/puddle.glb" id="1_3jn3q"]
+
+[node name="puddle" unique_id=859654909 instance=ExtResource("1_3jn3q")]
