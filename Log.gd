@@ -7,7 +7,7 @@ enum Category { PHYSICS, SHIFT, CHUTE, WHEELS, GENERAL }
 # true = prints, false = silent
 var enabled: Dictionary = {
 	Category.PHYSICS: false,
-	Category.SHIFT: false,
+	Category.SHIFT: true,
 	Category.CHUTE: false,
 	Category.WHEELS: false,
 	Category.GENERAL: true, # Keep general on for now
