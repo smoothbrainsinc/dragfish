@@ -6,22 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://cscff7ewanuxf" path="res://scenes/track.tscn" id="5_jbnud"]
 [ext_resource type="PackedScene" uid="uid://hb3l7skbje4r" path="res://gaggle_of_nuns_2.tscn" id="6_coijf"]
 [ext_resource type="PackedScene" uid="uid://bv88fqcrrl2pj" path="res://assets/sprites/nuns_3.tscn" id="6_vw4td"]
-[ext_resource type="Texture2D" uid="uid://dumacl8pd88qa" path="res://assets/images/gilligans_island.jpg" id="7_vw4td"]
-[ext_resource type="PackedScene" uid="uid://dk1q48s5eiks4" path="res://Lakes/lake_death/death_lake.tscn" id="8_nq75f"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_4ms5c"]
-size = Vector2(1500, 200)
-orientation = 0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t6ok1"]
-shading_mode = 0
-vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("7_vw4td")
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
 [node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
-visible = false
 
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -412.82922)
@@ -40,10 +28,3 @@ visible = false
 [node name="nuns3" parent="." unique_id=4595035 instance=ExtResource("6_vw4td")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.626862, 7.8729477, 125.27849)
 visible = false
-
-[node name="edge_image" type="MeshInstance3D" parent="." unique_id=1934430922]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -750, 100, 0)
-mesh = SubResource("PlaneMesh_4ms5c")
-surface_material_override/0 = SubResource("StandardMaterial3D_t6ok1")
-
-[node name="death_lake" parent="." unique_id=1328485004 instance=ExtResource("8_nq75f")]

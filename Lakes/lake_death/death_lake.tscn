@@ -8,10 +8,10 @@
 
 [node name="death_lake" parent="." unique_id=261688517 instance=ExtResource("1_y77ok")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
-visible = false
 
 [node name="new_hell_awaits_water" parent="." unique_id=2005479541 instance=ExtResource("2_hdv0o")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 
 [node name="puddle" parent="." unique_id=859654909 instance=ExtResource("3_4e05y")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.4628677, 0)
+visible = false
