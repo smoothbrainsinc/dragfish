@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://cu46b100244nd"]
 
 [ext_resource type="Shader" uid="uid://djyio8ph0it3r" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/shader/water.gdshader" id="1_l73mt"]
-[ext_resource type="Texture2D" uid="uid://dck2b16gulx5d" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/shader/ocean_albedo_white_highcontrast.png" id="2_8jfpx"]
+[ext_resource type="Texture2D" uid="uid://c28pojjx0kja3" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/shader/ocean_albedo_1.png" id="2_4q805"]
 [ext_resource type="Texture2D" uid="uid://cpav8p4gip0uk" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/shader/refraction.png" id="3_b70bb"]
 [ext_resource type="Texture2D" uid="uid://cq0i08hinbihi" path="res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/shader/foam_2.png" id="3_ln7b4"]
 
@@ -9,21 +9,21 @@
 render_priority = 0
 shader = ExtResource("1_l73mt")
 shader_parameter/freeze_time = false
-shader_parameter/albedo = Color(0.11764706, 0.14509805, 0.7372549, 0)
-shader_parameter/albedo_fresnel = Color(0.317647, 0.596078, 0.988235, 1)
-shader_parameter/texture_albedo = ExtResource("2_8jfpx")
-shader_parameter/specular = 0.259
+shader_parameter/albedo = Color(0.41568628, 0.4745098, 0.95686275, 0.7411765)
+shader_parameter/albedo_fresnel = Color(0, 0, 1, 0.40784314)
+shader_parameter/texture_albedo = ExtResource("2_4q805")
+shader_parameter/specular = 0.5
 shader_parameter/roughness = 0.2
 shader_parameter/metallic = 0.0
-shader_parameter/vertex_displace_from_mesh_normal = true
-shader_parameter/normal_wave_from_mesh_normal = true
+shader_parameter/vertex_displace_from_mesh_normal = false
+shader_parameter/normal_wave_from_mesh_normal = false
 shader_parameter/texture_refraction = ExtResource("3_b70bb")
-shader_parameter/refraction = 0.5700001220750002
+shader_parameter/refraction = 2.0
 shader_parameter/refraction_texture_channel = Vector4(1, 0, 0, 0)
-shader_parameter/refraction_opacity = 1.0
+shader_parameter/refraction_opacity = 0.218000010355
 shader_parameter/texture_foam = ExtResource("3_ln7b4")
 shader_parameter/shore_start_blend = 2.0
-shader_parameter/shore_end_blend = 6.0
+shader_parameter/shore_end_blend = 10.0
 shader_parameter/distance_fade_min = 1000.0
 shader_parameter/distance_fade_max = 1600.0
 shader_parameter/near_fade_min = 1.5
@@ -41,10 +41,10 @@ shader_parameter/uv_blend_sharpness = 2.0
 shader_parameter/uv_tri_scale = Vector3(36, 36, 36)
 shader_parameter/uv_tri_offset = Vector3(0, 0, 0)
 shader_parameter/color_deep = Color(0.0784314, 0.211765, 0.501961, 1)
-shader_parameter/color_shallow = Color(0, 0, 0, 0)
-shader_parameter/beers_law = 0.02
-shader_parameter/depth_offset = -60.0
-shader_parameter/albedo_snell = Color(0, 0.101960786, 0.23921569, 1)
+shader_parameter/color_shallow = Color(0.39607844, 0.5803922, 0.9411765, 0.61960787)
+shader_parameter/beers_law = 2.0
+shader_parameter/depth_offset = -0.75
+shader_parameter/albedo_snell = Color(0, 0, 0, 1)
 shader_parameter/snell_direction = Vector3(0, 1, 0)
 shader_parameter/snell_tightness = 0.6
 shader_parameter/WaveCount = 4

@@ -72,13 +72,10 @@ func _handle_avoidance(delta):
 	if avoidance_ray and avoidance_timer <= 0.0:
 		avoidance_ray.force_raycast_update()
 		
-		if avoidance_ray.is_colliding():
-			var collision_point = avoidance_ray.get_collision_point()
-			var to_obstacle = (collision_point - global_position).normalized()
-			
-			var avoidance_dir = to_obstacle.orthogonal().normalized()
-			if randf() > 0.5:
-				avoidance_dir = -avoidance_dir
+	if avoidance_ray.is_colliding():
+		var avoidance_dir = current_direction.cross(Vector3.UP).normalized()
+		if randf() > 0.5:
+			avoidance_dir = -avoidance_dir
 			
 			target_direction = avoidance_dir
 			avoidance_timer = avoidance_cooldown

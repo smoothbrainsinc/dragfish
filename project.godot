@@ -120,10 +120,6 @@ dismiss_results={
 ]
 }
 
-[rendering]
-
-renderer/rendering_method="gl_compatibility"
-
 [shader_globals]
 
 sgt_legacy_renderer={

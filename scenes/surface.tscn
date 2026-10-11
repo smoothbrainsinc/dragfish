@@ -5,7 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://f072s4s6ahak" path="res://assets/models/TrackSurface_Road006_2K-JPG_Roughness.png" id="3_pjqmy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5ax0b"]
-size = Vector3(12, 0.15, 100)
+margin = 0.0
+size = Vector3(12, 0.125, 100)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tap8s"]
 size = Vector3(12, 0.15, 100)
@@ -22,6 +23,7 @@ uv1_scale = Vector3(3, 25, 1)
 [node name="Surface" type="StaticBody3D" unique_id=1360670702]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=684998303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
 shape = SubResource("BoxShape3D_5ax0b")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1286735077]

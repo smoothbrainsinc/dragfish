@@ -458,6 +458,7 @@ shadow_mesh = SubResource("ArrayMesh_tdyyu")
 albedo_color = Color(0.025820246, 0.46639594, 0.7415135, 1)
 
 [node name="dragonDDD" type="VehicleBody3D" unique_id=253263196]
+steering = 0.08726646
 
 [node name="body" type="MeshInstance3D" parent="." unique_id=1571328955]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0006864717, 0.5280407, 0.32713965)
@@ -485,8 +486,11 @@ skeleton = NodePath("")
 
 [node name="wheelFL" type="VehicleWheel3D" parent="." unique_id=1827993574]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.246, 0.141, 4.873)
+steering = 0.08726646
 use_as_steering = true
 wheel_radius = 0.13
+wheel_rest_length = 0.01
+suspension_travel = 0.01
 
 [node name="tire-front_left" type="MeshInstance3D" parent="wheelFL" unique_id=1818169794]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0891428e-05, 0.00046038628, -0.0001654625)
@@ -495,8 +499,11 @@ skeleton = NodePath("")
 
 [node name="wheelFR" type="VehicleWheel3D" parent="." unique_id=420367774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.246, 0.141, 4.873)
+steering = 0.08726646
 use_as_steering = true
 wheel_radius = 0.13
+wheel_rest_length = 0.01
+suspension_travel = 0.01
 
 [node name="tire-front_right" type="MeshInstance3D" parent="wheelFR" unique_id=1645062593]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006956756, 0.00046038628, -0.0001654625)

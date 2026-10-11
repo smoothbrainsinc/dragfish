@@ -28,3 +28,8 @@ visible = false
 [node name="nuns3" parent="." unique_id=4595035 instance=ExtResource("6_vw4td")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.626862, 7.8729477, 125.27849)
 visible = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=526355045]
+transform = Transform3D(0.09844718, -0.9951423, 0, 0.9951423, 0.09844718, 0, 0, 0, 1, 0, -60.651184, -398.95068)
+light_color = Color(0.24766767, 0.41403994, 0.22977152, 1)
+sky_mode = 1

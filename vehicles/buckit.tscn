@@ -502,7 +502,7 @@ func toggle():
 "
 
 [node name="Buckit" type="VehicleBody3D" unique_id=1454160348]
-mass = 1000.0
+mass = 2500.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, 0.8, 0.8)
 script = ExtResource("1_teg7b")

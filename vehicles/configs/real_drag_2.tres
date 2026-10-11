@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://c287nk8nkib1k"]
+[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://pb2jcuen687u"]
 
 [ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]
@@ -30,8 +30,8 @@ friction_coefficient = 1.3
 [sub_resource type="Resource" id="Resource_83ju6"]
 script = ExtResource("3_13rpf")
 radius = 0.2
-rest_length = 0.25
-suspension_travel = 0.3
+rest_length = 0.1
+suspension_travel = 0.1
 metadata/_custom_type_script = "uid://dgwtba5ryj11c"
 
 [sub_resource type="Resource" id="Resource_f8llp"]
@@ -45,8 +45,8 @@ optimal_slip_ratio = 0.2
 script = ExtResource("3_13rpf")
 engine_force = 100.0
 radius = 0.81
-rest_length = 0.25
-suspension_travel = 0.3
+rest_length = 0.1
+suspension_travel = 0.1
 metadata/_custom_type_script = "uid://dgwtba5ryj11c"
 
 [sub_resource type="Resource" id="Resource_k7kr5"]

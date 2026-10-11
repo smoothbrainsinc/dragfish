@@ -10,27 +10,39 @@
 
 [node name="FishSchool" type="Node3D" parent="." unique_id=1080093227]
 script = ExtResource("1_pat3b")
-number_of_fish = 100
+grid_cell_size = 15.0
+lake_radius = 800.0
+spawn_center = Vector3(0, 0, 0)
+inner_x = 400.0
+inner_z = 400.0
+outer_x = 800.0
+outer_z = 800.0
+max_depth = 0.0
 
 [node name="blue_gill2" parent="." unique_id=776176130 instance=ExtResource("2_sbaja")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.845, -6, 0)
 script = ExtResource("3_7nr04")
+lake_size = Vector2(1633, 1633)
+lake_depth = 300.0
+max_dive_depth = 15.0
 
 [node name="lakeMonster" parent="." unique_id=1080063356 instance=ExtResource("5_or3pl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.205872, 0)
 script = ExtResource("3_7nr04")
 swim_speed = 2.0
 lake_size = Vector2(1633, 1633)
+lake_depth = 300.0
 min_depth = 5.0
 wander_time_min = 3.0
 wander_time_max = 8.0
 dive_chance = 0.3
-max_dive_depth = 0.8
+max_dive_depth = 150.0
 avoidance_ray_length = 10.0
 avoidance_cooldown = 1.0
 
 [node name="merelf2" parent="." unique_id=1715385116 instance=ExtResource("8_8f827")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
 script = ExtResource("3_7nr04")
 lake_size = Vector2(1633, 1633)
-max_dive_depth = 10.0
+lake_depth = 300.0
+max_dive_depth = 150.0

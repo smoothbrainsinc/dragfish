@@ -82,9 +82,9 @@ func _ready():
 
 func _get_cell(pos: Vector3) -> Vector3i:
 	return Vector3i(
-		int(pos.x / grid_cell_size),
-		int(pos.y / grid_cell_size),
-		int(pos.z / grid_cell_size)
+		floori(pos.x / grid_cell_size),
+		floori(pos.y / grid_cell_size),
+		floori(pos.z / grid_cell_size)
 	)
 
 func _rebuild_grid() -> void:
@@ -112,8 +112,6 @@ func _get_pooled_bucket() -> PackedInt32Array:
 func _process(delta):
 	_rebuild_grid()
 	update_fish(delta)
-	if fish_data.size() > 0:
-		var world_pos = multi_mesh_instance.global_transform * multi_mesh_instance.multimesh.get_instance_transform(0).origin
 
 func update_fish(delta):
 	for i in range(fish_data.size()):

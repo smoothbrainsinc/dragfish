@@ -65,7 +65,7 @@ func apply_wheel_friction(wheels: Array[VehicleWheel3D]) -> void:
 
 	# Convert velocity to local space
 	var local_vel := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
-	var forward_speed := -local_vel.z
+	var forward_speed := local_vel.z
 
 	# Very small rolling resistance (prevents infinite coast)
 	var rolling_resistance := 0.015
