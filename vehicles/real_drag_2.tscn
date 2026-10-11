@@ -25,9 +25,10 @@ albedo_color = Color(0.025820246, 0.46639594, 0.7415135, 1)
 [node name="realDrag2" type="VehicleBody3D" unique_id=1914500428]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
 input_capture_on_drag = true
-mass = 700.0
+mass = 2330.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.5, 1.79)
+brake = 6000.0
 
 [node name="body" type="MeshInstance3D" parent="." unique_id=1330987996]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999964, 0, 0.7249201, 0)
@@ -46,6 +47,7 @@ shape = SubResource("ConvexPolygonShape3D_eq1hr")
 
 [node name="wheelFL" type="VehicleWheel3D" parent="." unique_id=1486193908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343, 0.30055875, 4.914)
+brake = 6000.0
 use_as_steering = true
 wheel_radius = 0.216
 wheel_rest_length = 0.2
@@ -56,6 +58,7 @@ skeleton = NodePath("")
 
 [node name="wheelFR" type="VehicleWheel3D" parent="." unique_id=665236176]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.343, 0.301, 4.914)
+brake = 6000.0
 use_as_steering = true
 wheel_radius = 0.216
 wheel_rest_length = 0.2
@@ -66,6 +69,7 @@ skeleton = NodePath("")
 
 [node name="wheelRL" type="VehicleWheel3D" parent="." unique_id=713586897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0.8192469, -1.788)
+brake = 6000.0
 use_as_traction = true
 wheel_radius = 0.813
 wheel_rest_length = 0.2
@@ -78,6 +82,7 @@ skeleton = NodePath("")
 
 [node name="wheelRR" type="VehicleWheel3D" parent="." unique_id=1999316639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0.819, -1.788)
+brake = 6000.0
 use_as_traction = true
 wheel_radius = 0.813
 wheel_rest_length = 0.2
