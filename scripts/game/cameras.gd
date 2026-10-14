@@ -334,9 +334,12 @@ func set_current_camera(idx: int):
 	
 	for i in range(cameras.size()):
 		cameras[i].current = (i == idx)
-	
+		if cameras[i].has_method("set_active"):
+			cameras[i].set_active(i == idx)
+
 	follow_camera = cameras[idx]
 	current_camera_index = idx
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if follow_camera.has_method("set_active") else Input.MOUSE_MODE_VISIBLE
 	print("[Camera] Switched to Camera%d" % (idx + 1))
 
 func set_target(new_target: Node3D):

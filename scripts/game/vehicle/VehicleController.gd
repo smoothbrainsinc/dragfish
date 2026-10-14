@@ -132,8 +132,10 @@ func _physics_process(delta: float) -> void:
 			transmission
 		)
 
-	var drive_torque := engine.get_current_torque()
 	var wheel_radius := _get_driven_wheel_radius()
+	var implied_rpm: float = abs(forward_speed) / wheel_radius * (60.0 / TAU) * current_gear_ratio
+	var crank_rpm: float = max(engine.current_rpm, implied_rpm)
+	var drive_torque: float = engine.config.get_torque_at_rpm(crank_rpm) * throttle
 	var drive_force: float = transmission.calculate_wheel_force(drive_torque, wheel_radius)
 
 	# Gated: Only format the string if PHYSICS logging is enabled

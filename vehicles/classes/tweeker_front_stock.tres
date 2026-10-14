@@ -1,9 +1,10 @@
+[gd_resource type="Resource" script_class="WheelConfig" format=3 uid="uid://r445ygnqkapl"]
 
-[gd_resource type="Resource" script_class="WheelConfig" load_steps=2 format=3]
-[ext_resource type="Script" path="res://Wheelconfig.gd" id="1_twfr"]
+[ext_resource type="Script" uid="uid://dgwtba5ryj11c" path="res://Wheelconfig.gd" id="1_twfr"]
+
 [resource]
 script = ExtResource("1_twfr")
-radius = 0.35
+radius = 1.2
 rest_length = 0.22
 friction_slip = 6.66
 suspension_travel = 0.12

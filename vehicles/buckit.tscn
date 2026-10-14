@@ -6,8 +6,9 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aoo7h"]
 albedo_color = Color(0, 1, 0, 1)
-metallic = 1.0
-roughness = 0.5
+metallic = 0.7
+roughness = 0.25
+clearcoat_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_teg7b"]
 vertex_color_use_as_albedo = true
@@ -27,6 +28,9 @@ blend_mode = 3
 roughness = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vq86v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pehky"]
+size = Vector3(2.6174, 1.5152683, 4.427928)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_teg7b"]
 size = Vector3(2.4140625, 1.4099121, 4.5497437)
@@ -517,8 +521,13 @@ surface_material_override/2 = SubResource("StandardMaterial3D_pehky")
 surface_material_override/3 = SubResource("StandardMaterial3D_m04nb")
 surface_material_override/4 = SubResource("StandardMaterial3D_vq86v")
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1851060570]
+transform = Transform3D(1, 0, 0, 0, 0.9999997, 0, 0, 0, 0.9999997, -0.005077362, 1.0323175, 0.16627665)
+shape = SubResource("BoxShape3D_pehky")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1976241920]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0563631, 0)
+visible = false
 shape = SubResource("BoxShape3D_teg7b")
 
 [node name="wheelFL" type="VehicleWheel3D" parent="." unique_id=1596018522]

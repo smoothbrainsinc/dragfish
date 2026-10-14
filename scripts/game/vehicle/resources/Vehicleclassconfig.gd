@@ -12,6 +12,7 @@ extends Resource
 @export var class_name_id: String = ""       # internal id e.g. "meth_head"
 @export var display_name: String = ""        # shown in UI e.g. "Meth Head"
 @export var description: String = ""
+@export var tach_face: Texture2D
 
 @export_group("Stock Wheel Configs")
 ## The baseline front wheel physics for every car in this class.

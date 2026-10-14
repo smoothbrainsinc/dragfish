@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VehicleClassConfig" format=3]
+[gd_resource type="Resource" script_class="VehicleClassConfig" format=3 uid="uid://cb5o87pwv1vtk"]
 
 [ext_resource type="Script" uid="uid://bkxbhngwgkqb2" path="res://scripts/game/vehicle/resources/Vehicleclassconfig.gd" id="1_m16bx"]
 [ext_resource type="Resource" path="res://vehicles/classes/broke_fuck_front_stock.tres" id="2_jrexa"]

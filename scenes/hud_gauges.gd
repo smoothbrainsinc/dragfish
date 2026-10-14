@@ -44,6 +44,10 @@ func _process(_delta: float) -> void:
 
 func _bind_vehicle(v: VehicleController) -> void:
 	tach.value_max = v.engine.config.redline_rpm
+	var face := tach.get_node("Face") as TextureRect
+	var cls := v.vehicle_config.vehicle_class
+	if cls and cls.tach_face:
+		face.texture = cls.tach_face
 	v.engine.rpm_changed.connect(_on_rpm_changed)
 	v.transmission.gear_changed.connect(_on_gear_changed)
 

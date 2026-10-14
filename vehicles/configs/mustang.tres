@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_fcxg4"]
 [ext_resource type="Script" uid="uid://dgwtba5ryj11c" path="res://Wheelconfig.gd" id="3_13rpf"]
 [ext_resource type="Script" uid="uid://du1enhren7ngr" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="4_7ko4g"]
-[ext_resource type="Resource" path="res://vehicles/classes/broke_fuck_class.tres" id="5_h7bs8"]
+[ext_resource type="Resource" uid="uid://cb5o87pwv1vtk" path="res://vehicles/classes/broke_fuck_class.tres" id="5_h7bs8"]
 
 [sub_resource type="Resource" id="Resource_i61f7"]
 script = ExtResource("1_uwxqw")

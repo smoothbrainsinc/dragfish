@@ -6,7 +6,7 @@ enum Category { PHYSICS, SHIFT, CHUTE, WHEELS, GENERAL }
 # Toggle these on/off to control what prints to the console.
 # true = prints, false = silent
 var enabled: Dictionary = {
-	Category.PHYSICS: false,
+	Category.PHYSICS: true,
 	Category.SHIFT: true,
 	Category.CHUTE: false,
 	Category.WHEELS: false,

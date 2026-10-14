@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://c8lk45thwsui3"]
+[gd_resource type="Resource" script_class="VehicleConfig" format=3]
 
-[ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
-[ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]
-[ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_fcxg4"]
-[ext_resource type="Script" uid="uid://dgwtba5ryj11c" path="res://Wheelconfig.gd" id="3_13rpf"]
-[ext_resource type="Script" uid="uid://du1enhren7ngr" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="4_7ko4g"]
+[ext_resource type="Script" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="1_dvd3c"]
+[ext_resource type="Script" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_uwxqw"]
+[ext_resource type="Script" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_fcxg4"]
+[ext_resource type="Script" path="res://Wheelconfig.gd" id="3_13rpf"]
+[ext_resource type="Script" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="4_7ko4g"]
 [ext_resource type="Resource" path="res://vehicles/classes/tweeker_class.tres" id="6_mh3xr"]
 
 [sub_resource type="Resource" id="Resource_i61f7"]
@@ -29,9 +29,10 @@ friction_coefficient = 1.3
 
 [sub_resource type="Resource" id="Resource_83ju6"]
 script = ExtResource("3_13rpf")
-radius = 0.2
-rest_length = 0.1
-suspension_travel = 0.1
+radius = 0.3
+rest_length = 0.2
+suspension_travel = 0.25
+suspension_stiffness = 100.0
 metadata/_custom_type_script = "uid://dgwtba5ryj11c"
 
 [sub_resource type="Resource" id="Resource_f8llp"]
@@ -44,9 +45,10 @@ optimal_slip_ratio = 0.2
 [sub_resource type="Resource" id="Resource_uyfhv"]
 script = ExtResource("3_13rpf")
 engine_force = 100.0
-radius = 0.81
-rest_length = 0.1
-suspension_travel = 0.1
+radius = 0.61
+rest_length = 0.2
+suspension_travel = 0.25
+suspension_stiffness = 100.0
 metadata/_custom_type_script = "uid://dgwtba5ryj11c"
 
 [sub_resource type="Resource" id="Resource_k7kr5"]
@@ -62,8 +64,7 @@ vehicle_name = "buckit"
 display_name = "Buckit"
 description = "old bucket"
 vehicle_class = ExtResource("6_mh3xr")
-mass = 2500.0
-center_of_mass_offset = Vector3(0, -0.5, -0.5)
+mass = 1250.0
 front_wheel_config = SubResource("Resource_83ju6")
 rear_wheel_config = SubResource("Resource_uyfhv")
 engine = SubResource("Resource_i61f7")
