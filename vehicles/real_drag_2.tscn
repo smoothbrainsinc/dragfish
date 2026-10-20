@@ -3,6 +3,7 @@
 [ext_resource type="ArrayMesh" uid="uid://kgofvg7edv7f" path="res://vehicles/real_drag_2_body_mesh.res" id="2_eq1hr"]
 [ext_resource type="ArrayMesh" uid="uid://cgbfy7atd2sgj" path="res://vehicles/real_drag_2_front_tire_mesh.res" id="3_a3kbq"]
 [ext_resource type="ArrayMesh" uid="uid://gixxxbhb0cyn" path="res://vehicles/real_drag_2_rear_tire_mesh.res" id="4_xbvyq"]
+[ext_resource type="Script" uid="uid://ddnrc5j47ygns" path="res://vehicles/node.gd" id="6_a3kbq"]
 [ext_resource type="Script" uid="uid://bkedrkwswuoeu" path="res://scripts/parachute.gd" id="7_xbvyq"]
 [ext_resource type="ArrayMesh" uid="uid://byuvm6cs3ntii" path="res://vehicles/drag_chute_mesh.res" id="8_dhbb3"]
 
@@ -103,3 +104,6 @@ transform = Transform3D(-4.371112e-08, -0.9999938, 0.0034906506, 0.9999999, -4.3
 mesh = ExtResource("8_dhbb3")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_3nmhu")
+
+[node name="Node" type="Node" parent="." unique_id=609376349]
+script = ExtResource("6_a3kbq")

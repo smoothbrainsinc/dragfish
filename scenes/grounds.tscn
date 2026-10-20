@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cscff7ewanuxf" path="res://scenes/track.tscn" id="5_jbnud"]
 [ext_resource type="PackedScene" uid="uid://hb3l7skbje4r" path="res://gaggle_of_nuns_2.tscn" id="6_coijf"]
 [ext_resource type="PackedScene" uid="uid://bv88fqcrrl2pj" path="res://assets/sprites/nuns_3.tscn" id="6_vw4td"]
+[ext_resource type="PackedScene" uid="uid://bqhiuj1hnp224" path="res://assets/models/track_lighting.tscn" id="7_vw4td"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
@@ -33,3 +34,6 @@ visible = false
 transform = Transform3D(0.09844718, -0.9951423, 0, 0.9951423, 0.09844718, 0, 0, 0, 1, 0, -60.651184, -398.95068)
 light_color = Color(0.24766767, 0.41403994, 0.22977152, 1)
 sky_mode = 1
+
+[node name="track_lighting" parent="." unique_id=21920103 instance=ExtResource("7_vw4td")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -223.73694)

@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bqhiuj1hnp224"]
+
+[ext_resource type="PackedScene" uid="uid://d1yq8rgk1v5n7" path="res://assets/models/lights.tscn" id="1_owcoy"]
+
+[node name="track_lighting" type="Node3D" unique_id=21920103]
+
+[node name="lights" parent="." unique_id=1259526068 instance=ExtResource("1_owcoy")]
+
+[node name="lights2" parent="." unique_id=1944784191 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
+
+[node name="lights3" parent="." unique_id=1751446722 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 100)
+
+[node name="lights4" parent="." unique_id=559229882 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
+
+[node name="lights5" parent="." unique_id=322324606 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 200)
+
+[node name="lights6" parent="." unique_id=506303936 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 250)
+
+[node name="lights7" parent="." unique_id=148973723 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 300)
+
+[node name="lights8" parent="." unique_id=507892440 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 350)
+
+[node name="lights9" parent="." unique_id=1999342506 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 400)
+
+[node name="lights10" parent="." unique_id=691430099 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 450)
+
+[node name="lights11" parent="." unique_id=1758200514 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 500)
+
+[node name="lights12" parent="." unique_id=1184508388 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 550)
+
+[node name="lights13" parent="." unique_id=920456399 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 600)
+
+[node name="lights14" parent="." unique_id=310371882 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 650)
+
+[node name="lights15" parent="." unique_id=719829219 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 700)
+
+[node name="lights16" parent="." unique_id=257569368 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 750)
+
+[node name="lights17" parent="." unique_id=694729384 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 800)
+
+[node name="lights18" parent="." unique_id=854292798 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 850)
+
+[node name="lights19" parent="." unique_id=1370675408 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 900)
+
+[node name="lights20" parent="." unique_id=48591373 instance=ExtResource("1_owcoy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 950)

@@ -1,4 +1,4 @@
-@icon("res://addons/boujie_water_shader/icons/Wave.svg")
+@icon("res://Lakes/fuckyouwater/boujie_water_shader-8b933c4428d6984029cba52cebc224449ac74549/addons/boujie_water_shader/icons/Wave.svg")
 class_name GerstnerWave
 extends Resource
 

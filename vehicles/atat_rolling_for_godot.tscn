@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cacdr0wdewqss" path="res://vehicles/atatRollingForGodot_DiamondPlate008C_4K_Color.jpg" id="1_n5w5e"]
 [ext_resource type="ArrayMesh" uid="uid://611p6ld5nnc4" path="res://vehicles/at_at_front_left_tire_mesh.res" id="2_5fki7"]
 [ext_resource type="ArrayMesh" uid="uid://dbefgab1hjij3" path="res://vehicles/at_at_front_right_tire_mesh.res" id="3_vplpo"]
+[ext_resource type="Script" uid="uid://ddnrc5j47ygns" path="res://vehicles/node.gd" id="4_vplpo"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jsixq"]
 resource_name = "atat"
@@ -942,3 +943,6 @@ skeleton = NodePath("")
 
 [node name="wheelEmptyRR" type="Node3D" parent="VehicleWheel3DRR" unique_id=1862436881]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3977, 1.2441609, -1.7384)
+
+[node name="Node" type="Node" parent="." unique_id=1806769912]
+script = ExtResource("4_vplpo")
