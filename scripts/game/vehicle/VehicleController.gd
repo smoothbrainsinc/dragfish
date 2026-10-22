@@ -279,6 +279,9 @@ func _cache_wheels() -> void:
 				steering_wheels.append(child)
 			if child.use_as_traction:
 				driven_wheels.append(child)
+			for m in child.get_children():
+				if m is Node3D:
+					m.transform = Transform3D(Basis.from_scale(Vector3(1, 1, -1)), Vector3.ZERO) * m.transform
 
 	assert(driven_wheels.size() > 0, "No driven wheels!")
 
