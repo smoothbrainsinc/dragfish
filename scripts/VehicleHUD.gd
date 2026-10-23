@@ -26,11 +26,7 @@ func _process(_delta: float) -> void:
 	
 	# --- Gear ---
 	if show_gear:
-		var gear_text = "1"
-		var gear_index = vehicle.transmission.get_gear_index()  # ← Inside transmission module
-		if gear_index > 0:
-			gear_text = str(gear_index + 1)
-		gear_label.text = "GEAR: %s" % gear_text
+		gear_label.text = "GEAR: %s" % vehicle.transmission.get_gear_string()
 	
 	# --- Speed ---
 	if show_speed:

@@ -8,6 +8,8 @@ class_name TransmissionConfig
 @export var gear_ratios: Array[float] = [3.50, 2.10, 1.50, 1.00]
 ## Final drive ratio (differential)
 @export var final_drive: float = 4.10
+## Reverse gear ratio (multiplied by final drive)
+@export var reverse_ratio: float = 3.20
 
 @export_group("Shift Timing")
 ## Time to complete a shift (seconds)

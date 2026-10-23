@@ -55,6 +55,7 @@ finish_line = NodePath("timing_marks/finish_line")
 speed_trap_start = NodePath("timing_marks/speed_trap")
 
 [node name="track_1000m_full_barriers2" parent="." unique_id=1820486977 instance=ExtResource("2_g4360")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0001296997)
 
 [node name="timing_marks" type="Node3D" parent="." unique_id=2065995929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 450)
@@ -91,7 +92,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_sm4ro")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="timing_marks/start" unique_id=535828327]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09942627, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18475407, 0)
 mesh = SubResource("BoxMesh_exc3w")
 
 [node name="60_feet" type="Area3D" parent="timing_marks" unique_id=1845177188]

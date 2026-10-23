@@ -4,6 +4,7 @@ extends Node
 var player_vehicle: VehicleController = null
 var npc_vehicle: VehicleController = null
 var start_tree_node: Node
+var staging: StagingController = null
 
 func _ready():
 	add_to_group("race_manager")
@@ -35,6 +36,16 @@ func _ready():
 		print("[RaceManager] Connected to green light signal")
 	else:
 		push_warning("[RaceManager] Could not connect to green light!")
+
+	_setup_staging()
+
+func _setup_staging() -> void:
+	if staging and is_instance_valid(staging):
+		staging.queue_free()
+	staging = StagingController.new()
+	staging.name = "StagingController"
+	add_child(staging)
+	staging.setup(start_tree_node, player_vehicle, npc_vehicle)
 
 func _on_green_light() -> void:
 	print("[RaceManager] GREEN - Starting vehicles!")
@@ -148,7 +159,8 @@ func restart_race() -> void:
 
 	await get_tree().process_frame
 
-	spawn_vehicles()
+	await spawn_vehicles()
+	_setup_staging()
 
 func _cleanup_vehicle(vehicle: VehicleController) -> void:
 	if vehicle and is_instance_valid(vehicle):

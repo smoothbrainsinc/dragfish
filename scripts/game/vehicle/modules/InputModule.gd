@@ -6,6 +6,7 @@ class_name InputModule
 signal shift_up_requested
 signal shift_down_requested
 signal launch_control_activated  # For holding at launch RPM
+signal reverse_requested
 
 # Required InputMap actions (validate these exist)
 const REQUIRED_ACTIONS = [
@@ -42,6 +43,9 @@ func setup(player_controlled: bool, config: VehicleConfig = null) -> void:
 	
 	if is_player_controlled:
 		_validate_input_map()
+		# Player input (shifting, reverse, launch control) must work during
+		# staging, before the race starts.
+		set_physics_process(true)
 	else:
 		if vehicle_config:
 			# Use AI parameters from vehicle config
@@ -86,16 +90,14 @@ func stop() -> void:
 
 ## Get throttle input (0.0 - 1.0)
 func get_throttle() -> float:
-	if not race_started:
-		return 0.0
-	
+	# Player throttle is live before green (staging, burnouts, backing up).
+	# AI stays locked until race_started via get_ai_throttle().
 	if is_player_controlled:
 		# Check if launch control is active
 		if launch_control_active:
 			return 1.0  # Full throttle held at launch RPM
 		return Input.get_action_strength("throttle")
-	else:
-		return get_ai_throttle()
+	return get_ai_throttle()
 
 ## Get brake input (0.0 - 1.0)
 func get_brake() -> float:
@@ -176,6 +178,9 @@ func _physics_process(_delta: float) -> void:
 		
 		if InputMap.has_action("shift_down") and Input.is_action_just_pressed("shift_down"):
 			emit_signal("shift_down_requested")
+		
+		if InputMap.has_action("reverse") and Input.is_action_just_pressed("reverse"):
+			reverse_requested.emit()
 		
 		# Check for launch control
 		launch_control_active = check_launch_control()

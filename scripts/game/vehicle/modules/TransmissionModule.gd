@@ -2,7 +2,7 @@ extends Node
 class_name TransmissionModule
 ## Handles gear shifting, clutch simulation, and power delivery
 
-signal gear_changed(new_gear: int)  # 1-based gear number (display value)
+signal gear_changed(new_gear: int)  # 1-based gear number (display value), 0 = reverse
 signal shift_started
 signal shift_completed
 signal missed_shift
@@ -14,6 +14,7 @@ var shift_timer: float = 0.0
 var clutch_position: float = 1.0  # 1.0 = engaged, 0.0 = disengaged
 
 var is_manual_mode: bool = false
+var in_reverse: bool = false
 var pending_gear: int = -1
 var was_missed_shift: bool = false
 
@@ -85,7 +86,7 @@ func _physics_process(delta: float) -> void:
 
 ## Request a gear shift (up or down)
 func request_shift_up() -> bool:
-	if is_shifting:
+	if is_shifting or in_reverse:
 		return false
 	if current_gear >= config.get_gear_count() - 1:
 		return false  # Already in top gear
@@ -96,7 +97,7 @@ func request_shift_up() -> bool:
 
 
 func request_shift_down() -> bool:
-	if is_shifting:
+	if is_shifting or in_reverse:
 		return false
 	if current_gear <= 0:
 		return false  # Already in first gear
@@ -180,7 +181,7 @@ func calculate_wheel_force(engine_torque: float, wheel_radius: float) -> float:
 	if is_shifting or wheel_radius <= 0.0:
 		return 0.0
 
-	var gear_ratio := config.get_total_ratio(current_gear)
+	var gear_ratio := get_current_total_ratio()
 	if gear_ratio == 0.0:
 		return 0.0
 
@@ -191,7 +192,26 @@ func calculate_wheel_force(engine_torque: float, wheel_radius: float) -> float:
 
 ## Get current total ratio including final drive
 func get_current_total_ratio() -> float:
+	if in_reverse:
+		return config.reverse_ratio * config.final_drive
 	return config.get_total_ratio(current_gear)
+
+
+## +1.0 driving forward, -1.0 in reverse. Multiply drive force by this.
+func get_drive_direction() -> float:
+	return -1.0 if in_reverse else 1.0
+
+
+## Select or leave reverse. Leaving reverse returns to 1st gear.
+func set_reverse(on: bool) -> bool:
+	if on == in_reverse:
+		return true
+	if is_shifting:
+		return false
+	in_reverse = on
+	current_gear = 0
+	gear_changed.emit(get_gear_number())
+	return true
 
 
 ## Kept for compatibility; same value as get_current_total_ratio()
@@ -231,15 +251,17 @@ func set_manual_clutch(position: float) -> void:
 
 func reset() -> void:
 	current_gear = 0
+	in_reverse = false
 	_cancel_shift()
 
 
 func get_gear_string() -> String:
-	return str(current_gear + 1)
+	return "R" if in_reverse else str(current_gear + 1)
 
 
+## 0 = reverse
 func get_gear_number() -> int:
-	return current_gear + 1
+	return 0 if in_reverse else current_gear + 1
 
 
 func get_gear_index() -> int:

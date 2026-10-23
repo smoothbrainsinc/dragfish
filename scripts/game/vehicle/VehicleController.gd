@@ -9,6 +9,13 @@ class_name VehicleController
 var driven_wheel_left: VehicleWheel3D = null
 var driven_wheel_right: VehicleWheel3D = null
 
+## Grip on the driven wheels while a burnout is held. Must be low enough that
+## drive force exceeds friction (friction limit = friction_slip * wheel load).
+@export var burnout_friction_slip: float = 0.4
+
+const BURNOUT_MAX_SPEED := 3.0       # m/s, burnout ends once the car rolls past this
+const REVERSE_ENGAGE_MAX_SPEED := 1.0  # m/s, can only select/leave reverse below this
+
 const WHEEL_SYNC_GRACE_TIME := 0.35  # seconds to suppress the drive-force
 									  # desync clamp after a gear shift completes
 
@@ -21,6 +28,7 @@ var engine: EngineModule
 var transmission: TransmissionModule
 var tires: TirePhysicsModule
 var input: InputModule
+var smoke: TireSmokeModule
 
 # ===== Wheels =====
 var steering_wheels: Array[VehicleWheel3D] = []
@@ -30,6 +38,9 @@ var all_wheels: Array[VehicleWheel3D] = []
 # ===== State =====
 var initialized := false
 var forward_speed := 0.0
+var staged := false          # set by StagingController once in the stage beam
+var burnout_active := false
+var _saved_friction: Dictionary = {}  # wheel -> friction_slip before burnout
 var wheel_sync_grace_timer := 0.0  # suppresses the drive-force desync clamp right after a shift,
 									 # giving the physical wheel time to spin back up to speed
 
@@ -78,6 +89,9 @@ func start_race() -> void:
 	input.start_race()
 
 func stop_vehicle() -> void:
+	_set_burnout(false)
+	if smoke:
+		smoke.stop()
 	set_physics_process(false)
 	transmission.stop()
 	input.stop()
@@ -111,11 +125,16 @@ func _physics_process(delta: float) -> void:
 			transmission.set_manual_clutch(1.0)
 
 	var current_gear_ratio := transmission.get_current_gear_ratio()
+	var drive_dir := transmission.get_drive_direction()
+	# Speed along the driven direction (positive when reversing in reverse)
+	var driven_speed := forward_speed * drive_dir
 
-	if forward_speed <= 0.1 and throttle <= 0.0:
-		engine.update(0.0, 0.0, forward_speed)
+	_update_burnout(throttle, brake_input)
+
+	if driven_speed <= 0.1 and throttle <= 0.0:
+		engine.update(0.0, 0.0, driven_speed)
 	else:
-		engine.update(throttle, current_gear_ratio, forward_speed)
+		engine.update(throttle, current_gear_ratio, driven_speed)
 
 	engine._physics_process(delta)
 
@@ -136,7 +155,7 @@ func _physics_process(delta: float) -> void:
 	var implied_rpm: float = abs(forward_speed) / wheel_radius * (60.0 / TAU) * current_gear_ratio
 	var crank_rpm: float = max(engine.current_rpm, implied_rpm)
 	var drive_torque: float = engine.config.get_torque_at_rpm(crank_rpm) * throttle
-	var drive_force: float = transmission.calculate_wheel_force(drive_torque, wheel_radius)
+	var drive_force: float = transmission.calculate_wheel_force(drive_torque, wheel_radius) * drive_dir
 
 	# Gated: Only format the string if PHYSICS logging is enabled
 	if is_player and Log.enabled[Log.Category.PHYSICS] and Engine.get_physics_frames() % 60 == 0:
@@ -157,6 +176,11 @@ func _physics_process(delta: float) -> void:
 
 	tires.update_wheel_slip(all_wheels, forward_speed)
 	tires.apply_wheel_friction(all_wheels)
+	tires.update_wheelspin(
+		all_wheels, forward_speed, engine.current_rpm, current_gear_ratio,
+		drive_dir, transmission.get_clutch_position(), throttle, burnout_active
+	)
+	smoke.update_smoke(tires, drive_dir)
 
 
 # =============================================================
@@ -243,7 +267,7 @@ func _apply_differential_force(total_force: float) -> void:
 	var speed_l := (rpm_l * TAU / 60.0) * wheel_radius
 	var speed_r := (rpm_r * TAU / 60.0) * wheel_radius
 	var avg_wheel_speed := (speed_l + speed_r) * 0.5
-	var wheelspin: float = avg_wheel_speed - abs(forward_speed)
+	var wheelspin: float = absf(avg_wheel_speed) - abs(forward_speed)
 
 	# Cornering makes the two wheels differ legitimately - that's not slip.
 	# Only bias torque once the wheels are outrunning the chassis.
@@ -253,7 +277,7 @@ func _apply_differential_force(total_force: float) -> void:
 		driven_wheel_right.engine_force = per_wheel
 		return
 
-	var rpm_diff := rpm_l - rpm_r
+	var rpm_diff := (rpm_l - rpm_r) * transmission.get_drive_direction()
 	var bias: float = clamp(rpm_diff * diff_lock_strength * 0.001, -diff_max_bias, diff_max_bias)
 	driven_wheel_left.engine_force = total_force * (0.5 - bias)
 	driven_wheel_right.engine_force = total_force * (0.5 + bias)
@@ -262,7 +286,32 @@ func _apply_differential_force(total_force: float) -> void:
 		Log.d(Log.Category.WHEELS, "[Diff] rpm_l=%.0f rpm_r=%.0f bias=%.2f wheelspin=%.2f" % [rpm_l, rpm_r, bias, wheelspin])
 func _apply_brakes(amount: float) -> void:
 	for w in all_wheels:
-		w.brake = amount * vehicle_config.brake_force
+		# Burnout: brake the non-driven wheels only; driven wheels must spin freely
+		var braked := 0.0 if (burnout_active and w.use_as_traction) else amount
+		w.brake = braked * vehicle_config.brake_force
+
+## Burnout = player holds brake + throttle at a standstill before staging.
+## Drops grip on the driven wheels so they break loose and spin.
+func _update_burnout(throttle: float, brake_input: float) -> void:
+	var want := is_player and not staged and not input.race_started \
+		and brake_input > 0.1 and throttle > 0.3 \
+		and absf(forward_speed) < BURNOUT_MAX_SPEED \
+		and transmission.get_current_total_ratio() > 0.0 \
+		and not transmission.is_shifting
+	_set_burnout(want)
+
+func _set_burnout(on: bool) -> void:
+	if on == burnout_active:
+		return
+	burnout_active = on
+	for w in driven_wheels:
+		if on:
+			_saved_friction[w] = w.wheel_friction_slip
+			w.wheel_friction_slip = minf(w.wheel_friction_slip, burnout_friction_slip)
+		elif _saved_friction.has(w):
+			w.wheel_friction_slip = _saved_friction[w]
+	if not on:
+		_saved_friction.clear()
 
 func _apply_steering(amount: float) -> void:
 	for w in steering_wheels:
@@ -312,16 +361,20 @@ func _create_modules() -> void:
 	transmission = TransmissionModule.new()
 	tires = TirePhysicsModule.new()
 	input = InputModule.new()
+	smoke = TireSmokeModule.new()
 
 	add_child(engine)
 	add_child(transmission)
 	add_child(tires)
 	add_child(input)
+	add_child(smoke)
 
 func _setup_modules() -> void:
 	engine.setup(vehicle_config.engine, _get_driven_wheel_radius())
 	transmission.setup(vehicle_config.transmission, vehicle_config.engine)
 	tires.setup(vehicle_config.front_tires, vehicle_config.rear_tires)
+	tires.register_wheels(all_wheels)
+	smoke.setup(self, all_wheels)
 	input.setup(is_player, vehicle_config)
 
 	transmission.set_manual_mode(is_player)
@@ -330,6 +383,12 @@ func _setup_modules() -> void:
 	if is_player:
 		input.shift_up_requested.connect(_on_shift_up_requested)
 		input.shift_down_requested.connect(_on_shift_down_requested)
+		input.reverse_requested.connect(_on_reverse_requested)
+
+func _on_reverse_requested() -> void:
+	if absf(forward_speed) > REVERSE_ENGAGE_MAX_SPEED:
+		return
+	transmission.set_reverse(not transmission.in_reverse)
 
 func _on_shift_up_requested() -> void:
 	transmission.request_shift_up()

@@ -63,6 +63,5 @@ func _on_rpm_changed(rpm: float) -> void:
 
 
 func _on_gear_changed(new_gear: int) -> void:
-	# TransmissionModule has no reverse/neutral state — new_gear is always
-	# 1-indexed positive (1st gear and up).
-	gear_label.text = str(new_gear)
+	# 0 = reverse, otherwise 1-indexed gear
+	gear_label.text = "R" if new_gear == 0 else str(new_gear)
