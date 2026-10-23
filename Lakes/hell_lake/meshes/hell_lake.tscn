@@ -216,10 +216,11 @@ skeleton = NodePath("")
 [node name="L1_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=993173319]
 shape = SubResource("ConcavePolygonShape3D_1widr")
 
-[node name="L2-hell_awaits" type="MeshInstance3D" parent="." unique_id=1434878622]
+[node name="L2-hell_awaits" type="MeshInstance3D" parent="." unique_id=1434878622 groups=["fish_habitat"]]
 mesh = SubResource("ArrayMesh_xt4hn")
 skeleton = NodePath("")
 script = ExtResource("4_fno3g")
+weed_count = 2000
 
 [node name="L2_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1528118592]
 shape = SubResource("ConcavePolygonShape3D_fno3g")
@@ -248,4 +249,28 @@ skeleton = NodePath("")
 shape = SubResource("ConcavePolygonShape3D_egwhc")
 
 [node name="new_hell_awaits_water" parent="." unique_id=286069375 instance=ExtResource("5_1widr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.516, -8.035828, -69.573)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.516, 1.9158554, -69.573)
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1215999794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 24.436, -700)
+pixel_size = 1.685
+billboard = 1
+text = "700, -700"
+
+[node name="Label3D2" type="Label3D" parent="." unique_id=765706646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 24.436, 700)
+pixel_size = 1.685
+billboard = 1
+text = "700, 700"
+
+[node name="Label3D3" type="Label3D" parent="." unique_id=1269291892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -700, 24.436, 700)
+pixel_size = 1.685
+billboard = 1
+text = "-700, 700"
+
+[node name="Label3D4" type="Label3D" parent="." unique_id=1654974634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -700, 24.436, -700)
+pixel_size = 1.685
+billboard = 1
+text = "-700, -700"

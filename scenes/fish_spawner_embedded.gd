@@ -19,12 +19,24 @@ extends Node3D
 @export var outer_z: float = 600.0
 @export var surface_y: float = 0.0
 @export var max_depth: float = -10.0
+@export var habitat_group: String = "fish_habitat"
+
+const CELL := 4.0
 
 var multi_mesh_instance: MultiMeshInstance3D
 var fish_data: Array = []
 var spatial_grid: Dictionary = {}
-var grid_pool: Array = []  # reusable PackedInt32Array buckets, avoids per-frame allocation
+var grid_pool: Array = []
 var pool_index: int = 0
+
+var habitat_ok := false
+var bed := PackedFloat32Array()
+var bed_origin := Vector2.ZERO
+var bed_w := 0
+var bed_h := 0
+var habitat_tris: Array = []
+var wet_cells := PackedInt32Array()
+const INTERIOR_FLOOR := -30.0
 
 class FishData:
 	var position: Vector3
@@ -77,8 +89,151 @@ func _ready():
 		push_error("Could not create material!")
 		return
 	setup_multimesh(fish_mesh, fish_material)
+	var hab := get_tree().get_first_node_in_group(habitat_group)
+	if hab is MeshInstance3D:
+		habitat_ok = _build_habitat(hab)
+	print("Habitat: ", habitat_ok)
 	spawn_fish()
 	print("✓ Spawned ", number_of_fish, " fish")
+
+# ---------- habitat (L2 mesh) ----------
+
+func _build_habitat(mi: MeshInstance3D) -> bool:
+	var mdt := MeshDataTool.new()
+	if mi.mesh == null or mdt.create_from_surface(mi.mesh, 0) != OK:
+		return false
+	var xf := global_transform.affine_inverse() * mi.global_transform
+	var mn := Vector2(INF, INF)
+	var mx := Vector2(-INF, -INF)
+	habitat_tris.clear()
+	for f in mdt.get_face_count():
+		var t := [
+			xf * mdt.get_vertex(mdt.get_face_vertex(f, 0)),
+			xf * mdt.get_vertex(mdt.get_face_vertex(f, 1)),
+			xf * mdt.get_vertex(mdt.get_face_vertex(f, 2))]
+		habitat_tris.append(t)
+		for v in t:
+			mn = Vector2(minf(mn.x, v.x), minf(mn.y, v.z))
+			mx = Vector2(maxf(mx.x, v.x), maxf(mx.y, v.z))
+	if habitat_tris.is_empty():
+		return false
+	bed_origin = mn
+	bed_w = int(ceil((mx.x - mn.x) / CELL)) + 1
+	bed_h = int(ceil((mx.y - mn.y) / CELL)) + 1
+	bed.resize(bed_w * bed_h)
+	bed.fill(-1e9)
+	for t in habitat_tris:
+		var a: Vector3 = t[0]
+		var b: Vector3 = t[1]
+		var c: Vector3 = t[2]
+		for v in t:
+			_bed_max(v.x, v.z, v.y)
+		var x0 := int((minf(a.x, minf(b.x, c.x)) - mn.x) / CELL)
+		var x1 := int((maxf(a.x, maxf(b.x, c.x)) - mn.x) / CELL)
+		var z0 := int((minf(a.z, minf(b.z, c.z)) - mn.y) / CELL)
+		var z1 := int((maxf(a.z, maxf(b.z, c.z)) - mn.y) / CELL)
+		var den := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
+		if absf(den) < 0.00001:
+			continue
+		for ix in range(x0, x1 + 1):
+			for iz in range(z0, z1 + 1):
+				var px := mn.x + (ix + 0.5) * CELL
+				var pz := mn.y + (iz + 0.5) * CELL
+				var w1 := ((b.z - c.z) * (px - c.x) + (c.x - b.x) * (pz - c.z)) / den
+				var w2 := ((c.z - a.z) * (px - c.x) + (a.x - c.x) * (pz - c.z)) / den
+				var w3 := 1.0 - w1 - w2
+				if w1 >= 0.0 and w2 >= 0.0 and w3 >= 0.0:
+					_bed_max(px, pz, a.y * w1 + b.y * w2 + c.y * w3)
+	_fill_interior()
+	return true
+
+# L2 is only the shoreline ring. Everything enclosed by it is open water.
+func _fill_interior() -> void:
+	var n := bed_w * bed_h
+	var R := 2
+	var dil := PackedByteArray()
+	dil.resize(n)
+	for iz in bed_h:
+		for ix in bed_w:
+			if bed[iz * bed_w + ix] < -1e8:
+				continue
+			for dz in range(-R, R + 1):
+				for dx in range(-R, R + 1):
+					var x := ix + dx
+					var z := iz + dz
+					if x >= 0 and z >= 0 and x < bed_w and z < bed_h:
+						dil[z * bed_w + x] = 1
+	var outside := PackedByteArray()
+	outside.resize(n)
+	var stack: Array = []
+	for ix in bed_w:
+		stack.append(ix)
+		stack.append((bed_h - 1) * bed_w + ix)
+	for iz in bed_h:
+		stack.append(iz * bed_w)
+		stack.append(iz * bed_w + bed_w - 1)
+	while not stack.is_empty():
+		var c: int = stack.pop_back()
+		if outside[c] == 1 or dil[c] == 1:
+			continue
+		outside[c] = 1
+		var cx := c % bed_w
+		var cz := c / bed_w
+		if cx > 0: stack.append(c - 1)
+		if cx < bed_w - 1: stack.append(c + 1)
+		if cz > 0: stack.append(c - bed_w)
+		if cz < bed_h - 1: stack.append(c + bed_w)
+	var filled := 0
+	for iz in bed_h:
+		for ix in bed_w:
+			var i := iz * bed_w + ix
+			if bed[i] > -1e8 or outside[i] == 1:
+				continue
+			var near_out := false
+			for dz in range(-R, R + 1):
+				for dx in range(-R, R + 1):
+					var x := ix + dx
+					var z := iz + dz
+					if x >= 0 and z >= 0 and x < bed_w and z < bed_h and outside[z * bed_w + x] == 1:
+						near_out = true
+			if not near_out:
+				bed[i] = INTERIOR_FLOOR
+				filled += 1
+	wet_cells.clear()
+	for i in n:
+		if bed[i] > -1e8 and bed[i] < surface_y - 1.0:
+			wet_cells.append(i)
+	print("Interior cells filled: ", filled, "  wet cells: ", wet_cells.size())
+
+func _bed_max(x: float, z: float, y: float) -> void:
+	var ix := floori((x - bed_origin.x) / CELL)
+	var iz := floori((z - bed_origin.y) / CELL)
+	if ix < 0 or iz < 0 or ix >= bed_w or iz >= bed_h:
+		return
+	var i := iz * bed_w + ix
+	bed[i] = maxf(bed[i], y)
+
+# returns 1e9 when there is no L2 there (treated as land)
+func _bed_at(x: float, z: float) -> float:
+	var ix := floori((x - bed_origin.x) / CELL)
+	var iz := floori((z - bed_origin.y) / CELL)
+	if ix < 0 or iz < 0 or ix >= bed_w or iz >= bed_h:
+		return 1e9
+	var h := bed[iz * bed_w + ix]
+	return 1e9 if h < -1e8 else h
+
+func _random_habitat_point() -> Vector3:
+	if wet_cells.is_empty():
+		return Vector3(0, surface_y - 1.0, 0)
+	var i := wet_cells[randi() % wet_cells.size()]
+	var ix := i % bed_w
+	var iz := i / bed_w
+	var x := bed_origin.x + (ix + randf()) * CELL
+	var z := bed_origin.y + (iz + randf()) * CELL
+	var y := randf_range(bed[i] + 0.3, surface_y - 0.3)
+	return Vector3(x, y, z)
+
+# ---------- flocking ----------
 
 func _get_cell(pos: Vector3) -> Vector3i:
 	return Vector3i(
@@ -96,8 +251,6 @@ func _rebuild_grid() -> void:
 			spatial_grid[cell] = _get_pooled_bucket()
 		spatial_grid[cell].append(i)
 
-# Reuse PackedInt32Array buckets across frames instead of allocating a new
-# Array for every occupied cell every frame (was the main per-frame GC cost).
 func _get_pooled_bucket() -> PackedInt32Array:
 	if pool_index < grid_pool.size():
 		var bucket: PackedInt32Array = grid_pool[pool_index]
@@ -133,36 +286,43 @@ func update_fish(delta):
 		var desired_velocity = fish.velocity + acceleration * delta
 		desired_velocity = desired_velocity.normalized() * swim_speed
 
-		# turn_speed now actually limits how fast heading can change per frame,
-		# instead of velocity snapping instantly to the new direction.
 		var max_turn = turn_speed * delta
 		fish.velocity = fish.velocity.slerp(desired_velocity, clamp(max_turn, 0.0, 1.0))
 		if fish.velocity.length() < 0.001:
 			fish.velocity = desired_velocity
 
+		var old_pos = fish.position
 		fish.position += fish.velocity * delta
 
 		if fish.position.y > surface_y:
 			fish.position.y = surface_y
 			fish.velocity.y = -abs(fish.velocity.y)
-		elif fish.position.y < max_depth:
-			fish.position.y = max_depth
-			fish.velocity.y = abs(fish.velocity.y)
 
-		# Bug fix: boundary check was against Vector3.ZERO while fish spawn
-		# and school around spawn_center — fish near the spawn ring edge were
-		# yanked toward world origin instead of staying in the lake.
-		var distance_from_center = Vector2(
-			fish.position.x - spawn_center.x,
-			fish.position.z - spawn_center.z
-		).length()
-		if distance_from_center > lake_radius:
-			var direction_to_center = Vector3(
-				spawn_center.x - fish.position.x,
-				0,
-				spawn_center.z - fish.position.z
-			).normalized()
-			fish.velocity += direction_to_center * 3.0 * delta
+		if habitat_ok:
+			var bh := _bed_at(fish.position.x, fish.position.z)
+			if bh > surface_y - 1.0:
+				fish.position.x = old_pos.x
+				fish.position.z = old_pos.z
+				fish.velocity.x = -fish.velocity.x
+				fish.velocity.z = -fish.velocity.z
+			else:
+				var floor_y := bh + 0.3
+				if fish.position.y < floor_y:
+					fish.position.y = floor_y
+					fish.velocity.y = abs(fish.velocity.y)
+		else:
+			if fish.position.y < max_depth:
+				fish.position.y = max_depth
+				fish.velocity.y = abs(fish.velocity.y)
+			var distance_from_center = Vector2(
+				fish.position.x - spawn_center.x,
+				fish.position.z - spawn_center.z
+			).length()
+			if distance_from_center > lake_radius:
+				var direction_to_center = Vector3(
+					spawn_center.x - fish.position.x, 0,
+					spawn_center.z - fish.position.z).normalized()
+				fish.velocity += direction_to_center * 3.0 * delta
 
 		var fish_transform = Transform3D()
 		fish_transform.origin = fish.position
@@ -179,8 +339,6 @@ func update_fish(delta):
 			fish_transform.basis = multi_mesh_instance.multimesh.get_instance_transform(i).basis
 		multi_mesh_instance.multimesh.set_instance_transform(i, fish_transform)
 
-# Single neighbor pass computing distance once per pair instead of three
-# separate loops (separation/alignment/cohesion) each recomputing it.
 func calculate_flocking(index: int) -> Dictionary:
 	var fish = fish_data[index]
 	var cell = _get_cell(fish.position)
@@ -242,9 +400,11 @@ func calculate_flocking(index: int) -> Dictionary:
 		"cohesion": cohesion
 	}
 
+# ---------- spawning ----------
+
 func spawn_fish():
 	for i in range(number_of_fish):
-		var pos = _random_point_in_rect_ring()
+		var pos = _random_habitat_point() if habitat_ok else _random_point_in_rect_ring()
 		var vel = Vector3(
 			randf_range(-1, 1),
 			randf_range(-0.1, 0.1),
@@ -270,6 +430,8 @@ func _random_point_in_rect_ring() -> Vector3:
 				spawn_center.z + z
 			)
 	return Vector3.ZERO
+
+# ---------- mesh / material ----------
 
 func load_fish_mesh() -> Mesh:
 	if fish_model_path == "" or not FileAccess.file_exists(fish_model_path):
