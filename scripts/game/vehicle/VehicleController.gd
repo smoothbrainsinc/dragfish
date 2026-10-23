@@ -147,6 +147,13 @@ func _physics_process(delta: float) -> void:
 	_apply_drive_force(drive_force)
 	_apply_brakes(brake_input)
 	_apply_steering(steer)
+	
+	if Engine.get_physics_frames() % 60 == 0:
+		for w in all_wheels:
+			print(w.name, " contact: ", w.is_in_contact(), " rpm: ", snappedf(w.get_rpm(), 0.1),
+				" y: ", snappedf(w.global_position.y, 0.001),
+				" radius: ", w.wheel_radius, " travel: ", w.suspension_travel,
+				" rest: ", w.wheel_rest_length, " traction: ", w.use_as_traction)
 
 	tires.update_wheel_slip(all_wheels, forward_speed)
 	tires.apply_wheel_friction(all_wheels)

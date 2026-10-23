@@ -443,7 +443,7 @@ skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_d3alw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=204252670]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0077515, 1.6219482)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0093715, 1.6219482)
 shape = SubResource("BoxShape3D_v4un2")
 
 [node name="wheelie_bar" type="MeshInstance3D" parent="." unique_id=154045889]
@@ -455,7 +455,7 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.215, 0.142, 4.873)
 use_as_steering = true
 wheel_radius = 0.13
-wheel_rest_length = 0.3
+wheel_rest_length = 0.1
 wheel_friction_slip = 10.0
 suspension_travel = 0.3
 suspension_max_force = 10000.0
@@ -469,7 +469,7 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.215, 0.142, 4.873)
 use_as_steering = true
 wheel_radius = 0.13
-wheel_rest_length = 0.3
+wheel_rest_length = 0.1
 wheel_friction_slip = 10.0
 suspension_travel = 0.3
 suspension_max_force = 10000.0
@@ -482,7 +482,7 @@ skeleton = NodePath("")
 [node name="wheelRL" type="VehicleWheel3D" parent="." unique_id=853921968]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.584, 0.506, -0.799)
 use_as_traction = true
-wheel_rest_length = 0.3
+wheel_rest_length = 0.1
 wheel_friction_slip = 10.0
 suspension_travel = 0.3
 suspension_max_force = 10000.0
@@ -495,7 +495,7 @@ skeleton = NodePath("")
 [node name="wheelRR" type="VehicleWheel3D" parent="." unique_id=826239941]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.584, 0.506, -0.799)
 use_as_traction = true
-wheel_rest_length = 0.3
+wheel_rest_length = 0.1
 wheel_friction_slip = 10.0
 suspension_travel = 0.3
 suspension_max_force = 10000.0
@@ -523,25 +523,25 @@ script = ExtResource("4_2u0vj")
 flame_texture = ExtResource("5_aej34")
 
 [node name="exhaust_marker_0" type="Node3D" parent="exhaust-pipes" unique_id=1758997450]
-transform = Transform3D(0.13265622, 0.11141571, 0, -0.11141571, 0.13265622, 0, 0, 0, 0.1732372, 0.7953253, 0.11596641, 0.2243923)
+transform = Transform3D(0.765749, 0.64313954, 0, -0.64313954, 0.765749, 0, 0, 0, 1, 0.82514167, 0.20773688, 0.21945012)
 
 [node name="exhaust_marker_1" type="Node3D" parent="exhaust-pipes" unique_id=1993762819]
-transform = Transform3D(0.073674604, -0.050394602, 0, 0.050394602, 0.073674604, 0, 0, 0, 0.08926121, -0.7993411, 0.11311069, 0.22331181)
+transform = Transform3D(0.8253821, -0.5645745, 0, 0.5645745, 0.8253821, 0, 0, 0, 1, -0.84834754, 0.14703766, 0.22331181)
 
 [node name="exhaust_marker_2" type="Node3D" parent="exhaust-pipes" unique_id=859282127]
-transform = Transform3D(-0.12981373, -0.1025207, 0, 0.1025207, -0.12981373, 0, 0, 0, -0.16541493, 0.79703367, 0.11401382, 0.06463256)
+transform = Transform3D(0.7847764, 0.619779, 0, -0.619779, 0.7847764, 0, 0, 0, 1, 0.8331242, 0.21205738, 0.06463256)
 
 [node name="exhaust_marker_3" type="Node3D" parent="exhaust-pipes" unique_id=1026719686]
-transform = Transform3D(0.07466198, -0.052238896, 0, 0.052238896, 0.07466198, 0, 0, 0, 0.091122515, -0.79586154, 0.11397523, 0.06636842)
+transform = Transform3D(0.81935817, -0.573282, 0, 0.573282, 0.81935817, 0, 0, 0, 1, -0.844868, 0.13659447, 0.06636842)
 
 [node name="exhaust_marker_4" type="Node3D" parent="exhaust-pipes" unique_id=1901026355]
-transform = Transform3D(0.10656312, 0.08418606, 0, -0.08418606, 0.10656312, 0, 0, 0, 0.13580498, 0.7998864, 0.111337245, -0.09220355)
+transform = Transform3D(0.78467757, 0.61990416, 0, -0.61990416, 0.78467757, 0, 0, 0, 1, 0.83014756, 0.20041692, -0.09634625)
 
 [node name="exhaust_marker_5" type="Node3D" parent="exhaust-pipes" unique_id=823673992]
-transform = Transform3D(0.07592392, -0.051655263, 0, 0.051655263, 0.07592392, 0, 0, 0, 0.09182978, -0.79724616, 0.113156766, -0.093657844)
+transform = Transform3D(0.82678974, -0.5625111, 0, 0.5625111, 0.82678974, 0, 0, 0, 1, -0.84248286, 0.14331385, -0.093657844)
 
 [node name="exhaust_marker_6" type="Node3D" parent="exhaust-pipes" unique_id=546022476]
-transform = Transform3D(0.118006594, 0.09769572, 0, -0.09769572, 0.118006594, 0, 0, 0, 0.15319926, 0.79588765, 0.113812, -0.24742343)
+transform = Transform3D(0.7702818, 0.63770366, 0, -0.63770366, 0.7702818, 0, 0, 0, 1, 0.8304905, 0.21005788, -0.26628712)
 
 [node name="exhaust_marker_7" type="Node3D" parent="exhaust-pipes" unique_id=1897655975]
-transform = Transform3D(0.07091791, -0.04966403, 0, 0.04966403, 0.07091791, 0, 0, 0, 0.08657867, -0.7969613, 0.11287376, -0.24941166)
+transform = Transform3D(0.8191153, -0.57362896, 0, 0.57362896, 0.8191153, 0, 0, 0, 1, -0.83088887, 0.1505706, -0.24941166)
