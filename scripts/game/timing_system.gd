@@ -72,6 +72,11 @@ func _get_lane(body: Node3D) -> int:
 		return -1
 	return lane
 
+## Called by StagingController when a staged car rolls out of the beams. A staged
+## car already overlaps the start line, so body_entered never fires for it.
+func on_rollout(body: Node3D) -> void:
+	_on_start_line_crossed(body)
+
 func _on_start_line_crossed(body: Node3D):
 	if not tree_started:
 		return
@@ -212,7 +217,12 @@ func _finalize_results():
 	# Lane 1 = right, lane 2 = left (per GameManager.gd lane assignment)
 	var right_results = timing_data.get(1, {})
 	var left_results = timing_data.get(2, {})
-	var winner_str = "right" if winner == 1 else "left" if winner == 2 else "both_fouled" if winner == "all_fouled" else ""
+	# get_winner() returns a lane (int) or "all_fouled" / "none" (String)
+	var winner_str := ""
+	if winner is int:
+		winner_str = "right" if winner == 1 else "left" if winner == 2 else ""
+	elif str(winner) == "all_fouled":
+		winner_str = "both_fouled"
 	emit_signal("all_finished", left_results, right_results, winner_str)
 
 # ============================================================================

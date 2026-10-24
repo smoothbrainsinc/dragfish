@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://dj0ykfnjqvkl7"]
+[gd_resource type="Resource" script_class="VehicleConfig" format=3 uid="uid://c460ghw2gpefk"]
 
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_mpsm5"]
 [ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_lc0ue"]
@@ -10,8 +10,8 @@
 
 [sub_resource type="Resource" id="Resource_srcpx"]
 script = ExtResource("1_mpsm5")
-redline_rpm = 8500.0
-rev_limiter_rpm = 8700.0
+redline_rpm = 17000.0
+rev_limiter_rpm = 16900.0
 torque_curve = {
 8000: 8500.0,
 1000.0: 3000.0,
@@ -50,6 +50,8 @@ vehicle_name = "krissie"
 display_name = "Krissie"
 description = "my honey"
 vehicle_class = ExtResource("7_pdldo")
+mass = 2500.0
+center_of_mass_offset = Vector3(0, -0.5, 0)
 drag_coefficient = 0.5
 frontal_area = 0.93
 front_wheel_config = ExtResource("3_u1r7t")

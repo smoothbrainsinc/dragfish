@@ -7,6 +7,7 @@ signal shift_up_requested
 signal shift_down_requested
 signal launch_control_activated  # For holding at launch RPM
 signal reverse_requested
+signal line_lock_requested
 
 # Required InputMap actions (validate these exist)
 const REQUIRED_ACTIONS = [
@@ -43,6 +44,7 @@ func setup(player_controlled: bool, config: VehicleConfig = null) -> void:
 	
 	if is_player_controlled:
 		_validate_input_map()
+		_ensure_action("line_lock", KEY_L)
 		# Player input (shifting, reverse, launch control) must work during
 		# staging, before the race starts.
 		set_physics_process(true)
@@ -70,6 +72,15 @@ func _ready() -> void:
 	set_physics_process(false)
 
 ## Validate required input actions exist
+## Adds a default key binding when the project has no such action (rebind in Project Settings > Input Map).
+func _ensure_action(action: String, key: Key) -> void:
+	if InputMap.has_action(action):
+		return
+	InputMap.add_action(action)
+	var ev := InputEventKey.new()
+	ev.physical_keycode = key
+	InputMap.action_add_event(action, ev)
+
 func _validate_input_map() -> void:
 	var missing_actions = []
 	for action in REQUIRED_ACTIONS:
@@ -181,6 +192,9 @@ func _physics_process(_delta: float) -> void:
 		
 		if InputMap.has_action("reverse") and Input.is_action_just_pressed("reverse"):
 			reverse_requested.emit()
+		
+		if Input.is_action_just_pressed("line_lock"):
+			line_lock_requested.emit()
 		
 		# Check for launch control
 		launch_control_active = check_launch_control()

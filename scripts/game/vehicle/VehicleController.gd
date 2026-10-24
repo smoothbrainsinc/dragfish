@@ -13,6 +13,15 @@ var driven_wheel_right: VehicleWheel3D = null
 ## drive force exceeds friction (friction limit = friction_slip * wheel load).
 @export var burnout_friction_slip: float = 0.4
 
+## Driven-wheel grip vs tire slip speed: full grip at or below GRIP_FULL_SLIP,
+## burnout-level grip at or above GRIP_NONE_SLIP (m/s of tire-vs-ground speed).
+const GRIP_FULL_SLIP := 3.0
+const GRIP_NONE_SLIP := 12.0
+
+## Player throttle cap before green, so the car can be eased up to the beams.
+## Burnouts and launch control are exempt; full throttle returns at green.
+@export var creep_throttle: float = 0.2
+
 const BURNOUT_MAX_SPEED := 3.0       # m/s, burnout ends once the car rolls past this
 const REVERSE_ENGAGE_MAX_SPEED := 1.0  # m/s, can only select/leave reverse below this
 
@@ -40,7 +49,8 @@ var initialized := false
 var forward_speed := 0.0
 var staged := false          # set by StagingController once in the stage beam
 var burnout_active := false
-var _saved_friction: Dictionary = {}  # wheel -> friction_slip before burnout
+var line_lock := false       # front brakes held, driven wheels free
+var _base_friction: Dictionary = {}  # driven wheel -> configured friction_slip
 var wheel_sync_grace_timer := 0.0  # suppresses the drive-force desync clamp right after a shift,
 									 # giving the physical wheel time to spin back up to speed
 
@@ -129,7 +139,11 @@ func _physics_process(delta: float) -> void:
 	# Speed along the driven direction (positive when reversing in reverse)
 	var driven_speed := forward_speed * drive_dir
 
+	if line_lock and (staged or input.race_started):
+		_set_line_lock(false)
 	_update_burnout(throttle, brake_input)
+	if is_player and not input.race_started and not burnout_active and not input.launch_control_active:
+		throttle = minf(throttle, creep_throttle)
 
 	if driven_speed <= 0.1 and throttle <= 0.0:
 		engine.update(0.0, 0.0, driven_speed)
@@ -180,6 +194,7 @@ func _physics_process(delta: float) -> void:
 		all_wheels, forward_speed, engine.current_rpm, current_gear_ratio,
 		drive_dir, transmission.get_clutch_position(), throttle, burnout_active
 	)
+	_update_driven_traction()
 	smoke.update_smoke(tires, drive_dir)
 
 
@@ -286,32 +301,50 @@ func _apply_differential_force(total_force: float) -> void:
 		Log.d(Log.Category.WHEELS, "[Diff] rpm_l=%.0f rpm_r=%.0f bias=%.2f wheelspin=%.2f" % [rpm_l, rpm_r, bias, wheelspin])
 func _apply_brakes(amount: float) -> void:
 	for w in all_wheels:
-		# Burnout: brake the non-driven wheels only; driven wheels must spin freely
-		var braked := 0.0 if (burnout_active and w.use_as_traction) else amount
+		# Burnout / line lock: driven wheels spin freely. Line lock holds the others.
+		var braked := amount
+		if burnout_active and w.use_as_traction:
+			braked = 0.0
+		elif line_lock and not w.use_as_traction:
+			braked = 1.0
 		w.brake = braked * vehicle_config.brake_force
 
-## Burnout = player holds brake + throttle at a standstill before staging.
+## Burnout = player holds brake (or line lock) + throttle at a standstill before staging.
 ## Drops grip on the driven wheels so they break loose and spin.
 func _update_burnout(throttle: float, brake_input: float) -> void:
 	var want := is_player and not staged and not input.race_started \
-		and brake_input > 0.1 and throttle > 0.3 \
+		and (brake_input > 0.1 or line_lock) and throttle > 0.3 \
 		and absf(forward_speed) < BURNOUT_MAX_SPEED \
 		and transmission.get_current_total_ratio() > 0.0 \
 		and not transmission.is_shifting
 	_set_burnout(want)
 
 func _set_burnout(on: bool) -> void:
-	if on == burnout_active:
-		return
 	burnout_active = on
+
+
+## A spinning tire has no grip: driven-wheel friction follows how fast the tire
+## surface is moving relative to the ground, so grip returns only as the tire
+## slows down or the car speeds up to meet it.
+func _update_driven_traction() -> void:
 	for w in driven_wheels:
-		if on:
-			_saved_friction[w] = w.wheel_friction_slip
-			w.wheel_friction_slip = minf(w.wheel_friction_slip, burnout_friction_slip)
-		elif _saved_friction.has(w):
-			w.wheel_friction_slip = _saved_friction[w]
-	if not on:
-		_saved_friction.clear()
+		if not _base_friction.has(w):
+			_base_friction[w] = w.wheel_friction_slip
+		var base: float = _base_friction[w]
+		var spun := 1.0 if burnout_active else smoothstep(GRIP_FULL_SLIP, GRIP_NONE_SLIP, tires.get_slip_speed(w))
+		w.wheel_friction_slip = lerpf(base, minf(base, burnout_friction_slip), spun)
+
+
+func _on_line_lock_requested() -> void:
+	if is_player and not staged and not input.race_started:
+		_set_line_lock(not line_lock)
+
+
+func _set_line_lock(on: bool) -> void:
+	if on == line_lock:
+		return
+	line_lock = on
+	print("[Vehicle] Line lock %s" % ("ON" if on else "OFF"))
 
 func _apply_steering(amount: float) -> void:
 	for w in steering_wheels:
@@ -384,6 +417,7 @@ func _setup_modules() -> void:
 		input.shift_up_requested.connect(_on_shift_up_requested)
 		input.shift_down_requested.connect(_on_shift_down_requested)
 		input.reverse_requested.connect(_on_reverse_requested)
+		input.line_lock_requested.connect(_on_line_lock_requested)
 
 func _on_reverse_requested() -> void:
 	if absf(forward_speed) > REVERSE_ENGAGE_MAX_SPEED:

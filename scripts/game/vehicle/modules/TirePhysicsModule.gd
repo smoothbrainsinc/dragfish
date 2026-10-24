@@ -15,15 +15,18 @@ var vehicle: VehicleBody3D
 
 # --- Wheelspin / break-loose tuning ---
 const SPIN_ACCEL := 600.0         # rad/s^2, wheel spin-up once traction is broken
-const SPIN_DECAY := 300.0         # rad/s^2, spin falling back to rolling speed
+const SPIN_DECAY := 45.0          # rad/s^2, a spun-up tire slowing to ground speed (~1 s from burnout)
+const SPIN_CATCHUP := 300.0       # rad/s^2, a tire slower than the ground catching up
+const SPIN_LOAD_FACTOR := 0.5     # outside a burnout, ground load holds wheelspin this fraction of engine speed
 const SKID_SLIP_THRESHOLD := 0.9  # get_skidinfo() below this = tire has lost grip
 const SPIN_SLIP_FULL := 6.0       # m/s tire-vs-ground speed difference = full slip
 
 # --- Per-wheel visual spin state ---
 var _spin_omega: Dictionary = {}   # wheel -> visual angular velocity (rad/s, + = forward)
 var _spin_extra: Dictionary = {}   # wheel -> accumulated angle beyond pure rolling (rad)
-var _mesh_base: Dictionary = {}    # wheel -> Array of [MeshInstance3D, Basis]
+var _mesh_base: Dictionary = {}    # wheel -> Array of [MeshInstance3D, Transform3D, Vector3 pivot]
 var slip_intensity: Dictionary = {}  # wheel -> 0..1, read by TireSmokeModule
+var _slip_speed: Dictionary = {}   # wheel -> tire surface speed minus ground speed (m/s, abs)
 
 
 
@@ -74,11 +77,15 @@ func register_wheels(wheels: Array[VehicleWheel3D]) -> void:
 		var list: Array = []
 		for m in w.get_children():
 			if m is MeshInstance3D:
-				list.append([m, m.transform.basis])
+				# Tire geometry is often baked off-center from the node origin, so spin
+				# about the geometry's own center (in wheel space), not the node origin.
+				var base: Transform3D = m.transform
+				list.append([m, base, base * (m as MeshInstance3D).get_aabb().get_center()])
 		_mesh_base[w] = list
 		_spin_omega[w] = 0.0
 		_spin_extra[w] = 0.0
 		slip_intensity[w] = 0.0
+		_slip_speed[w] = 0.0
 
 
 func update_wheelspin(
@@ -110,17 +117,21 @@ func update_wheelspin(
 
 		if slipping:
 			var engine_omega := engine_rpm * TAU / 60.0 / gear_ratio * clutch * drive_dir
-			var target := engine_omega if absf(engine_omega) > absf(roll) else roll
+			# Burnout pins the tire at engine speed; otherwise ground load holds it lower
+			var spin_target := engine_omega if force_spin else lerpf(roll, engine_omega, SPIN_LOAD_FACTOR)
+			var target := spin_target if absf(spin_target) > absf(roll) else roll
 			omega = move_toward(omega, target, SPIN_ACCEL * delta)
 		else:
-			omega = move_toward(omega, roll, SPIN_DECAY * delta)
+			var rate := SPIN_DECAY if absf(omega) > absf(roll) else SPIN_CATCHUP
+			omega = move_toward(omega, roll, rate * delta)
 
+		_slip_speed[w] = absf(omega - roll) * r
 		var spin_slip := 0.0
 		if in_contact:
 			spin_slip = clampf(absf(omega - roll) * r / SPIN_SLIP_FULL, 0.0, 1.0)
 		slip_intensity[w] = maxf(1.0 - grip, spin_slip) if in_contact else 0.0
 
-		var extra := fposmod(_spin_extra.get(w, 0.0) + (omega - roll) * delta, TAU)
+		var extra := fposmod(_spin_extra.get(w, 0.0) - (omega - roll) * delta, TAU)
 		_spin_omega[w] = omega
 		_spin_extra[w] = extra
 		_apply_extra_rotation(w, extra)
@@ -132,13 +143,18 @@ func _apply_extra_rotation(w: VehicleWheel3D, extra: float) -> void:
 		var m: MeshInstance3D = entry[0]
 		if not is_instance_valid(m):
 			continue
-		var t := m.transform
-		t.basis = rot * (entry[1] as Basis)
-		m.transform = t
+		var pivot: Vector3 = entry[2]
+		var spin := Transform3D(rot, pivot - rot * pivot)
+		m.transform = spin * (entry[1] as Transform3D)
 
 
 func get_slip_intensity(w: VehicleWheel3D) -> float:
 	return slip_intensity.get(w, 0.0)
+
+
+## Tire surface speed minus ground speed, m/s. Near 0 = rolling, large = spinning.
+func get_slip_speed(w: VehicleWheel3D) -> float:
+	return _slip_speed.get(w, 0.0)
 
 
 # ---------------------------------------------------------

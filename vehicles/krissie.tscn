@@ -634,6 +634,8 @@ shape = SubResource("ConvexPolygonShape3D_50xff")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.246, 0.171, 3.361)
 use_as_steering = true
 wheel_radius = 0.131
+wheel_rest_length = 0.1
+suspension_travel = 0.1
 
 [node name="tire-front_left" type="MeshInstance3D" parent="wheelFL" unique_id=1531907039]
 mesh = SubResource("ArrayMesh_uplg2")
@@ -643,6 +645,8 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.247, 0.171, 3.361)
 use_as_steering = true
 wheel_radius = 0.131
+wheel_rest_length = 0.1
+suspension_travel = 0.1
 
 [node name="tire-front_right" type="MeshInstance3D" parent="wheelFR" unique_id=701647939]
 mesh = SubResource("ArrayMesh_rj4n7")
@@ -652,6 +656,8 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.564, 0.529, -0.792)
 use_as_traction = true
 wheel_radius = 0.505
+wheel_rest_length = 0.1
+suspension_travel = 0.1
 
 [node name="tire-rear_left_004" type="MeshInstance3D" parent="wheelRL" unique_id=1299269394]
 mesh = SubResource("ArrayMesh_7lblc")
@@ -661,6 +667,8 @@ skeleton = NodePath("")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.564, 0.529, -0.792)
 use_as_traction = true
 wheel_radius = 0.505
+wheel_rest_length = 0.1
+suspension_travel = 0.1
 
 [node name="tire-rear_right" type="MeshInstance3D" parent="wheelRR" unique_id=1332695017]
 mesh = SubResource("ArrayMesh_cb8pa")
@@ -671,7 +679,7 @@ transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.67
 script = ExtResource("1_r4x7w")
 
 [node name="ChuteMesh" type="MeshInstance3D" parent="DragChute" unique_id=219560372]
-transform = Transform3D(-4.371112e-08, -0.9999938, 0.0034906506, 0.9999999, -4.3711385e-08, 0, 1.5258121e-10, 0.003490651, 0.9999937, 1.1765215, 0.6957598, -1.0150305)
+transform = Transform3D(-0.96455723, -8.432428e-08, -0.26387295, 8.742276e-08, -0.9999999, 0, -0.26387298, -2.306851e-08, 0.9645571, -0.42996955, 1.2597249, -0.017227769)
 mesh = ExtResource("2_1gpol")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_8txb0")
