@@ -22,7 +22,9 @@ const GRIP_NONE_SLIP := 12.0
 ## Burnouts and launch control are exempt; full throttle returns at green.
 @export var creep_throttle: float = 0.2
 
-const BURNOUT_MAX_SPEED := 3.0       # m/s, burnout ends once the car rolls past this
+const BURNOUT_MAX_SPEED := 3.0
+const BURNOUT_START_SPEED := 0.5      # brake-pedal burnouts only start from a standstill
+const POST_BURNOUT_SPIN_TIME := 2.0   # s, reduced grip after a burnout while the tires spin down       # m/s, burnout ends once the car rolls past this
 const REVERSE_ENGAGE_MAX_SPEED := 1.0  # m/s, can only select/leave reverse below this
 
 const WHEEL_SYNC_GRACE_TIME := 0.35  # seconds to suppress the drive-force
@@ -51,6 +53,7 @@ var staged := false          # set by StagingController once in the stage beam
 var burnout_active := false
 var line_lock := false       # front brakes held, driven wheels free
 var _base_friction: Dictionary = {}  # driven wheel -> configured friction_slip
+var _spin_window := 0.0              # seconds of post-burnout reduced grip left
 var wheel_sync_grace_timer := 0.0  # suppresses the drive-force desync clamp right after a shift,
 									 # giving the physical wheel time to spin back up to speed
 
@@ -194,8 +197,9 @@ func _physics_process(delta: float) -> void:
 		all_wheels, forward_speed, engine.current_rpm, current_gear_ratio,
 		drive_dir, transmission.get_clutch_position(), throttle, burnout_active
 	)
-	_update_driven_traction()
+	_update_driven_traction(delta)
 	smoke.update_smoke(tires, drive_dir)
+	_log_if_stuck(throttle, brake_input)
 
 
 # =============================================================
@@ -312,27 +316,59 @@ func _apply_brakes(amount: float) -> void:
 ## Burnout = player holds brake (or line lock) + throttle at a standstill before staging.
 ## Drops grip on the driven wheels so they break loose and spin.
 func _update_burnout(throttle: float, brake_input: float) -> void:
+	var slow := absf(forward_speed) < BURNOUT_MAX_SPEED
+	# Line lock burnouts start any time you are slow. A brake-pedal burnout must
+	# start from a standstill, so braking while creeping to the beams never
+	# turns into one.
+	var pedal := brake_input > 0.1 and (burnout_active or absf(forward_speed) < BURNOUT_START_SPEED)
 	var want := is_player and not staged and not input.race_started \
-		and (brake_input > 0.1 or line_lock) and throttle > 0.3 \
-		and absf(forward_speed) < BURNOUT_MAX_SPEED \
+		and throttle > 0.3 and slow and (line_lock or pedal) \
 		and transmission.get_current_total_ratio() > 0.0 \
 		and not transmission.is_shifting
 	_set_burnout(want)
 
 func _set_burnout(on: bool) -> void:
+	if burnout_active and not on:
+		_spin_window = POST_BURNOUT_SPIN_TIME
 	burnout_active = on
 
 
 ## A spinning tire has no grip: driven-wheel friction follows how fast the tire
 ## surface is moving relative to the ground, so grip returns only as the tire
 ## slows down or the car speeds up to meet it.
-func _update_driven_traction() -> void:
+## Only active during a burnout and for POST_BURNOUT_SPIN_TIME after it. Normal
+## launches always run the configured friction, so this can never trap the car.
+func _update_driven_traction(delta: float) -> void:
+	if input.race_started:
+		_spin_window = 0.0
+	elif _spin_window > 0.0:
+		_spin_window -= delta
 	for w in driven_wheels:
 		if not _base_friction.has(w):
 			_base_friction[w] = w.wheel_friction_slip
 		var base: float = _base_friction[w]
-		var spun := 1.0 if burnout_active else smoothstep(GRIP_FULL_SLIP, GRIP_NONE_SLIP, tires.get_slip_speed(w))
+		var spun := 0.0
+		if burnout_active:
+			spun = 1.0
+		elif _spin_window > 0.0:
+			spun = smoothstep(GRIP_FULL_SLIP, GRIP_NONE_SLIP, tires.get_slip_speed(w))
 		w.wheel_friction_slip = lerpf(base, minf(base, burnout_friction_slip), spun)
+
+
+## Once a second, when full throttle is on but the car is not moving, print what
+## is holding it so the cause is visible instead of guessed.
+func _log_if_stuck(throttle: float, brake_input: float) -> void:
+	if not is_player or Engine.get_physics_frames() % 60 != 0:
+		return
+	if throttle < 0.5 or absf(forward_speed) > 0.5:
+		return
+	var parts: Array[String] = []
+	for w in driven_wheels:
+		parts.append("%s fric=%.2f slip=%.1f skid=%.2f brake=%.0f contact=%s" % [
+			w.name, w.wheel_friction_slip, tires.get_slip_speed(w), w.get_skidinfo(), w.brake, w.is_in_contact()])
+	print("[Stuck?] thr=%.2f spd=%.2f pedal=%.2f lineLock=%s burnout=%s window=%.1f gear=%d | %s" % [
+		throttle, forward_speed, brake_input, line_lock, burnout_active, _spin_window,
+		transmission.get_gear_number(), " | ".join(parts)])
 
 
 func _on_line_lock_requested() -> void:

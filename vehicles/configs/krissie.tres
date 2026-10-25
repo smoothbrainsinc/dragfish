@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b1tj1mogl0gcl" path="res://scripts/game/vehicle/resources/EngineConfig.gd" id="1_mpsm5"]
 [ext_resource type="Script" uid="uid://e1de066ck228" path="res://scripts/game/vehicle/resources/TireConfig.gd" id="2_lc0ue"]
-[ext_resource type="Resource" uid="uid://du2b0ouw5imfp" path="res://vehicles/classes/meth_head_front_stock.tres" id="3_u1r7t"]
-[ext_resource type="Resource" uid="uid://bveobwghapl07" path="res://vehicles/classes/meth_head_rear_stock.tres" id="4_uw20n"]
+[ext_resource type="Script" uid="uid://dgwtba5ryj11c" path="res://Wheelconfig.gd" id="3_33d6q"]
 [ext_resource type="Script" uid="uid://b4dutpl7gc2pl" path="res://scripts/game/vehicle/resources/VehicleConfig.gd" id="5_dlh2t"]
 [ext_resource type="Script" uid="uid://du1enhren7ngr" path="res://scripts/game/vehicle/resources/TransmissionConfig.gd" id="6_d67r4"]
 [ext_resource type="Resource" uid="uid://dtfdesgl04md6" path="res://vehicles/classes/meth_head_class.tres" id="7_pdldo"]
@@ -29,12 +28,27 @@ compound_name = "dragster radial"
 compound_type = 2
 friction_coefficient = 1.3
 
+[sub_resource type="Resource" id="Resource_1qgwb"]
+script = ExtResource("3_33d6q")
+radius = 0.13
+rest_length = 0.1
+friction_slip = 50.0
+suspension_travel = 0.15
+metadata/_custom_type_script = "uid://dgwtba5ryj11c"
+
 [sub_resource type="Resource" id="Resource_53coi"]
 script = ExtResource("2_lc0ue")
 compound_name = "Drag Slick"
 compound_type = 3
 friction_coefficient = 2.0
 optimal_slip_ratio = 0.2
+
+[sub_resource type="Resource" id="Resource_7nno0"]
+script = ExtResource("3_33d6q")
+rest_length = 0.1
+friction_slip = 50.0
+suspension_travel = 0.15
+metadata/_custom_type_script = "uid://dgwtba5ryj11c"
 
 [sub_resource type="Resource" id="Resource_18ba7"]
 script = ExtResource("6_d67r4")
@@ -54,8 +68,8 @@ mass = 2500.0
 center_of_mass_offset = Vector3(0, -0.5, 0)
 drag_coefficient = 0.5
 frontal_area = 0.93
-front_wheel_config = ExtResource("3_u1r7t")
-rear_wheel_config = ExtResource("4_uw20n")
+front_wheel_config = SubResource("Resource_1qgwb")
+rear_wheel_config = SubResource("Resource_7nno0")
 engine = SubResource("Resource_srcpx")
 transmission = SubResource("Resource_18ba7")
 front_tires = SubResource("Resource_3hnwd")

@@ -33,6 +33,7 @@ func _ready() -> void:
 		"",
 		ResourceLoader.CACHE_MODE_IGNORE
 	) as VehicleConfig
+	vehicle_config.ensure_local_wheel_configs()
 	GameManager.player_car_config = vehicle_config
 	_load_vehicle()
 

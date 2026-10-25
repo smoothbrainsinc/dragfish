@@ -129,7 +129,12 @@ func update_wheelspin(
 		var spin_slip := 0.0
 		if in_contact:
 			spin_slip = clampf(absf(omega - roll) * r / SPIN_SLIP_FULL, 0.0, 1.0)
-		slip_intensity[w] = maxf(1.0 - grip, spin_slip) if in_contact else 0.0
+		# Grip loss counts as smoke when the wheel is being driven, or at speed
+		# (lockup). Gentle braking at a crawl near the line must not smoke.
+		var skid := 0.0
+		if driven or absf(forward_speed) > 4.0:
+			skid = 1.0 - grip
+		slip_intensity[w] = maxf(skid, spin_slip) if in_contact else 0.0
 
 		var extra := fposmod(_spin_extra.get(w, 0.0) - (omega - roll) * delta, TAU)
 		_spin_omega[w] = omega

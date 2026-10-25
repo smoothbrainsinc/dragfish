@@ -67,6 +67,10 @@ func apply_to_vehicle(vehicle: VehicleBody3D) -> void:
 			front_wheel_config.apply_to_wheel(child)
 		else:
 			rear_wheel_config.apply_to_wheel(child)
+		print("[WheelCfg] %s %s -> radius=%.3f rest=%.2f travel=%.2f friction=%.1f stiffness=%.2f maxForce=%.0f" % [
+			vehicle_name, child.name, child.wheel_radius, child.wheel_rest_length,
+			child.suspension_travel, child.wheel_friction_slip,
+			child.suspension_stiffness, child.suspension_max_force])
 
 
 ## Reset this car's wheel configs back to the class stock values.
@@ -79,9 +83,28 @@ func reset_to_class_stock() -> void:
 	rear_wheel_config  = vehicle_class.stock_rear_wheel_config.duplicate(true)
 
 
+## Wheel configs must live INSIDE this file. If one points at a shared file (the
+## class stock .tres), a pit edit changes that shared resource in memory and
+## ResourceSaver never writes it, so SAVE appears to do nothing. Duplicating
+## makes it a local sub-resource that saves with this file.
+func ensure_local_wheel_configs() -> void:
+	front_wheel_config = _localize(front_wheel_config)
+	rear_wheel_config = _localize(rear_wheel_config)
+
+
+func _localize(cfg: WheelConfig) -> WheelConfig:
+	if cfg == null:
+		return null
+	if cfg.resource_path.is_empty() or cfg.resource_path.begins_with(resource_path + "::"):
+		return cfg
+	print("[VehicleConfig] %s: wheel config was the shared file %s - embedding a private copy" % [vehicle_name, cfg.resource_path])
+	return cfg.duplicate(true) as WheelConfig
+
+
 ## Save this config back to its own .tres file.
 ## This is what SAVE in the pit calls.
 func save() -> void:
+	ensure_local_wheel_configs()
 	if resource_path.is_empty():
 		push_error("[VehicleConfig] resource_path is empty — cannot save %s." % vehicle_name)
 		return
