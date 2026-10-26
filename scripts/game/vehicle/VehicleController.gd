@@ -91,6 +91,7 @@ func initialize(config: VehicleConfig, player: bool) -> void:
 func start_vehicle() -> void:
 	if not initialized:
 		return
+	RunLogger.begin_run(self)
 	engine.start()
 	transmission.start()
 	set_physics_process(true)
@@ -102,6 +103,7 @@ func start_race() -> void:
 	input.start_race()
 
 func stop_vehicle() -> void:
+	RunLogger.end_run()
 	_set_burnout(false)
 	if smoke:
 		smoke.stop()
@@ -197,6 +199,9 @@ func _physics_process(delta: float) -> void:
 		all_wheels, forward_speed, engine.current_rpm, current_gear_ratio,
 		drive_dir, transmission.get_clutch_position(), throttle, burnout_active
 	)
+	tires.log_wheel_debug(all_wheels)
+	_update_driven_traction(delta)
+	
 	_update_driven_traction(delta)
 	smoke.update_smoke(tires, drive_dir)
 	_log_if_stuck(throttle, brake_input)

@@ -91,7 +91,6 @@ wheel_friction_slip = 20.0
 suspension_max_force = 10000.0
 
 [node name="tire-rear_right" type="MeshInstance3D" parent="wheelRR" unique_id=476259658]
-transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0)
 mesh = ExtResource("4_xbvyq")
 skeleton = NodePath("")
 

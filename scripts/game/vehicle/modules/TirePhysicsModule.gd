@@ -161,7 +161,21 @@ func get_slip_intensity(w: VehicleWheel3D) -> float:
 func get_slip_speed(w: VehicleWheel3D) -> float:
 	return _slip_speed.get(w, 0.0)
 
+var _log_timer: float = 0.0
 
+func log_wheel_debug(wheels: Array[VehicleWheel3D]) -> void:
+	_log_timer += get_physics_process_delta_time()
+	if _log_timer < 0.25:
+		return
+	_log_timer = 0.0
+	if vehicle == null:
+		vehicle = wheels[0].get_parent() as VehicleBody3D
+		if vehicle == null:
+			return
+	var v_local := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
+	print("[Lat] lat=%.3f fwd=%.3f yaw_rate=%.4f" % [v_local.x, v_local.z, vehicle.angular_velocity.y])
+	for w in wheels:
+		print("[Lat] %s steer=%.4f eng=%.1f brake=%.1f skid=%.2f rpm=%.1f" % [w.name, w.steering, w.engine_force, w.brake, w.get_skidinfo(), w.get_rpm()])
 # ---------------------------------------------------------
 # Optional longitudinal damping (VERY light)
 # ---------------------------------------------------------

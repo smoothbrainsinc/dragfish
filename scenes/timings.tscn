@@ -40,7 +40,7 @@ size = Vector3(14, 20, 0.1)
 size = Vector3(14, 20, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dbiuj"]
-size = Vector3(0.02, 20, 1000)
+size = Vector3(0.25, 20, 1000)
 
 [node name="Timings" type="Node3D" unique_id=1648604432 node_paths=PackedStringArray("start_line", "checkpoint_60ft", "checkpoint_330ft", "checkpoint_660ft", "checkpoint_1000ft", "finish_line", "speed_trap_start")]
 script = ExtResource("1_v7ra0")
