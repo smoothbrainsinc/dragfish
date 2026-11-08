@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cxyn2ve7ogk46" path="res://Lakes/hell_lake/hellLake_018_Gentle_Sand_Normal.png" id="3_1widr"]
 [ext_resource type="Script" uid="uid://x2thuuc1i0l1" path="res://Lakes/weed_spawner_3.gd" id="4_fno3g"]
 [ext_resource type="PackedScene" uid="uid://cldipfai7u8p1" path="res://Lakes/hell_lake/new_hell_awaits_water.tscn" id="5_1widr"]
+[ext_resource type="PackedScene" uid="uid://cu7i8mebxi870" path="res://Lakes/pentagram_lake/pentagram_lake.tscn" id="6_fno3g"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_361u1"]
 resource_name = "Material.001"
@@ -210,46 +211,56 @@ data = PackedVector3Array(84.56, -164.584, -547.5135, 79.9379, -164.584, -540.68
 [node name="hellLake" type="StaticBody3D" unique_id=1982963995]
 
 [node name="L1-hell_awaits" type="MeshInstance3D" parent="." unique_id=559342036]
+visible = false
 mesh = SubResource("ArrayMesh_dc1d6")
 skeleton = NodePath("")
 
 [node name="L1_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=993173319]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_1widr")
 
 [node name="L2-hell_awaits" type="MeshInstance3D" parent="." unique_id=1434878622 groups=["fish_habitat"]]
+visible = false
 mesh = SubResource("ArrayMesh_xt4hn")
 skeleton = NodePath("")
 script = ExtResource("4_fno3g")
 weed_count = 2000
 
 [node name="L2_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1528118592]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_fno3g")
 
 [node name="L3-hell_awaits" type="MeshInstance3D" parent="." unique_id=53934166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.867035, 0)
+visible = false
 mesh = SubResource("ArrayMesh_er5xd")
 skeleton = NodePath("")
 
 [node name="L3_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=841239675]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_cw8jp")
 
 [node name="L4-hell_awaits" type="MeshInstance3D" parent="." unique_id=1523344528]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.383, 0)
+visible = false
 mesh = SubResource("ArrayMesh_r40tn")
 skeleton = NodePath("")
 
 [node name="L4_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1373798649]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_aokey")
 
 [node name="L5-hell_awaits" type="MeshInstance3D" parent="." unique_id=1818803290]
+visible = false
 mesh = SubResource("ArrayMesh_c8iyq")
 skeleton = NodePath("")
 
 [node name="L5_CollisionShape3D" type="CollisionShape3D" parent="." unique_id=640728528]
+visible = false
 shape = SubResource("ConcavePolygonShape3D_egwhc")
 
 [node name="new_hell_awaits_water" parent="." unique_id=286069375 instance=ExtResource("5_1widr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.516, 1.9158554, -69.573)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.516, -3.6661148, -69.573)
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1215999794]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700, 24.436, -700)
@@ -274,3 +285,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -700, 24.436, -700)
 pixel_size = 1.685
 billboard = 1
 text = "-700, -700"
+
+[node name="pentagram_lake" parent="." unique_id=594617263 instance=ExtResource("6_fno3g")]

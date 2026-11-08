@@ -37,3 +37,4 @@ sky_mode = 1
 
 [node name="track_lighting" parent="." unique_id=21920103 instance=ExtResource("7_vw4td")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -223.73694)
+visible = false

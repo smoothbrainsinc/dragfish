@@ -202,7 +202,7 @@ func _physics_process(delta: float) -> void:
 	tires.log_wheel_debug(all_wheels)
 	_update_driven_traction(delta)
 	
-	_update_driven_traction(delta)
+
 	smoke.update_smoke(tires, drive_dir)
 	_log_if_stuck(throttle, brake_input)
 

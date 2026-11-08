@@ -6,6 +6,5 @@ extends Ocean
 signal updated_lod(far_distance: float, middle_distance: float, unit_size: float)
 
 
-@warning_ignore("shadowed_variable_base_class")
 func _on_water_material_designer_updated_lod(far_distance, middle_distance, unit_size):
 	updated_lod.emit(far_distance, middle_distance, unit_size)

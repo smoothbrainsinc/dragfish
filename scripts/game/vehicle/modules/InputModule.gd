@@ -31,8 +31,14 @@ var ai_throttle_variation: float = 0.0  # Random performance variation
 var ai_throttle_phase: float = 0.0  # Per-vehicle random offset so AI cars don't all wobble in sync
 var ai_lane_center_x: float = 0.0
 var ai_lane_center_cached: bool = false
-var ai_lane_correction_gain: float = 0.0  # TUNE THIS - starting guess, not measured
-var ai_lane_damping_gain: float = 0.6
+var ai_lane_forward := Vector3.ZERO
+var ai_lane_side_x := 1.0
+var ai_wheelbase := 0.0
+
+const AI_LANE_WN := 1.0         # rad/s, how fast it returns to lane center
+const AI_LANE_ZETA := 1.0       # critically damped
+const AI_MIN_SPEED := 10.0      # m/s, keeps 1/v from blowing up at the line
+const AI_MAX_STEER_RAD := 0.03  # hard authority limit at the wheels
 
 # Race state
 var race_started: bool = false
@@ -139,26 +145,29 @@ func get_steering() -> float:
 ## which otherwise random-walks the car into a wall or the other lane over
 ## a long run (uncorrelated noise every frame -> heading drifts unbounded).
 func get_ai_steering() -> float:
-	var vehicle := get_parent() as VehicleBody3D
-	if vehicle == null:
-		return randf_range(-0.02, 0.02)
+	var vehicle := get_parent() as VehicleController
+	if vehicle == null or vehicle.steering_wheels.is_empty() or vehicle.driven_wheels.is_empty():
+		return 0.0
 
 	if not ai_lane_center_cached:
 		var spawn_marker = vehicle.get_meta("spawn_marker", null)
 		ai_lane_center_x = spawn_marker.global_position.x if spawn_marker else vehicle.global_position.x
+		ai_lane_forward = Vector3(vehicle.global_transform.basis.z.x, 0.0, vehicle.global_transform.basis.z.z).normalized()
+		ai_lane_side_x = vehicle.global_transform.basis.x.x
+		ai_wheelbase = absf(vehicle.steering_wheels[0].position.z - vehicle.driven_wheels[0].position.z)
 		ai_lane_center_cached = true
 
-	var lateral_offset := vehicle.global_position.x - ai_lane_center_x
-	var local_vel := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
-	var lateral_velocity: float = local_vel.x
-	var speed: float = abs(local_vel.z)
+	var fwd := Vector3(vehicle.global_transform.basis.z.x, 0.0, vehicle.global_transform.basis.z.z)
+	if fwd.length_squared() < 0.0001:
+		return 0.0
+	var heading_err := ai_lane_forward.signed_angle_to(fwd.normalized(), Vector3.UP)  # + = nose toward body +X
+	var e := (vehicle.global_position.x - ai_lane_center_x) * ai_lane_side_x           # + = on body +X side
+	var v := maxf(absf(vehicle.forward_speed), AI_MIN_SPEED)
 
-	# same steering angle = more yaw at higher speed, so scale gain down
-	# as speed rises or the controller destabilizes near top speed
-	var speed_factor: float = clamp(speed / 10.0, 1.0, 15.0)
-
-	var correction := (-lateral_offset * ai_lane_correction_gain - lateral_velocity * ai_lane_damping_gain) / speed_factor
-	return clamp(correction, -1.0, 1.0)
+	# e'' = (v^2/L) * steer, e' = v * heading_err
+	var steer_rad := -(ai_wheelbase / (v * v)) * (AI_LANE_WN * AI_LANE_WN * e + 2.0 * AI_LANE_ZETA * AI_LANE_WN * v * heading_err)
+	steer_rad = clampf(steer_rad, -AI_MAX_STEER_RAD, AI_MAX_STEER_RAD)
+	return steer_rad / vehicle.vehicle_config.max_steer_angle
 	
 ## Check clutch input (for manual transmission)
 func is_clutch_pressed() -> bool:
