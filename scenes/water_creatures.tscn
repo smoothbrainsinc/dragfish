@@ -16,6 +16,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.845, -6, 0)
 script = ExtResource("3_7nr04")
 lake_size = Vector2(1633, 1633)
 lake_depth = 300.0
+surface_y = -6.0
 max_dive_depth = 15.0
 
 [node name="lakeMonster" parent="." unique_id=1080063356 instance=ExtResource("5_or3pl")]
