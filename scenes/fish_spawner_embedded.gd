@@ -177,8 +177,8 @@ func _fill_interior() -> void:
 		if outside[c] == 1 or dil[c] == 1:
 			continue
 		outside[c] = 1
-		var cx := c % bed_w
-		var cz := c / bed_w
+		var cx := int(c % bed_w)
+		var cz := int(c / float(bed_w))
 		if cx > 0: stack.append(c - 1)
 		if cx < bed_w - 1: stack.append(c + 1)
 		if cz > 0: stack.append(c - bed_w)
@@ -226,8 +226,8 @@ func _random_habitat_point() -> Vector3:
 	if wet_cells.is_empty():
 		return Vector3(0, surface_y - 1.0, 0)
 	var i := wet_cells[randi() % wet_cells.size()]
-	var ix := i % bed_w
-	var iz := i / bed_w
+	var ix := int(i % bed_w)
+	var iz := int(i / float(bed_w))
 	var x := bed_origin.x + (ix + randf()) * CELL
 	var z := bed_origin.y + (iz + randf()) * CELL
 	var y := randf_range(bed[i] + 0.3, surface_y - 0.3)

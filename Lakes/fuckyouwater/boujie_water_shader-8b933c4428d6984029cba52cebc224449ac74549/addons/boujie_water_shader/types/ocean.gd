@@ -137,7 +137,7 @@ func _add_mesh_as_node(mesh: Mesh, new_name: String, pos: Vector3 = Vector3.ZERO
 class PlaneMeshGenerator:
 	extends RefCounted
 	var resolution: int
-	var unit_size: float
+	var quad_size: float
 	var seam_up: bool
 	var seam_down: bool
 	var seam_left: bool
@@ -145,21 +145,21 @@ class PlaneMeshGenerator:
 	var _st: SurfaceTool
 
 	func _init(
-		resolution: int,
-		unit_size: float = 1.0,
-		seam_up: bool = false,
-		seam_down: bool = false,
-		seam_left: bool = false,
-		seam_right: bool = false
+		p_resolution: int,
+		p_unit_size: float = 1.0,
+		p_seam_up: bool = false,
+		p_seam_down: bool = false,
+		p_seam_left: bool = false,
+		p_seam_right: bool = false
 	):
-		self.resolution = resolution
-		self.unit_size = unit_size
-		self.seam_up = seam_up
-		self.seam_down = seam_down
-		self.seam_left = seam_left
-		self.seam_right = seam_right
-		self._st = SurfaceTool.new()
-		self._st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		resolution = p_resolution
+		quad_size = p_unit_size
+		seam_up = p_seam_up
+		seam_down = p_seam_down
+		seam_left = p_seam_left
+		seam_right = p_seam_right
+		_st = SurfaceTool.new()
+		_st.begin(Mesh.PRIMITIVE_TRIANGLES)
 
 	func generate():
 		var f_resolution = float(resolution)
@@ -204,15 +204,15 @@ class PlaneMeshGenerator:
 				var verts = []
 				for coord in coords:
 					uvs.append(Vector2(coord) / f_resolution)  # TODO: validate. might need a shift.
-					verts.append((Vector3(coord.x, 0, coord.y) - midpoint) * self.unit_size)
+					verts.append((Vector3(coord.x, 0, coord.y) - midpoint) * quad_size)
 
 				# add quad
-				self._st.add_triangle_fan(PackedVector3Array(verts), PackedVector2Array(uvs))
+				_st.add_triangle_fan(PackedVector3Array(verts), PackedVector2Array(uvs))
 
 	func commit():
-		self._st.generate_normals()
-		self._st.index()
-		return self._st.commit()
+		_st.generate_normals()
+		_st.index()
+		return _st.commit()
 
 
 class FarPlaneMeshGenerator:
@@ -223,35 +223,35 @@ class FarPlaneMeshGenerator:
 	var far: float
 	var _st: SurfaceTool
 
-	func _init(near, uv_scale, far: float = 1000):
-		self.near = near
-		self.uv_scale = uv_scale
-		self.far = far
-		self._st = SurfaceTool.new()
-		self._st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	func _init(p_near: float, p_uv_scale: float, p_far: float = 1000.0):
+		near = p_near
+		uv_scale = p_uv_scale
+		far = p_far
+		_st = SurfaceTool.new()
+		_st.begin(Mesh.PRIMITIVE_TRIANGLES)
 
 	func generate():
 		# +x is right, +z is down
-		var r = self.near
-		var f = self.far
+		var r = near
+		var f = far
 		# coords in units of meters. These translate directly to vertices.
 		var inners = [Vector2(-r, -r), Vector2(r, -r), Vector2(r, r), Vector2(-r, r)]
 		var outers = [Vector2(-f, -f), Vector2(f, -f), Vector2(f, f), Vector2(-f, f)]
-		self._add_quad([outers[0], outers[1], inners[1], inners[0]])
-		self._add_quad([outers[1], outers[2], inners[2], inners[1]])
-		self._add_quad([outers[2], outers[3], inners[3], inners[2]])
-		self._add_quad([outers[3], outers[0], inners[0], inners[3]])
+		_add_quad([outers[0], outers[1], inners[1], inners[0]])
+		_add_quad([outers[1], outers[2], inners[2], inners[1]])
+		_add_quad([outers[2], outers[3], inners[3], inners[2]])
+		_add_quad([outers[3], outers[0], inners[0], inners[3]])
 
 	func commit():
-		self._st.generate_normals()
-		self._st.index()
-		return self._st.commit()
+		_st.generate_normals()
+		_st.index()
+		return _st.commit()
 
 	func _add_quad(coords):
 		# coords in units of meters
 		var uvs = []
 		var verts = []
 		for coord in coords:
-			uvs.append(Vector2(coord) / self.uv_scale - Vector2(0.5, 0.5))  # TODO: validate
+			uvs.append(Vector2(coord) / uv_scale - Vector2(0.5, 0.5))  # TODO: validate
 			verts.append(Vector3(coord.x, 0, coord.y))
-		self._st.add_triangle_fan(PackedVector3Array(verts), PackedVector2Array(uvs))
+		_st.add_triangle_fan(PackedVector3Array(verts), PackedVector2Array(uvs))

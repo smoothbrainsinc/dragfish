@@ -76,8 +76,8 @@ shader_parameter/cirrus_absorption = 2.0
 shader_parameter/cirrus_sky_tint_fade = 0.5
 shader_parameter/cirrus_size = 1.0
 shader_parameter/cirrus_uv = Vector2(0.16, 0.11)
-shader_parameter/cirrus_position1 = Vector2(0.08269765, 0.08269765)
-shader_parameter/cirrus_position2 = Vector2(0.08269765, 0.08269765)
+shader_parameter/cirrus_position1 = Vector2(0.0903466, 0.0903466)
+shader_parameter/cirrus_position2 = Vector2(0.0903466, 0.0903466)
 shader_parameter/cirrus_texture = ExtResource("13_8jgqo")
 shader_parameter/cumulus_visible = true
 shader_parameter/cumulus_intensity = 0.6
@@ -87,7 +87,7 @@ shader_parameter/cumulus_absorption = 2.0
 shader_parameter/cumulus_noise_freq = 2.7
 shader_parameter/cumulus_sky_tint_fade = 0.0
 shader_parameter/cumulus_size = 0.5
-shader_parameter/cumulus_position = Vector2(5.414189, 5.414189)
+shader_parameter/cumulus_position = Vector2(10.461749, 10.461749)
 shader_parameter/cumulus_texture = ExtResource("14_023cl")
 shader_parameter/cumulus_partial_mie_phase = Vector3(0.957564, 1.042436, 0.412)
 shader_parameter/cumulus_mie_intensity = 1.0
@@ -112,7 +112,6 @@ tonemap_mode = 3
 tonemap_white = 6.0
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_w8701"]
-auto_exposure_enabled = true
 
 [node name="Root" type="Node3D" unique_id=1567092246]
 script = ExtResource("1_8jgqo")
@@ -124,7 +123,6 @@ script = ExtResource("19_x5deg")
 fog_enabled = false
 editor_time_enabled = false
 minutes_per_day = 1440.0
-auto_exposure = true
 wind_direction = 2.35619451204804
 metadata/_custom_type_script = "uid://deo0gxkmk2ahd"
 

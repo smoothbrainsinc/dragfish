@@ -101,13 +101,13 @@ func _update_lod():
 
 
 func _update_distance_fade():
-	var max = distance_fade_far
-	var min = max * (1.0 - distance_fade_softness)
+	var max_value = distance_fade_far
+	var min_value = max_value * (1.0 - distance_fade_softness)
 	material.set_shader_parameter("distance_fade_max", max)
 	material.set_shader_parameter("distance_fade_min", min)
 
-	max = wave_fade_far
-	min = max * (1.0 - wave_fade_softness)
+	max_value = wave_fade_far
+	min_value = max_value * (1.0 - wave_fade_softness)
 	material.set_shader_parameter("foam_fade_max", max)
 	material.set_shader_parameter("foam_fade_min", min)
 	material.set_shader_parameter("shore_fade_max", max)
