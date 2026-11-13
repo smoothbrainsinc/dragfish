@@ -1,40 +1,19 @@
 [gd_scene format=3 uid="uid://bbssvd4xrvryt"]
 
 [ext_resource type="PackedScene" uid="uid://dx6q122k2ccbk" path="res://scenes/water_creatures.tscn" id="2_tbi4r"]
-[ext_resource type="PackedScene" uid="uid://cs8ir5chqkile" path="res://assets/sprites/gaggle_of_nuns.tscn" id="4_d8sy1"]
-[ext_resource type="PackedScene" uid="uid://bt1kegkmehb2h" path="res://Lakes/hell_lake/meshes/hell_lake.tscn" id="5_coijf"]
+[ext_resource type="PackedScene" uid="uid://b7o15nptte5ro" path="res://Lakes/pentagram_lake/pentagram_lake_redo.tscn" id="3_k0iur"]
+[ext_resource type="PackedScene" uid="uid://dk1dggplpgx35" path="res://Lakes/pentagram_lake/pentagram_lake_redo_water_surface.tscn" id="4_d8sy1"]
 [ext_resource type="PackedScene" uid="uid://cscff7ewanuxf" path="res://scenes/track.tscn" id="5_jbnud"]
-[ext_resource type="PackedScene" uid="uid://hb3l7skbje4r" path="res://gaggle_of_nuns_2.tscn" id="6_coijf"]
-[ext_resource type="PackedScene" uid="uid://bv88fqcrrl2pj" path="res://assets/sprites/nuns_3.tscn" id="6_vw4td"]
-[ext_resource type="PackedScene" uid="uid://bqhiuj1hnp224" path="res://assets/models/track_lighting.tscn" id="7_vw4td"]
 
 [node name="grounds" type="Node3D" unique_id=683886069]
 
-[node name="hellLake" parent="." unique_id=1234737826 instance=ExtResource("5_coijf")]
-
 [node name="water_creatures" parent="." unique_id=728233415 instance=ExtResource("2_tbi4r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -412.82922)
-
-[node name="Nuns" parent="." unique_id=1827689186 instance=ExtResource("4_d8sy1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.37516, 7.3597736, 188.80688)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -28.70221, -476.70313)
 
 [node name="track" parent="." unique_id=982529315 instance=ExtResource("5_jbnud")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -2.654, 633.545)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 633.545)
 
-[node name="Nuns2" parent="." unique_id=1667883415 instance=ExtResource("6_coijf")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 8.490231, 6.9148636, 178.58325)
-visible = false
+[node name="pentagram_lake_redo" parent="." unique_id=530606564 instance=ExtResource("3_k0iur")]
 
-[node name="nuns3" parent="." unique_id=4595035 instance=ExtResource("6_vw4td")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.626862, 7.8729477, 125.27849)
-visible = false
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=526355045]
-transform = Transform3D(0.09844718, -0.9951423, 0, 0.9951423, 0.09844718, 0, 0, 0, 1, 0, -60.651184, -398.95068)
-light_color = Color(0.24766767, 0.41403994, 0.22977152, 1)
-sky_mode = 1
-
-[node name="track_lighting" parent="." unique_id=21920103 instance=ExtResource("7_vw4td")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -223.73694)
-visible = false
+[node name="pentagram_lake_redo_water_surface" parent="." unique_id=1109965121 instance=ExtResource("4_d8sy1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.0531006, 0)
