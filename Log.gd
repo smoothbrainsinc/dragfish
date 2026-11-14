@@ -9,7 +9,7 @@ var enabled: Dictionary = {
 	Category.PHYSICS: true,
 	Category.SHIFT: false,
 	Category.CHUTE: false,
-	Category.WHEELS: true,
+	Category.WHEELS: false,
 	Category.GENERAL: false, # Keep general on for now
 }
 

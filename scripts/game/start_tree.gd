@@ -9,278 +9,175 @@ enum TreeType {
 
 @export var tree_type: TreeType = TreeType.PRO_TREE
 @export var random_delay: bool = true
+@export var emission_energy: float = 12.0
+@export var omni_energy: float = 8.0
 
-# === SIGNALS (What this tree tells the world) ===
-signal tree_started              # Tree sequence beginning
-signal green_light               # GO!
-#signal race_complete             # Race finished
-#signal request_red_light(lane: String)  # Someone else wants to trigger red light
+signal tree_started
+signal green_light
 
-# Tree timing constants
-const PRO_AMBER_TIME = 0.4
-const FULL_AMBER_TIME = 0.5
-const FULL_AMBER_INTERVAL = 0.5
+const PRO_AMBER_TIME := 0.4
+const FULL_AMBER_INTERVAL := 0.5
+const GREEN_HOLD_TIME := 2.0
 
-# Tree state
-var race_active = false
-var tree_sequence_running = false
-
-# Light references, keyed by lane number (int) to match timing_system.gd
-var lights = {
-	1: {},
-	2: {}
+# Node-name fragment -> light key. Order matters: "prestage" before "stage".
+const NAME_KEYS := [
+	["prestage", "prestage"], ["stage", "stage"],
+	["three", "amber3"], ["two", "amber2"], ["one", "amber1"],
+	["go", "green"], ["foul", "red"],
+]
+const AMBER := Color(1.0, 0.6, 0.0)
+const YELLOW := Color(1.0, 1.0, 0.0)
+const COLORS := {
+	"green": Color(0, 1, 0), "red": Color(1, 0, 0),
+	"prestage": YELLOW, "stage": YELLOW,
+	"amber1": AMBER, "amber2": AMBER, "amber3": AMBER,
 }
-var light_nodes = {}
+
+var race_active := false
+var tree_sequence_running := false
+
+# Lane keys (1 = right, 2 = left) match timing_system.gd.
+var lights := {1: {}, 2: {}}      # lane -> key -> MeshInstance3D
+var materials := {1: {}, 2: {}}   # lane -> key -> StandardMaterial3D
+var omnis := {1: {}, 2: {}}       # lane -> key -> OmniLight3D
 
 
-func _ready():
+func _ready() -> void:
 	add_to_group("start_tree")
-	print("[Tree] NHRA Tree System initializing...")
-	find_all_lights()
-	add_omni_lights()
+	find_all_lights(self)
+	find_all_omnis(self)
 	turn_all_lights_off()
 	print("[Tree] Ready. Type: %s" % TreeType.keys()[tree_type])
-	print("[Tree] Press SPACEBAR to start the race")
 
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and not tree_sequence_running:
 		start_tree_sequence()
 
 
 # ============================================================================
-# PUBLIC API (Can be called by other systems, but signals are preferred)
+# PUBLIC API
 # ============================================================================
 
-func trigger_red_light(lane: int):
-	"""Trigger red light for a lane (called by external systems via signal)"""
+func trigger_red_light(lane: int) -> void:
 	set_light(lane, "red", true)
 	print("[Tree] LANE %d - RED LIGHT (FOUL START)" % lane)
 
 
-func reset_tree():
-	"""Reset tree to initial state"""
+func reset_tree() -> void:
 	turn_all_lights_off()
 	race_active = false
 	tree_sequence_running = false
-	print("[Tree] Reset complete")
 
 
 # ============================================================================
 # TREE SEQUENCES
 # ============================================================================
 
-func start_tree_sequence():
-	"""Begin the tree countdown sequence"""
+func start_tree_sequence() -> void:
 	if tree_sequence_running:
 		return
-	
 	tree_sequence_running = true
 	race_active = true
-	emit_signal("tree_started")
-	print("[Tree] === TREE SEQUENCE STARTING ===")
-	
-	# Random delay before tree starts
+	tree_started.emit()
+
 	if random_delay:
-		var delay = randf_range(1.0, 3.0)
-		print("[Tree] Delay: %.2f seconds" % delay)
-		await get_tree().create_timer(delay).timeout
-	
+		await get_tree().create_timer(randf_range(1.0, 3.0)).timeout
+
 	if tree_type == TreeType.PRO_TREE:
 		await run_pro_tree()
 	else:
 		await run_full_tree()
 
+	await get_tree().create_timer(GREEN_HOLD_TIME).timeout
+	turn_all_lights_off()
+	tree_sequence_running = false
 
-func run_pro_tree():
-	"""Pro tree: All ambers at once, 0.4s to green"""
-	print("[Tree] PRO TREE")
-	
-	# All three ambers simultaneously, all lanes
-	for lane in lights.keys():
-		set_light(lane, "amber3", true)
-		set_light(lane, "amber2", true)
-		set_light(lane, "amber1", true)
-	print("[Tree] All ambers ON")
-	
+
+func run_pro_tree() -> void:
+	set_lights(["amber3", "amber2", "amber1"], true)
 	await get_tree().create_timer(PRO_AMBER_TIME).timeout
-	
-	# Turn off ambers
-	for lane in lights.keys():
-		set_light(lane, "amber3", false)
-		set_light(lane, "amber2", false)
-		set_light(lane, "amber1", false)
-	
-	# GREEN LIGHT!
-	for lane in lights.keys():
-		set_light(lane, "green", true)
-	emit_signal("green_light")
-	print("[Tree] === GREEN LIGHT - GO! ===")
-	
-	await get_tree().create_timer(2.0).timeout
-	turn_all_lights_off()
-	tree_sequence_running = false
+	_go()
 
 
-func run_full_tree():
-	"""Full tree: Sequential ambers, 0.5s each"""
-	print("[Tree] FULL TREE (Sportsman)")
-	
-	# Top amber
-	for lane in lights.keys():
-		set_light(lane, "amber3", true)
-	print("[Tree] Top amber ON")
-	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
-	
-	# Middle amber
-	for lane in lights.keys():
-		set_light(lane, "amber2", true)
-	print("[Tree] Middle amber ON")
-	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
-	
-	# Bottom amber
-	for lane in lights.keys():
-		set_light(lane, "amber1", true)
-	print("[Tree] Bottom amber ON")
-	await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
-	
-	# Turn off all ambers
-	for lane in lights.keys():
-		set_light(lane, "amber3", false)
-		set_light(lane, "amber2", false)
-		set_light(lane, "amber1", false)
-	
-	# GREEN LIGHT!
-	for lane in lights.keys():
-		set_light(lane, "green", true)
-	emit_signal("green_light")
-	print("[Tree] === GREEN LIGHT - GO! ===")
-	
-	await get_tree().create_timer(2.0).timeout
-	turn_all_lights_off()
-	tree_sequence_running = false
+func run_full_tree() -> void:
+	for amber in ["amber3", "amber2", "amber1"]:
+		set_lights([amber], true)
+		await get_tree().create_timer(FULL_AMBER_INTERVAL).timeout
+	_go()
+
+
+func _go() -> void:
+	set_lights(["amber3", "amber2", "amber1"], false)
+	set_lights(["green"], true)
+	green_light.emit()
 
 
 # ============================================================================
-# LIGHT MANAGEMENT (Internal implementation)
+# LIGHT MANAGEMENT
 # ============================================================================
 
-func find_all_lights():
-	"""Scan tree for light meshes"""
-	search_for_lights(self)
-	var total := 0
+## Returns [lane, key] for a node name, or [] if it isn't a lane light.
+func _parse_name(node_name: String) -> Array:
+	var n := node_name.to_lower()
+	var lane := 0
+	if "right" in n:
+		lane = 1
+	elif "left" in n:
+		lane = 2
+	if lane == 0:
+		return []
+	for pair in NAME_KEYS:
+		if pair[0] in n:
+			return [lane, pair[1]]
+	return []
+
+
+func find_all_lights(node: Node) -> void:
+	if node is MeshInstance3D and node.name.begins_with("lens_"):
+		var parsed := _parse_name(node.name)
+		if not parsed.is_empty():
+			var mesh := node as MeshInstance3D
+			var src := mesh.get_active_material(0)
+			var mat: StandardMaterial3D = src.duplicate() if src is StandardMaterial3D else StandardMaterial3D.new()
+			mesh.set_surface_override_material(0, mat)
+			lights[parsed[0]][parsed[1]] = mesh
+			materials[parsed[0]][parsed[1]] = mat
+	for child in node.get_children():
+		find_all_lights(child)
+
+
+func find_all_omnis(node: Node) -> void:
+	if node is OmniLight3D:
+		var parsed := _parse_name(node.name)
+		if not parsed.is_empty():
+			omnis[parsed[0]][parsed[1]] = node
+	for child in node.get_children():
+		find_all_omnis(child)
+
+
+func set_lights(keys: Array, on: bool) -> void:
 	for lane in lights.keys():
-		total += lights[lane].size()
-	print("[Tree] Found %d light meshes" % total)
+		for key in keys:
+			set_light(lane, key, on)
 
 
-func search_for_lights(node):
-	"""Recursively find light meshes"""
-	var node_name = node.name.to_lower()
-
-	if node is MeshInstance3D and "empty" not in node_name:
-		var lane := 0
-		if "right" in node_name:
-			lane = 1
-		elif "left" in node_name:
-			lane = 2
-
-		if lane != 0 and lane in lights:
-			if "prestage" in node_name:
-				lights[lane]["prestage"] = node
-			elif "stage" in node_name:
-				lights[lane]["stage"] = node
-			elif "three" in node_name:
-				lights[lane]["amber3"] = node
-			elif "two" in node_name:
-				lights[lane]["amber2"] = node
-			elif "one" in node_name:
-				lights[lane]["amber1"] = node
-			elif "go" in node_name:
-				lights[lane]["green"] = node
-			elif "foul" in node_name:
-				lights[lane]["red"] = node
-
-	for child in node.get_children():
-		search_for_lights(child)
-
-func add_omni_lights():
-	"""Add OmniLight3D nodes to Empty markers"""
-	search_for_empties(self)
-
-
-func search_for_empties(node):
-	"""Recursively find Empty markers and add lights"""
-	if "Empty" in node.name and node is Node3D:
-		var omni = OmniLight3D.new()
-		omni.omni_range = 2.0
-		omni.light_energy = 0
-		node.add_child(omni)
-		light_nodes[node.name] = omni
-	
-	for child in node.get_children():
-		search_for_empties(child)
-
-
-func set_light(lane: int, light_name: String, on: bool):
-	"""Turn a specific light on/off"""
-	if lane not in lights or light_name not in lights[lane]:
+func set_light(lane: int, light_name: String, on: bool) -> void:
+	if not materials.has(lane) or not materials[lane].has(light_name):
 		return
-	
-	var mesh = lights[lane][light_name]
-	var mat := StandardMaterial3D.new()
-	mesh.set_surface_override_material(0, mat)
-	
-	if mat is StandardMaterial3D:
-		if on:
-			mat.emission_enabled = true
-			mat.emission_energy_multiplier = 2.0
-			mat.albedo_color = Color.WHITE
-			
-			# Color based on light type
-			if light_name == "green":
-				mat.emission = Color(0, 2, 0)
-			elif light_name == "red":
-				mat.emission = Color(2, 0, 0)
-			elif light_name == "prestage" or light_name == "stage":
-				mat.emission = Color(2, 2, 0)
-			else:
-				mat.emission = Color(2, 1.2, 0)
-		else:
-			mat.emission_enabled = false
-			mat.albedo_color = Color(0.2, 0.2, 0.2)
-	
-	# Update OmniLight if exists
-# Map lane + light_name back to the empty's suffix
-	var side := "right" if lane == 1 else "left"
-	var suffix_map := {
-		"amber3": "three", "amber2": "two", "amber1": "one",
-		"green": "go", "red": "foul",
-		"prestage": "prestage", "stage": "stage"
-	}
-	var target_suffix: String = suffix_map.get(light_name, "")
-	var empty_pattern := "empty_%s%s" % [side, target_suffix]
 
-	for empty_name in light_nodes.keys():
-		if empty_name.to_lower() == empty_pattern:
-			var omni = light_nodes[empty_name]
-			if on:
-				omni.light_energy = 3.0
-				if light_name == "green":
-					omni.light_color = Color(0, 1, 0)
-				elif light_name == "red":
-					omni.light_color = Color(1, 0, 0)
-				elif light_name == "prestage" or light_name == "stage":
-					omni.light_color = Color(1, 1, 0)
-				else:
-					omni.light_color = Color(1, 0.6, 0)
-			else:
-				omni.light_energy = 0
-			break
+	var mat: StandardMaterial3D = materials[lane][light_name]
+	mat.emission_enabled = on
+	if on:
+		mat.emission = COLORS[light_name]
+		mat.emission_energy_multiplier = emission_energy
+
+	if omnis[lane].has(light_name):
+		var omni: OmniLight3D = omnis[lane][light_name]
+		omni.light_energy = omni_energy if on else 0.0
 
 
-func turn_all_lights_off():
-	"""Turn off all lights"""
+func turn_all_lights_off() -> void:
 	for lane in lights.keys():
-		for light_name in lights[lane].keys():
-			set_light(lane, light_name, false)
+		for key in lights[lane].keys():
+			set_light(lane, key, false)

@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://bkcqm2rmweyrn" path="res://scripts/game/timing_system.gd" id="1_v7ra0"]
 [ext_resource type="PackedScene" uid="uid://cq1rea4p55sum" path="res://scenes/track_1000m_full_barriers.tscn" id="2_g4360"]
 [ext_resource type="Script" uid="uid://cu7rn3yfv8hom" path="res://scenes/stage_beam.gd" id="3_e5htc"]
-[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="3_exc3w"]
 [ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="4_15le1"]
 [ext_resource type="Texture2D" uid="uid://d1hbup2170v1e" path="res://assets/images/stripe.png" id="4_p8uew"]
+[ext_resource type="PackedScene" uid="uid://dswqifc8v37y0" path="res://start_tree.tscn" id="5_p8uew"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e0q1u"]
 size = Vector3(50, 20, 0.1)
@@ -129,12 +129,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -97.535)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, 0)
 shape = SubResource("BoxShape3D_w5lx7")
 
-[node name="start_tree" parent="." unique_id=306340699 instance=ExtResource("3_exc3w")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 40)
-script = ExtResource("4_15le1")
-
 [node name="Center_Line" type="Area3D" parent="." unique_id=2137344491]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.95, 450)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Center_Line" unique_id=1984100878]
 shape = SubResource("BoxShape3D_dbiuj")
+
+[node name="start_tree" parent="." unique_id=66348709 instance=ExtResource("5_p8uew")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4.1660605e-06, 0, 47.654175)
+script = ExtResource("4_15le1")

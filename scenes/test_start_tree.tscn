@@ -1,15 +1,14 @@
 [gd_scene format=3 uid="uid://cbf3o1r01qun5"]
 
 [ext_resource type="Script" uid="uid://ehpggltlcery" path="res://scenes/test_start_tree.gd" id="1_jmw4y"]
-[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="1_r7xbi"]
-[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="3_hexpq"]
+[ext_resource type="PackedScene" uid="uid://barox2h7w338q" path="res://assets/models/start_tree_2_electric_bogaloo.tscn" id="2_hexpq"]
+[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="3_geh4g"]
 
 [node name="test_start_tree" type="Node3D" unique_id=19908151]
 script = ExtResource("1_jmw4y")
 
-[node name="start_tree" parent="." unique_id=66348709 instance=ExtResource("1_r7xbi")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0136966705, 0, 0.050524473)
-script = ExtResource("3_hexpq")
+[node name="start_tree" parent="." unique_id=1128083876 instance=ExtResource("2_hexpq")]
+script = ExtResource("3_geh4g")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2067293133]
 anchors_preset = 8

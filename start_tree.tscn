@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dswqifc8v37y0"]
+
+[ext_resource type="PackedScene" uid="uid://dd1vibs7ucmpq" path="res://assets/models/start_tree.glb" id="1_er8c4"]
+[ext_resource type="Script" uid="uid://g11jhjxujnma" path="res://scripts/game/start_tree.gd" id="2_b2ry5"]
+
+[node name="start_tree" unique_id=1704194959 instance=ExtResource("1_er8c4")]
+script = ExtResource("2_b2ry5")
+
+[node name="leftPreStage" parent="." index="25" unique_id=1098809065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11863077, 2.6571152, 0.06869271)
