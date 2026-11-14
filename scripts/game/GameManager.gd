@@ -29,7 +29,7 @@ var wheel_modifications: Dictionary = {}
 var lane_spawns: Array[Marker3D] = []
 
 func _ready() -> void:
-	print("[GameManager] Initializing...")
+	Log.d(Log.Category.RACE, "[GameManager] Initializing...")
 	discover_vehicles()
 
 ## Discover vehicles by scanning scenes folder
@@ -41,7 +41,7 @@ func discover_vehicles() -> void:
 		push_error("[GameManager] Cannot open vehicles folder: " + VEHICLE_SCENES_FOLDER)
 		return
 
-	print("[GameManager] Scanning for vehicles...")
+	Log.d(Log.Category.RACE, "[GameManager] Scanning for vehicles...")
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
@@ -54,10 +54,10 @@ func discover_vehicles() -> void:
 			if ResourceLoader.exists(specific_tres):
 				config = load(specific_tres) as VehicleConfig
 				if config:
-					print("  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
+					Log.d(Log.Category.RACE, "  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
 			else:
 				config = _create_default_config(vehicle_name, scene_path)
-				print("  ✓ %s (default config)" % vehicle_name)
+				Log.d(Log.Category.RACE, "  ✓ %s (default config)" % vehicle_name)
 
 			if config and config.is_valid():
 				available_vehicles.append(config)
@@ -69,7 +69,7 @@ func discover_vehicles() -> void:
 	if available_vehicles.is_empty():
 		push_error("[GameManager] No vehicles found in: " + VEHICLE_SCENES_FOLDER)
 	else:
-		print("[GameManager] Found %d vehicles" % available_vehicles.size())
+		Log.d(Log.Category.RACE, "[GameManager] Found %d vehicles" % available_vehicles.size())
 
 ## Generate a default config for any vehicle without a .tres
 func _create_default_config(vehicle_name: String, scene_path: String) -> VehicleConfig:
@@ -114,7 +114,7 @@ func set_spawn_markers(markers: Array[Marker3D]) -> void:
 		push_error("[GameManager] Empty spawn marker array provided!")
 		return
 	lane_spawns = markers
-	print("[GameManager] Spawn markers set: %d lanes" % markers.size())
+	Log.d(Log.Category.RACE, "[GameManager] Spawn markers set: %d lanes" % markers.size())
 
 ## Spawn vehicle body only (NO script attachment here)
 ## RaceManager handles script attachment after add_child
@@ -150,7 +150,7 @@ func spawn_vehicle(config: VehicleConfig, is_player: bool, lane: int) -> Vehicle
 	vehicle_body.set_meta("is_player", is_player)
 	vehicle_body.set_meta("config", config)
 
-	print("[GameManager] Created vehicle body for lane %d" % lane)
+	Log.d(Log.Category.RACE, "[GameManager] Created vehicle body for lane %d" % lane)
 	return vehicle_body
 
 ## Debug info

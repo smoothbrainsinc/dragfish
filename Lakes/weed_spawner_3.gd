@@ -76,7 +76,7 @@ func _build_multimesh():
 	var mmi = MultiMeshInstance3D.new()
 	mmi.multimesh = mm
 	add_child(mmi)
-	print("WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
+	Log.d(Log.Category.WORLD, "WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
 
 func _pick_weighted_tri(tris: Array, areas: Array, total: float) -> int:
 	var r = randf() * total

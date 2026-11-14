@@ -47,7 +47,7 @@ func setup(front_config: TireConfig, rear_config: TireConfig) -> void:
 		rear_config.optimal_slip_ratio
 	)
 
-	print("[TirePhysics] Setup:",
+	Log.d(Log.Category.SETUP, "[TirePhysics] Setup:",
 		"Front μ=%.2f" % front_base_friction,
 		"Rear μ=%.2f" % rear_base_friction,
 		"Slip=%.2f" % optimal_slip_ratio
@@ -164,6 +164,8 @@ func get_slip_speed(w: VehicleWheel3D) -> float:
 var _log_timer: float = 0.0
 
 func log_wheel_debug(wheels: Array[VehicleWheel3D]) -> void:
+	if not Log.is_on(Log.Category.LATERAL):
+		return
 	_log_timer += get_physics_process_delta_time()
 	if _log_timer < 0.25:
 		return
@@ -173,9 +175,9 @@ func log_wheel_debug(wheels: Array[VehicleWheel3D]) -> void:
 		if vehicle == null:
 			return
 	var v_local := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
-	print("[Lat] lat=%.3f fwd=%.3f yaw_rate=%.4f" % [v_local.x, v_local.z, vehicle.angular_velocity.y])
+	Log.d(Log.Category.LATERAL, "[Lat] lat=%.3f fwd=%.3f yaw_rate=%.4f" % [v_local.x, v_local.z, vehicle.angular_velocity.y])
 	for w in wheels:
-		print("[Lat] %s steer=%.4f eng=%.1f brake=%.1f skid=%.2f rpm=%.1f" % [w.name, w.steering, w.engine_force, w.brake, w.get_skidinfo(), w.get_rpm()])
+		Log.d(Log.Category.LATERAL, "[Lat] %s steer=%.4f eng=%.1f brake=%.1f skid=%.2f rpm=%.1f" % [w.name, w.steering, w.engine_force, w.brake, w.get_skidinfo(), w.get_rpm()])
 # ---------------------------------------------------------
 # Optional longitudinal damping (VERY light)
 # ---------------------------------------------------------

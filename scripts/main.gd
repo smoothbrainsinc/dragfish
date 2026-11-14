@@ -23,7 +23,7 @@ func _process(delta: float) -> void:
 		_fps_accum = 0.0
 		_fps_ticks += 1
 		if _fps_ticks % 4 == 0 and not OS.get_cmdline_user_args().is_empty():
-			print("[fps] %d sim x%.2f" % [Engine.get_frames_per_second(), sim_rate])
+			Log.d(Log.Category.WORLD, "[fps] %d sim x%.2f" % [Engine.get_frames_per_second(), sim_rate])
 
 func _parse_args() -> Dictionary:
 	var out := {}

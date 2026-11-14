@@ -115,7 +115,7 @@ func _spawn_entry(entry: SpawnEntry):
 		flock.setup(mmi, entry, _surface_y)
 		_target.add_child(flock)
 
-	print("SurfaceSpawner: placed %d of %s (%s)" % [entry.count, entry.model_path, "moving" if entry.moves else "static"])
+	Log.d(Log.Category.WORLD, "SurfaceSpawner: placed %d of %s (%s)" % [entry.count, entry.model_path, "moving" if entry.moves else "static"])
 
 func _load_mesh(path: String) -> Mesh:
 	var res = load(path)

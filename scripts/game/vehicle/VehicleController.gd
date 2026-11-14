@@ -186,9 +186,9 @@ func _physics_process(delta: float) -> void:
 	_apply_brakes(brake_input)
 	_apply_steering(steer)
 	
-	if Engine.get_physics_frames() % 60 == 0:
+	if Log.is_on(Log.Category.WHEELS) and Engine.get_physics_frames() % 60 == 0:
 		for w in all_wheels:
-			print(w.name, " contact: ", w.is_in_contact(), " rpm: ", snappedf(w.get_rpm(), 0.1),
+			Log.d(Log.Category.WHEELS, w.name, " contact: ", w.is_in_contact(), " rpm: ", snappedf(w.get_rpm(), 0.1),
 				" y: ", snappedf(w.global_position.y, 0.001),
 				" radius: ", w.wheel_radius, " travel: ", w.suspension_travel,
 				" rest: ", w.wheel_rest_length, " traction: ", w.use_as_traction)
@@ -363,7 +363,7 @@ func _update_driven_traction(delta: float) -> void:
 ## Once a second, when full throttle is on but the car is not moving, print what
 ## is holding it so the cause is visible instead of guessed.
 func _log_if_stuck(throttle: float, brake_input: float) -> void:
-	if not is_player or Engine.get_physics_frames() % 60 != 0:
+	if not is_player or not Log.is_on(Log.Category.PHYSICS) or Engine.get_physics_frames() % 60 != 0:
 		return
 	if throttle < 0.5 or absf(forward_speed) > 0.5:
 		return
@@ -371,7 +371,7 @@ func _log_if_stuck(throttle: float, brake_input: float) -> void:
 	for w in driven_wheels:
 		parts.append("%s fric=%.2f slip=%.1f skid=%.2f brake=%.0f contact=%s" % [
 			w.name, w.wheel_friction_slip, tires.get_slip_speed(w), w.get_skidinfo(), w.brake, w.is_in_contact()])
-	print("[Stuck?] thr=%.2f spd=%.2f pedal=%.2f lineLock=%s burnout=%s window=%.1f gear=%d | %s" % [
+	Log.d(Log.Category.PHYSICS, "[Stuck?] thr=%.2f spd=%.2f pedal=%.2f lineLock=%s burnout=%s window=%.1f gear=%d | %s" % [
 		throttle, forward_speed, brake_input, line_lock, burnout_active, _spin_window,
 		transmission.get_gear_number(), " | ".join(parts)])
 
@@ -385,7 +385,7 @@ func _set_line_lock(on: bool) -> void:
 	if on == line_lock:
 		return
 	line_lock = on
-	print("[Vehicle] Line lock %s" % ("ON" if on else "OFF"))
+	Log.d(Log.Category.GENERAL, "[Vehicle] Line lock %s" % ("ON" if on else "OFF"))
 
 func _apply_steering(amount: float) -> void:
 	for w in steering_wheels:

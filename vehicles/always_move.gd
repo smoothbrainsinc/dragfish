@@ -8,4 +8,4 @@ func _physics_process(_delta):
 	
 	# Show we're alive
 	if Engine.get_frames_drawn() % 60 == 0:
-		print("[%s] Speed: %.1f m/s" % [name, linear_velocity.length()])
+		Log.d(Log.Category.TEST, "[%s] Speed: %.1f m/s" % [name, linear_velocity.length()])

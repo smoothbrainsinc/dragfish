@@ -79,7 +79,7 @@ void fragment() {
 """
 
 func _ready():
-	print("\n=== FULL FLOCKING FISH SPAWNER ===")
+	Log.d(Log.Category.WORLD, "\n=== FULL FLOCKING FISH SPAWNER ===")
 	var fish_mesh = load_fish_mesh()
 	if not fish_mesh:
 		push_error("Could not load fish mesh!")
@@ -92,9 +92,9 @@ func _ready():
 	var hab := get_tree().get_first_node_in_group(habitat_group)
 	if hab is MeshInstance3D:
 		habitat_ok = _build_habitat(hab)
-	print("Habitat: ", habitat_ok)
+	Log.d(Log.Category.WORLD, "Habitat: ", habitat_ok)
 	spawn_fish()
-	print("✓ Spawned ", number_of_fish, " fish")
+	Log.d(Log.Category.WORLD, "✓ Spawned ", number_of_fish, " fish")
 
 # ---------- habitat (L2 mesh) ----------
 
@@ -203,7 +203,7 @@ func _fill_interior() -> void:
 	for i in n:
 		if bed[i] > -1e8 and bed[i] < surface_y - 1.0:
 			wet_cells.append(i)
-	print("Interior cells filled: ", filled, "  wet cells: ", wet_cells.size())
+	Log.d(Log.Category.WORLD, "Interior cells filled: ", filled, "  wet cells: ", wet_cells.size())
 
 func _bed_max(x: float, z: float, y: float) -> void:
 	var ix := floori((x - bed_origin.x) / CELL)

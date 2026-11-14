@@ -330,6 +330,10 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_faywk")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tltjv"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 1)
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_cfquh"]
 _surfaces = [{
 "aabb": AABB(-0.17483784, 0.41155407, -0.039649375, 0.11332286, 0.13337126, 0.03309991),
@@ -1164,10 +1168,11 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, -0.11817301, 2.0169327, 0.0
 mesh = SubResource("ArrayMesh_qyyyg")
 skeleton = NodePath("")
 
-[node name="leftOne" type="MeshInstance3D" parent="case_left_one" unique_id=312192168]
+[node name="lensLeftOne" type="MeshInstance3D" parent="case_left_one" unique_id=312192168]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_ydcls")
 skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_tltjv")
 
 [node name="omni_leftOne" type="OmniLight3D" parent="case_left_one" unique_id=865499083]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
@@ -1182,7 +1187,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11817301, 0.4882667, 0.045
 mesh = SubResource("ArrayMesh_ouuwl")
 skeleton = NodePath("")
 
-[node name="Empty_leftPreStage" type="OmniLight3D" parent="case_left_prestage" unique_id=84563357]
+[node name="omni_leftPreStage" type="OmniLight3D" parent="case_left_prestage" unique_id=84563357]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11817301, 0.4882667, 0.045663733)
 
 [node name="case_left_stage" type="MeshInstance3D" parent="." unique_id=540417696]
@@ -1195,7 +1200,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_fyvwp")
 skeleton = NodePath("")
 
-[node name="Empty_leftStage" type="OmniLight3D" parent="case_left_stage" unique_id=403461525]
+[node name="omni_leftStage" type="OmniLight3D" parent="case_left_stage" unique_id=403461525]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_left_three" type="MeshInstance3D" parent="." unique_id=1046754916]
@@ -1208,7 +1213,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_kigjv")
 skeleton = NodePath("")
 
-[node name="Empty_leftThree" type="OmniLight3D" parent="case_left_three" unique_id=410059848]
+[node name="omni_leftThree" type="OmniLight3D" parent="case_left_three" unique_id=410059848]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_left_two" type="MeshInstance3D" parent="." unique_id=1761318874]
@@ -1221,7 +1226,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_t2fm8")
 skeleton = NodePath("")
 
-[node name="Empty_leftTwo" type="OmniLight3D" parent="case_left_two" unique_id=1592312698]
+[node name="omni_leftTwo" type="OmniLight3D" parent="case_left_two" unique_id=1592312698]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_right_foul" type="MeshInstance3D" parent="." unique_id=1814832445]
@@ -1234,7 +1239,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_fjglm")
 skeleton = NodePath("")
 
-[node name="Empty_rightFoul" type="OmniLight3D" parent="case_right_foul" unique_id=2071422011]
+[node name="omni_rightFoul" type="OmniLight3D" parent="case_right_foul" unique_id=2071422011]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_right_go" type="MeshInstance3D" parent="." unique_id=921774027]
@@ -1247,7 +1252,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -1.1920929e-07, 2.235174
 mesh = SubResource("ArrayMesh_08v6v")
 skeleton = NodePath("")
 
-[node name="Empty_rightGo" type="OmniLight3D" parent="case_right_go" unique_id=1595215245]
+[node name="rightGo2" type="OmniLight3D" parent="case_right_go" unique_id=1595215245]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 7.450581e-09, 0, 0)
 
 [node name="case_right_one" type="MeshInstance3D" parent="." unique_id=1087224339]
@@ -1260,7 +1265,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, -7.450581e-09, 4.7683716e-0
 mesh = SubResource("ArrayMesh_rbtqk")
 skeleton = NodePath("")
 
-[node name="Empty_rightOne" type="OmniLight3D" parent="case_right_one" unique_id=1880156310]
+[node name="omni_rightOne" type="OmniLight3D" parent="case_right_one" unique_id=1880156310]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_right_prestage" type="MeshInstance3D" parent="." unique_id=794216673]
@@ -1273,7 +1278,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 4.7683716e-07, 2.2351742
 mesh = SubResource("ArrayMesh_2wjxk")
 skeleton = NodePath("")
 
-[node name="Empty_rightPreStage" type="OmniLight3D" parent="case_right_prestage" unique_id=1869502937]
+[node name="omni_rightPreStage" type="OmniLight3D" parent="case_right_prestage" unique_id=1869502937]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 7.450581e-09, 0, 0)
 
 [node name="case_right_stage" type="MeshInstance3D" parent="." unique_id=863669786]
@@ -1286,7 +1291,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 2.3841858e-07, 2.2351742
 mesh = SubResource("ArrayMesh_he5f2")
 skeleton = NodePath("")
 
-[node name="Empty_rightStage" type="OmniLight3D" parent="case_right_stage" unique_id=1917604614]
+[node name="omni_rightStage" type="OmniLight3D" parent="case_right_stage" unique_id=1917604614]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 7.450581e-09, 0, 0)
 
 [node name="case_right_three" type="MeshInstance3D" parent="." unique_id=2040124413]
@@ -1299,7 +1304,7 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, -7.450581e-09, -4.7683716e-
 mesh = SubResource("ArrayMesh_egj04")
 skeleton = NodePath("")
 
-[node name="Empty_rightThree" type="OmniLight3D" parent="case_right_three" unique_id=177358704]
+[node name="omni_rightThree" type="OmniLight3D" parent="case_right_three" unique_id=177358704]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="case_right_two" type="MeshInstance3D" parent="." unique_id=2010389692]
@@ -1312,5 +1317,5 @@ transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, -7.450581e-09, -4.7683716e-
 mesh = SubResource("ArrayMesh_llqn2")
 skeleton = NodePath("")
 
-[node name="Empty_rightTwo" type="OmniLight3D" parent="case_right_two" unique_id=1553582198]
+[node name="omni_rightTwo" type="OmniLight3D" parent="case_right_two" unique_id=1553582198]
 transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0, 0)

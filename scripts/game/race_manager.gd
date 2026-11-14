@@ -20,9 +20,9 @@ func _ready():
 		push_error("[RaceManager] No player vehicle selected!")
 		return
 
-	print("[RaceManager] Starting race:")
-	print("  Player: %s (lane %d)" % [GameManager.player_car_config.display_name, GameManager.player_lane])
-	print("  NPC: %s%s" % [
+	Log.d(Log.Category.RACE, "[RaceManager] Starting race:")
+	Log.d(Log.Category.RACE, "  Player: %s (lane %d)" % [GameManager.player_car_config.display_name, GameManager.player_lane])
+	Log.d(Log.Category.RACE, "  NPC: %s%s" % [
 		GameManager.npc_car_config.display_name if GameManager.npc_car_config else "None",
 		" (lane %d)" % GameManager.npc_lane if GameManager.npc_car_config else ""
 	])
@@ -33,7 +33,7 @@ func _ready():
 	start_tree_node = get_tree().get_first_node_in_group("start_tree")
 	if start_tree_node and start_tree_node.has_signal("green_light"):
 		start_tree_node.green_light.connect(_on_green_light)
-		print("[RaceManager] Connected to green light signal")
+		Log.d(Log.Category.RACE, "[RaceManager] Connected to green light signal")
 	else:
 		push_warning("[RaceManager] Could not connect to green light!")
 
@@ -48,7 +48,7 @@ func _setup_staging() -> void:
 	staging.setup(start_tree_node, player_vehicle, npc_vehicle)
 
 func _on_green_light() -> void:
-	print("[RaceManager] GREEN - Starting vehicles!")
+	Log.d(Log.Category.RACE, "[RaceManager] GREEN - Starting vehicles!")
 	if player_vehicle:
 		player_vehicle.start_race()
 	if npc_vehicle:
@@ -68,7 +68,7 @@ func spawn_vehicles() -> void:
 	var active: Array[int] = []
 
 	# === SPAWN PLAYER ===
-	print("\n[RaceManager] Spawning player vehicle...")
+	Log.d(Log.Category.RACE, "\n[RaceManager] Spawning player vehicle...")
 	var player_body = GameManager.spawn_vehicle(GameManager.player_car_config, true, GameManager.player_lane)
 
 	if not player_body:
@@ -98,7 +98,7 @@ func spawn_vehicles() -> void:
 	player_vehicle.start_vehicle()
 	active.append(player_lane_num)
 
-	print("  ✓ Player ready: %s at %s (lane %d)" % [
+	Log.d(Log.Category.RACE, "  ✓ Player ready: %s at %s (lane %d)" % [
 		GameManager.player_car_config.vehicle_name,
 		player_spawn_marker.global_position,
 		player_lane_num
@@ -106,7 +106,7 @@ func spawn_vehicles() -> void:
 
 	# === SPAWN NPC (optional) ===
 	if GameManager.npc_car_config != null:
-		print("\n[RaceManager] Spawning NPC vehicle...")
+		Log.d(Log.Category.RACE, "\n[RaceManager] Spawning NPC vehicle...")
 		var npc_body = GameManager.spawn_vehicle(GameManager.npc_car_config, false, GameManager.npc_lane)
 
 		if not npc_body:
@@ -136,20 +136,20 @@ func spawn_vehicles() -> void:
 		npc_vehicle.start_vehicle()
 		active.append(npc_lane_num)
 
-		print("  ✓ NPC ready: %s at %s (lane %d)" % [
+		Log.d(Log.Category.RACE, "  ✓ NPC ready: %s at %s (lane %d)" % [
 			GameManager.npc_car_config.vehicle_name,
 			npc_spawn_marker.global_position,
 			npc_lane_num
 		])
-		print("\n[RaceManager] === BOTH VEHICLES READY ===\n")
+		Log.d(Log.Category.RACE, "\n[RaceManager] === BOTH VEHICLES READY ===\n")
 	else:
-		print("\n[RaceManager] === SOLO RUN - NO NPC ===\n")
+		Log.d(Log.Category.RACE, "\n[RaceManager] === SOLO RUN - NO NPC ===\n")
 
 	GameManager.active_lanes = active
-	print("[RaceManager] Active lanes: ", active)
+	Log.d(Log.Category.RACE, "[RaceManager] Active lanes: ", active)
 
 func restart_race() -> void:
-	print("[RaceManager] Restarting race...")
+	Log.d(Log.Category.RACE, "[RaceManager] Restarting race...")
 
 	_cleanup_vehicle(player_vehicle)
 	_cleanup_vehicle(npc_vehicle)

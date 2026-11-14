@@ -36,7 +36,7 @@ func setup(transmission_config: TransmissionConfig, engine_cfg: EngineConfig) ->
 	config = transmission_config
 	engine_config = engine_cfg
 	current_gear = 0
-	print("[TransmissionModule] Setup: %s" % config.get_debug_info())
+	Log.d(Log.Category.SETUP, "[TransmissionModule] Setup: %s" % config.get_debug_info())
 
 
 func start() -> void:

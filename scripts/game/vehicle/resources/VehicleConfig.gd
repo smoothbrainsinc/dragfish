@@ -67,7 +67,7 @@ func apply_to_vehicle(vehicle: VehicleBody3D) -> void:
 			front_wheel_config.apply_to_wheel(child)
 		else:
 			rear_wheel_config.apply_to_wheel(child)
-		print("[WheelCfg] %s %s -> radius=%.3f rest=%.2f travel=%.2f friction=%.1f stiffness=%.2f maxForce=%.0f" % [
+		Log.d(Log.Category.SETUP, "[WheelCfg] %s %s -> radius=%.3f rest=%.2f travel=%.2f friction=%.1f stiffness=%.2f maxForce=%.0f" % [
 			vehicle_name, child.name, child.wheel_radius, child.wheel_rest_length,
 			child.suspension_travel, child.wheel_friction_slip,
 			child.suspension_stiffness, child.suspension_max_force])
@@ -97,7 +97,7 @@ func _localize(cfg: WheelConfig) -> WheelConfig:
 		return null
 	if cfg.resource_path.is_empty() or cfg.resource_path.begins_with(resource_path + "::"):
 		return cfg
-	print("[VehicleConfig] %s: wheel config was the shared file %s - embedding a private copy" % [vehicle_name, cfg.resource_path])
+	Log.d(Log.Category.SETUP, "[VehicleConfig] %s: wheel config was the shared file %s - embedding a private copy" % [vehicle_name, cfg.resource_path])
 	return cfg.duplicate(true) as WheelConfig
 
 
@@ -112,7 +112,7 @@ func save() -> void:
 	if err != OK:
 		push_error("[VehicleConfig] Failed to save %s: error %d" % [vehicle_name, err])
 	else:
-		print("[VehicleConfig] Saved: %s" % resource_path)
+		Log.d(Log.Category.SETUP, "[VehicleConfig] Saved: %s" % resource_path)
 
 func get_horsepower() -> float:
 	if not engine:

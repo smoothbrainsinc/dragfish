@@ -336,7 +336,7 @@ func _init_gpu(bottom_data: PackedByteArray, state_data: PackedByteArray) -> voi
 		_rd.texture_update(_tex_state_rd[1], 0, state_data)
 
 	_gpu_ready = true
-	print("SimController: GPU init ok (%dx%d, dx=%s, DT=%s, kind=%d)" % [n, n, dxv, dtv, kind])
+	Log.d(Log.Category.WORLD, "SimController: GPU init ok (%dx%d, dx=%s, DT=%s, kind=%d)" % [n, n, dxv, dtv, kind])
 
 func _img_uniform(binding: int, rid: RID) -> RDUniform:
 	var u := RDUniform.new()
@@ -435,6 +435,6 @@ func _on_debug_data(data: PackedByteArray) -> void:
 	dbg_max_speed = f[2]
 	dbg_wet_cells = f[3]
 	dbg_nan_cells = f[4]
-	print("[sim] t=%.2f vol=%.3f m3 max_h=%.3f max_u=%.2f wet=%d nan=%d" % [
+	Log.d(Log.Category.WORLD, "[sim] t=%.2f vol=%.3f m3 max_h=%.3f max_u=%.2f wet=%d nan=%d" % [
 		f[5], f[0], f[1], f[2], int(f[3]), int(f[4]),
 	])

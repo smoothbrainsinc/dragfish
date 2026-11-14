@@ -34,8 +34,8 @@ func _ready():
 	await get_tree().process_frame
 	_find_checkpoints()
 	_connect_checkpoints()
-	print("[Timing] Checkpoint-based timing system ready")
-	print("[Timing] Waiting for start tree signals...")
+	Log.d(Log.Category.TIMING, "[Timing] Checkpoint-based timing system ready")
+	Log.d(Log.Category.TIMING, "[Timing] Waiting for start tree signals...")
 
 # ============================================================================
 # SIGNAL CONNECTIONS (Called by RaceController or manually)
@@ -43,10 +43,10 @@ func _ready():
 func connect_to_start_tree(start_tree: Node):
 	if start_tree.has_signal("tree_started"):
 		start_tree.tree_started.connect(_on_tree_started)
-		print("[Timing] Connected to tree_started signal")
+		Log.d(Log.Category.TIMING, "[Timing] Connected to tree_started signal")
 	if start_tree.has_signal("green_light"):
 		start_tree.green_light.connect(_on_green_light)
-		print("[Timing] Connected to green_light signal")
+		Log.d(Log.Category.TIMING, "[Timing] Connected to green_light signal")
 
 # ============================================================================
 # SIGNAL HANDLERS
@@ -54,12 +54,12 @@ func connect_to_start_tree(start_tree: Node):
 func _on_tree_started():
 	reset_timing_data()
 	tree_started = true
-	print("[Timing] Armed and ready (foul detection ACTIVE)...")
+	Log.d(Log.Category.TIMING, "[Timing] Armed and ready (foul detection ACTIVE)...")
 
 func _on_green_light():
 	race_started = true
 	green_light_time = Time.get_ticks_msec() / 1000.0
-	print("[Timing] === RACE STARTED - CLOCK RUNNING ===")
+	Log.d(Log.Category.TIMING, "[Timing] === RACE STARTED - CLOCK RUNNING ===")
 
 # ============================================================================
 # CHECKPOINT HANDLERS
@@ -95,16 +95,16 @@ func _on_start_line_crossed(body: Node3D):
 		data["reaction_time"] = -999.0
 		data["vehicle_name"] = get_vehicle_name(body)
 		emit_signal("red_light_triggered", lane)
-		print("[Timing] Lane %d - ***** FOUL START - RED LIGHT! *****" % lane)
+		Log.d(Log.Category.TIMING, "[Timing] Lane %d - ***** FOUL START - RED LIGHT! *****" % lane)
 	else:
 		data["reaction_time"] = current_time - green_light_time
 		data["vehicle_name"] = get_vehicle_name(body)
 		if data["reaction_time"] < 0:
 			data["red_light"] = true
 			emit_signal("red_light_triggered", lane)
-			print("[Timing] Lane %d - RED LIGHT! RT: %.4f" % [lane, data["reaction_time"]])
+			Log.d(Log.Category.TIMING, "[Timing] Lane %d - RED LIGHT! RT: %.4f" % [lane, data["reaction_time"]])
 		else:
-			print("[Timing] Lane %d - Reaction Time: %.4f" % [lane, data["reaction_time"]])
+			Log.d(Log.Category.TIMING, "[Timing] Lane %d - Reaction Time: %.4f" % [lane, data["reaction_time"]])
 			emit_signal("checkpoint_crossed", lane, "start", data["reaction_time"])
 
 func _on_60ft_crossed(body: Node3D):
@@ -131,7 +131,7 @@ func _handle_checkpoint(body: Node3D, crossed_key: String, time_key: String, lab
 	data[crossed_key] = true
 	var current_time = Time.get_ticks_msec() / 1000.0
 	data[time_key] = current_time - green_light_time
-	print("[Timing] Lane %d - %s: %.4f" % [lane, label, data[time_key]])
+	Log.d(Log.Category.TIMING, "[Timing] Lane %d - %s: %.4f" % [lane, label, data[time_key]])
 	emit_signal("checkpoint_crossed", lane, label, data[time_key])
 
 func _on_speed_trap_entered(body: Node3D):
@@ -186,32 +186,32 @@ func _all_lanes_finished() -> bool:
 func _finalize_results():
 	var winner = get_winner()
 
-	print("\n" + "=".repeat(70))
-	print("=== ALL LANES DONE - RESULTS ===")
-	print("=".repeat(70))
+	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
+	Log.d(Log.Category.TIMING, "=== ALL LANES DONE - RESULTS ===")
+	Log.d(Log.Category.TIMING, "=".repeat(70))
 
 	for lane in active_lanes:
 		var d = timing_data[lane]
-		print("\nLane %d - %s" % [lane, d["vehicle_name"]])
+		Log.d(Log.Category.TIMING, "\nLane %d - %s" % [lane, d["vehicle_name"]])
 		if d["red_light"]:
-			print("  FOUL - RED LIGHT")
+			Log.d(Log.Category.TIMING, "  FOUL - RED LIGHT")
 			continue
-		print("  Reaction Time: %.4f sec" % d["reaction_time"])
-		print("  60 ft:         %.4f sec" % d["time_60ft"])
-		print("  330 ft:        %.4f sec" % d["time_330ft"])
-		print("  1/8 mile:      %.4f sec" % d["time_660ft"])
-		print("  1000 ft:       %.4f sec" % d["time_1000ft"])
-		print("  ET (1/4 mile): %.4f sec" % d["elapsed_time"])
-		print("  Speed:         %.2f MPH (%.2f KM/H)" % [d["speed_mph"], d["speed_kmh"]])
+		Log.d(Log.Category.TIMING, "  Reaction Time: %.4f sec" % d["reaction_time"])
+		Log.d(Log.Category.TIMING, "  60 ft:         %.4f sec" % d["time_60ft"])
+		Log.d(Log.Category.TIMING, "  330 ft:        %.4f sec" % d["time_330ft"])
+		Log.d(Log.Category.TIMING, "  1/8 mile:      %.4f sec" % d["time_660ft"])
+		Log.d(Log.Category.TIMING, "  1000 ft:       %.4f sec" % d["time_1000ft"])
+		Log.d(Log.Category.TIMING, "  ET (1/4 mile): %.4f sec" % d["elapsed_time"])
+		Log.d(Log.Category.TIMING, "  Speed:         %.2f MPH (%.2f KM/H)" % [d["speed_mph"], d["speed_kmh"]])
 
-	print("\n" + "=".repeat(70))
+	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
 	if str(winner) == "all_fouled":
-		print("*** ALL DRIVERS FOULED - NO WINNER ***")
+		Log.d(Log.Category.TIMING, "*** ALL DRIVERS FOULED - NO WINNER ***")
 	elif str(winner) == "none":
-		print("*** NO WINNER ***")
+		Log.d(Log.Category.TIMING, "*** NO WINNER ***")
 	else:
-		print("*** WINNER: LANE %d (%s) ***" % [winner, timing_data[winner]["vehicle_name"]])
-	print("=".repeat(70) + "\n")
+		Log.d(Log.Category.TIMING, "*** WINNER: LANE %d (%s) ***" % [winner, timing_data[winner]["vehicle_name"]])
+	Log.d(Log.Category.TIMING, "=".repeat(70) + "\n")
 
 	
 	# Lane 1 = right, lane 2 = left (per GameManager.gd lane assignment)
@@ -241,7 +241,7 @@ func reset_timing_data():
 	race_started = false
 	tree_started = false
 	green_light_time = 0.0
-	print("[Timing] Data reset for lanes: ", active_lanes)
+	Log.d(Log.Category.TIMING, "[Timing] Data reset for lanes: ", active_lanes)
 
 func _create_timing_data() -> Dictionary:
 	return {
@@ -292,26 +292,26 @@ func get_winner():
 
 func print_race_results(lane: int):
 	var data = timing_data[lane]
-	print("\n" + "=".repeat(70))
-	print("=== LANE %d RESULTS - %s ===" % [lane, data.get("vehicle_name", "Unknown")])
-	print("=".repeat(70))
+	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
+	Log.d(Log.Category.TIMING, "=== LANE %d RESULTS - %s ===" % [lane, data.get("vehicle_name", "Unknown")])
+	Log.d(Log.Category.TIMING, "=".repeat(70))
 	if data["red_light"]:
-		print("***** FOUL START - RED LIGHT *****")
+		Log.d(Log.Category.TIMING, "***** FOUL START - RED LIGHT *****")
 	if data["reaction_time"] > 0 and data["reaction_time"] != -999.0:
-		print("Reaction Time: %.4f sec" % data["reaction_time"])
+		Log.d(Log.Category.TIMING, "Reaction Time: %.4f sec" % data["reaction_time"])
 	if data["time_60ft"] > 0:
-		print("60 ft:         %.4f sec" % data["time_60ft"])
+		Log.d(Log.Category.TIMING, "60 ft:         %.4f sec" % data["time_60ft"])
 	if data["time_330ft"] > 0:
-		print("330 ft:        %.4f sec" % data["time_330ft"])
+		Log.d(Log.Category.TIMING, "330 ft:        %.4f sec" % data["time_330ft"])
 	if data["time_660ft"] > 0:
-		print("1/8 mile:      %.4f sec" % data["time_660ft"])
+		Log.d(Log.Category.TIMING, "1/8 mile:      %.4f sec" % data["time_660ft"])
 	if data["time_1000ft"] > 0:
-		print("1000 ft:       %.4f sec" % data["time_1000ft"])
+		Log.d(Log.Category.TIMING, "1000 ft:       %.4f sec" % data["time_1000ft"])
 	if data["elapsed_time"] > 0:
-		print("ET (1/4 mile): %.4f sec" % data["elapsed_time"])
+		Log.d(Log.Category.TIMING, "ET (1/4 mile): %.4f sec" % data["elapsed_time"])
 	if data["speed_mph"] > 0:
-		print("Speed:         %.2f MPH (%.2f KM/H)" % [data["speed_mph"], data["speed_kmh"]])
-	print("=".repeat(70))
+		Log.d(Log.Category.TIMING, "Speed:         %.2f MPH (%.2f KM/H)" % [data["speed_mph"], data["speed_kmh"]])
+	Log.d(Log.Category.TIMING, "=".repeat(70))
 
 # ============================================================================
 # CHECKPOINT DISCOVERY & CONNECTION
@@ -362,35 +362,35 @@ func _connect_checkpoints():
 	var connected_count = 0
 	if start_line:
 		start_line.body_entered.connect(_on_start_line_crossed)
-		print("[Timing] Connected: start_line")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: start_line")
 		connected_count += 1
 	if checkpoint_60ft:
 		checkpoint_60ft.body_entered.connect(_on_60ft_crossed)
-		print("[Timing] Connected: 60ft checkpoint")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: 60ft checkpoint")
 		connected_count += 1
 	if checkpoint_330ft:
 		checkpoint_330ft.body_entered.connect(_on_330ft_crossed)
-		print("[Timing] Connected: 330ft checkpoint")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: 330ft checkpoint")
 		connected_count += 1
 	if checkpoint_660ft:
 		checkpoint_660ft.body_entered.connect(_on_660ft_crossed)
-		print("[Timing] Connected: 660ft checkpoint")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: 660ft checkpoint")
 		connected_count += 1
 	if checkpoint_1000ft:
 		checkpoint_1000ft.body_entered.connect(_on_1000ft_crossed)
-		print("[Timing] Connected: 1000ft checkpoint")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: 1000ft checkpoint")
 		connected_count += 1
 	if speed_trap_start:
 		speed_trap_start.body_entered.connect(_on_speed_trap_entered)
-		print("[Timing] Connected: speed trap")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: speed trap")
 		connected_count += 1
 	if finish_line:
 		finish_line.body_entered.connect(_on_finish_line_crossed)
-		print("[Timing] Connected: finish line")
+		Log.d(Log.Category.TIMING, "[Timing] Connected: finish line")
 		connected_count += 1
-	print("[Timing] Total checkpoints connected: %d/7" % connected_count)
-	print("Start position: ", start_line.global_position)
-	print("Finish position:", finish_line.global_position)
+	Log.d(Log.Category.TIMING, "[Timing] Total checkpoints connected: %d/7" % connected_count)
+	Log.d(Log.Category.TIMING, "Start position: ", start_line.global_position)
+	Log.d(Log.Category.TIMING, "Finish position:", finish_line.global_position)
 
 func _on_center_line_crossed(body: Node3D):
 	if not race_started:
@@ -404,5 +404,5 @@ func _on_center_line_crossed(body: Node3D):
 	data["dnf"] = true
 	if not data["vehicle_name"]:
 		data["vehicle_name"] = get_vehicle_name(body)
-	print("[Timing] Lane %d - ***** CENTERLINE CROSSED - DNF! *****" % lane)
+	Log.d(Log.Category.TIMING, "[Timing] Lane %d - ***** CENTERLINE CROSSED - DNF! *****" % lane)
 	emit_signal("center_line_crossed", lane)

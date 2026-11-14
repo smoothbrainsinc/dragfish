@@ -53,17 +53,17 @@ func _ready():
 	var all_found = true
 	for i in range(wheel_labels.size()):
 		if not wheel_labels[i]:
-			print("WARNING: Wheel label ", i+1, " not found!")
+			Log.d(Log.Category.UI, "WARNING: Wheel label ", i+1, " not found!")
 			all_found = false
 	
 	if all_found:
-		print("[Dashboard] All UI elements found successfully!")
+		Log.d(Log.Category.UI, "[Dashboard] All UI elements found successfully!")
 	
 	# Set initial visibility
 	if detailed_panel:
 		detailed_panel.visible = show_detailed
 	
-	print("[Dashboard] UI ready for: %s" % vehicle.name)
+	Log.d(Log.Category.UI, "[Dashboard] UI ready for: %s" % vehicle.name)
 
 func find_ui_elements():
 	# Find all labels and panels by their names in the scene
@@ -143,7 +143,7 @@ func update_basic_stats():
 
 func update_detailed_stats():
 	if not gforce_label or not inputs_label:
-		print("Missing gforce or inputs label")
+		Log.d(Log.Category.UI, "Missing gforce or inputs label")
 		return
 	
 	
@@ -167,7 +167,7 @@ func update_detailed_stats():
 	for i in range(min(wheels.size(), current_wheel_labels.size())):
 		var label = current_wheel_labels[i]
 		if not label:
-			print("Wheel label ", i, " is null")
+			Log.d(Log.Category.UI, "Wheel label ", i, " is null")
 			continue
 		
 		var wheel = wheels[i]
@@ -196,7 +196,7 @@ func update_detailed_stats():
 func get_wheels() -> Array:
 	var wheels = []
 	if not vehicle:
-		print("No vehicle in get_wheels!")
+		Log.d(Log.Category.UI, "No vehicle in get_wheels!")
 		return wheels
 		
 	for child in vehicle.get_children():

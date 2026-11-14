@@ -9,5 +9,5 @@ func _ready():
 			for v in s.get_faces():
 				var w = n.global_transform * v
 				if w.y > 5.0:
-					print(n.get_path(), " | ", s.resource_path, " | ", w)
+					Log.d(Log.Category.WORLD, n.get_path(), " | ", s.resource_path, " | ", w)
 					break

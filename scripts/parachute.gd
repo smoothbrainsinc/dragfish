@@ -17,14 +17,14 @@ func _ready():
 func connect_to_finish_line():
 	var finish_line = get_tree().get_first_node_in_group("finish_checkpoint")
 	if finish_line:
-		print("[Chute] Connected on: ", get_parent().name)
+		Log.d(Log.Category.CHUTE, "[Chute] Connected on: ", get_parent().name)
 		finish_line.body_entered.connect(_on_finish_line_entered)
 	else:
-		print("[Chute] MISSED finish line!")
+		Log.d(Log.Category.CHUTE, "[Chute] MISSED finish line!")
 
 
 func _on_finish_line_entered(body: Node3D) -> void:
-	print("[Chute] body_entered: ", body.name, " parent: ", get_parent().name)
+	Log.d(Log.Category.CHUTE, "[Chute] body_entered: ", body.name, " parent: ", get_parent().name)
 	if body == get_parent():
 		deploy()
 
@@ -52,7 +52,7 @@ func deploy():
 	is_deployed = true
 	deployment_progress = 0.0
 	set_physics_process(true)
-	print("[Chute] Deployed!")
+	Log.d(Log.Category.CHUTE, "[Chute] Deployed!")
 
 func retract():
 	is_deployed = false
@@ -60,4 +60,4 @@ func retract():
 	set_physics_process(false)
 	if chute_mesh:
 		chute_mesh.visible = false
-	print("[Chute] Retracted")
+	Log.d(Log.Category.CHUTE, "[Chute] Retracted")

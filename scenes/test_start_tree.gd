@@ -30,4 +30,4 @@ func _on_button_pressed(lane: int, light_name: String) -> void:
 	var new_state: bool = not _state.get(key, false)
 	_state[key] = new_state
 	tree.set_light(lane, light_name, new_state)
-	print("[Test] Lane %d - %s -> %s" % [lane, light_name, new_state])
+	Log.d(Log.Category.TREE, "[Test] Lane %d - %s -> %s" % [lane, light_name, new_state])

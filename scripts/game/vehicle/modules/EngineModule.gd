@@ -24,12 +24,12 @@ func setup(engine_config: EngineConfig, vehicle_wheel_radius: float = 0.35) -> v
 	wheel_radius = vehicle_wheel_radius
 	current_rpm = config.idle_rpm
 	target_rpm = config.idle_rpm
-	print("[EngineModule] Setup: %d HP @ %.0f RPM, Wheel: %.2fm" % [
+	Log.d(Log.Category.ENGINE, "[EngineModule] Setup: %d HP @ %.0f RPM, Wheel: %.2fm" % [
 		config.get_peak_horsepower(),
 		config.get_peak_power_rpm(),
 		wheel_radius
 	])
-	print("[EngineModule] Redline: %.0f RPM | Rev Limiter: %.0f RPM" % [
+	Log.d(Log.Category.ENGINE, "[EngineModule] Redline: %.0f RPM | Rev Limiter: %.0f RPM" % [
 		config.redline_rpm,
 		config.rev_limiter_rpm
 	])
@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		if not is_rev_limited:
 			is_rev_limited = true
 			emit_signal("rev_limiter_activated")
-			print("[EngineModule] REV LIMITER at %.0f RPM" % current_rpm)
+			Log.d(Log.Category.ENGINE, "[EngineModule] REV LIMITER at %.0f RPM" % current_rpm)
 
 		current_rpm = min(current_rpm, config.redline_rpm)
 		target_rpm = config.redline_rpm - 500.0

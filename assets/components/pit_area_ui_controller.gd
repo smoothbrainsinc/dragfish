@@ -205,7 +205,7 @@ func _on_save_pressed() -> void:
 		push_error("[PitUI] No vehicle_config to save.")
 		return
 	vehicle_config.save()
-	print("[PitUI] Saved.")
+	Log.d(Log.Category.UI, "[PitUI] Saved.")
 
 
 func _on_reset_pressed() -> void:
@@ -214,7 +214,7 @@ func _on_reset_pressed() -> void:
 	vehicle_config.reset_to_class_stock()
 	vehicle_config.apply_to_vehicle(current_vehicle)
 	_load_spinboxes()
-	print("[PitUI] Reset to class stock.")
+	Log.d(Log.Category.UI, "[PitUI] Reset to class stock.")
 
 
 func _on_race_pressed() -> void:

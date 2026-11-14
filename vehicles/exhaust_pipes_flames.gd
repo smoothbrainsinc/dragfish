@@ -9,10 +9,10 @@ extends Node3D
 
 
 func _ready():
-	print("Found ", get_child_count(), " children")
+	Log.d(Log.Category.TEST, "Found ", get_child_count(), " children")
 	for marker in get_children():
-		print("Child: ", marker.name, " Type: ", marker.get_class())
-		print(marker.name, " forward: ", marker.global_transform.basis.z, " up: ", marker.global_transform.basis.y)
+		Log.d(Log.Category.TEST, "Child: ", marker.name, " Type: ", marker.get_class())
+		Log.d(Log.Category.TEST, marker.name, " forward: ", marker.global_transform.basis.z, " up: ", marker.global_transform.basis.y)
 		if marker is Node3D:
 			setup_flame(marker)
 

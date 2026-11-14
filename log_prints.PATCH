@@ -1,0 +1,1250 @@
+diff --git a/Lakes/hell_lake/meshes/Fish_spawner.gd b/Lakes/hell_lake/meshes/Fish_spawner.gd
+index 71ead7f..d5bafdb 100644
+--- a/Lakes/hell_lake/meshes/Fish_spawner.gd
++++ b/Lakes/hell_lake/meshes/Fish_spawner.gd
+@@ -66,7 +66,7 @@ void fragment() {
+ """
+ 
+ func _ready():
+-	print("\n=== FULL FLOCKING FISH SPAWNER ===")
++	Log.d(Log.Category.WORLD, "\n=== FULL FLOCKING FISH SPAWNER ===")
+ 	_sample_lake_mesh()
+ 	if _valid_tris.is_empty():
+ 		push_error("Fish spawner: no lake triangles sampled, aborting")
+@@ -81,7 +81,7 @@ func _ready():
+ 		return
+ 	setup_multimesh(fish_mesh, fish_material)
+ 	spawn_fish()
+-	print("✓ Spawned ", number_of_fish, " fish")
++	Log.d(Log.Category.WORLD, "✓ Spawned ", number_of_fish, " fish")
+ 
+ func _sample_lake_mesh():
+ 	if not mesh:
+@@ -107,7 +107,7 @@ func _sample_lake_mesh():
+ 			y_count += 1
+ 	if y_count > 0:
+ 		_lake_surface_y = y_sum / y_count
+-	print("Fish spawner: sampled ", _valid_tris.size(), " lake triangles, surface_y=", _lake_surface_y)
++	Log.d(Log.Category.WORLD, "Fish spawner: sampled ", _valid_tris.size(), " lake triangles, surface_y=", _lake_surface_y)
+ 
+ func _random_point_on_lake() -> Vector3:
+ 	var tri = _pick_weighted_tri(_valid_tris, _valid_areas, _total_area)
+diff --git a/Lakes/hell_lake/meshes/SurfaceSpawner.gd b/Lakes/hell_lake/meshes/SurfaceSpawner.gd
+index 7425a41..5a61647 100644
+--- a/Lakes/hell_lake/meshes/SurfaceSpawner.gd
++++ b/Lakes/hell_lake/meshes/SurfaceSpawner.gd
+@@ -115,7 +115,7 @@ func _spawn_entry(entry: SpawnEntry):
+ 		flock.setup(mmi, entry, _surface_y)
+ 		_target.add_child(flock)
+ 
+-	print("SurfaceSpawner: placed %d of %s (%s)" % [entry.count, entry.model_path, "moving" if entry.moves else "static"])
++	Log.d(Log.Category.WORLD, "SurfaceSpawner: placed %d of %s (%s)" % [entry.count, entry.model_path, "moving" if entry.moves else "static"])
+ 
+ func _load_mesh(path: String) -> Mesh:
+ 	var res = load(path)
+diff --git a/Lakes/weed_spawner_3.gd b/Lakes/weed_spawner_3.gd
+index bb233a9..5486e8c 100644
+--- a/Lakes/weed_spawner_3.gd
++++ b/Lakes/weed_spawner_3.gd
+@@ -76,7 +76,7 @@ func _build_multimesh():
+ 	var mmi = MultiMeshInstance3D.new()
+ 	mmi.multimesh = mm
+ 	add_child(mmi)
+-	print("WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
++	Log.d(Log.Category.WORLD, "WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
+ 
+ func _pick_weighted_tri(tris: Array, areas: Array, total: float) -> int:
+ 	var r = randf() * total
+diff --git a/Log.gd b/Log.gd
+index 62d8e53..066a7bc 100644
+--- a/Log.gd
++++ b/Log.gd
+@@ -1,19 +1,34 @@
+ extends Node
+ 
+-# Categories for logging. Add more here as your project grows.
+-enum Category { PHYSICS, SHIFT, CHUTE, WHEELS, GENERAL }
++enum Category {
++	PHYSICS, SHIFT, CHUTE, WHEELS, GENERAL, LATERAL, ENGINE, SETUP,
++	TREE, TIMING, RACE, CAMERA, UI, WORLD, TEST,
++}
+ 
+-# Toggle these on/off to control what prints to the console.
+-# true = prints, false = silent
++# Turn any category on (true) or off (false) here. Nothing else to touch.
+ var enabled: Dictionary = {
+ 	Category.PHYSICS: true,
+ 	Category.SHIFT: false,
+ 	Category.CHUTE: false,
+ 	Category.WHEELS: false,
+-	Category.GENERAL: false, # Keep general on for now
++	Category.GENERAL: false,
++	Category.LATERAL: false,   # tire sideways-slip spam, every 0.25s
++	Category.ENGINE: true,
++	Category.SETUP: true,      # startup / config messages
++	Category.TREE: true,
++	Category.TIMING: true,
++	Category.RACE: true,
++	Category.CAMERA: true,
++	Category.UI: true,
++	Category.WORLD: true,      # fish, weeds, water, fps
++	Category.TEST: true,
+ }
+ 
+-# The main logging function. Call this instead of print().
+-func d(category: Category, msg: String) -> void:
+-	if enabled.get(category, false):
+-		print(msg)
++
++func is_on(category: Category) -> bool:
++	return enabled.get(category, false)
++
++# Use instead of print(). Takes any number of things, like print().
++func d(category: Category, ...args: Array) -> void:
++	if is_on(category):
++		print("".join(args.map(str)))
+diff --git a/assets/components/pit_area_ui_controller.gd b/assets/components/pit_area_ui_controller.gd
+index 7b52eee..9cc9426 100644
+--- a/assets/components/pit_area_ui_controller.gd
++++ b/assets/components/pit_area_ui_controller.gd
+@@ -205,7 +205,7 @@ func _on_save_pressed() -> void:
+ 		push_error("[PitUI] No vehicle_config to save.")
+ 		return
+ 	vehicle_config.save()
+-	print("[PitUI] Saved.")
++	Log.d(Log.Category.UI, "[PitUI] Saved.")
+ 
+ 
+ func _on_reset_pressed() -> void:
+@@ -214,7 +214,7 @@ func _on_reset_pressed() -> void:
+ 	vehicle_config.reset_to_class_stock()
+ 	vehicle_config.apply_to_vehicle(current_vehicle)
+ 	_load_spinboxes()
+-	print("[PitUI] Reset to class stock.")
++	Log.d(Log.Category.UI, "[PitUI] Reset to class stock.")
+ 
+ 
+ func _on_race_pressed() -> void:
+diff --git a/assets/models/hell_water.gd b/assets/models/hell_water.gd
+index 39d53d1..f6cf65b 100644
+--- a/assets/models/hell_water.gd
++++ b/assets/models/hell_water.gd
+@@ -44,4 +44,4 @@ func _bake_depth_map() -> void:
+ 	_mat.set_shader_parameter("max_depth",       MAX_DEPTH)
+ 	_mat.set_shader_parameter("lake_origin",     LAKE_ORIGIN)
+ 	_mat.set_shader_parameter("lake_size",       LAKE_SIZE)
+-	print("[WaterDepth] Raycast depth map baked: ", MAP_RES, "x", MAP_RES)
++	Log.d(Log.Category.WORLD, "[WaterDepth] Raycast depth map baked: ", MAP_RES, "x", MAP_RES)
+diff --git a/scenes/fish_spawner_embedded.gd b/scenes/fish_spawner_embedded.gd
+index f82eda9..a091540 100644
+--- a/scenes/fish_spawner_embedded.gd
++++ b/scenes/fish_spawner_embedded.gd
+@@ -79,7 +79,7 @@ void fragment() {
+ """
+ 
+ func _ready():
+-	print("\n=== FULL FLOCKING FISH SPAWNER ===")
++	Log.d(Log.Category.WORLD, "\n=== FULL FLOCKING FISH SPAWNER ===")
+ 	var fish_mesh = load_fish_mesh()
+ 	if not fish_mesh:
+ 		push_error("Could not load fish mesh!")
+@@ -92,9 +92,9 @@ func _ready():
+ 	var hab := get_tree().get_first_node_in_group(habitat_group)
+ 	if hab is MeshInstance3D:
+ 		habitat_ok = _build_habitat(hab)
+-	print("Habitat: ", habitat_ok)
++	Log.d(Log.Category.WORLD, "Habitat: ", habitat_ok)
+ 	spawn_fish()
+-	print("✓ Spawned ", number_of_fish, " fish")
++	Log.d(Log.Category.WORLD, "✓ Spawned ", number_of_fish, " fish")
+ 
+ # ---------- habitat (L2 mesh) ----------
+ 
+@@ -203,7 +203,7 @@ func _fill_interior() -> void:
+ 	for i in n:
+ 		if bed[i] > -1e8 and bed[i] < surface_y - 1.0:
+ 			wet_cells.append(i)
+-	print("Interior cells filled: ", filled, "  wet cells: ", wet_cells.size())
++	Log.d(Log.Category.WORLD, "Interior cells filled: ", filled, "  wet cells: ", wet_cells.size())
+ 
+ func _bed_max(x: float, z: float, y: float) -> void:
+ 	var ix := floori((x - bed_origin.x) / CELL)
+diff --git a/scenes/pluto_raceway_searching_for_sky_daddies.gd b/scenes/pluto_raceway_searching_for_sky_daddies.gd
+index e44840e..8c5a7de 100644
+--- a/scenes/pluto_raceway_searching_for_sky_daddies.gd
++++ b/scenes/pluto_raceway_searching_for_sky_daddies.gd
+@@ -9,5 +9,5 @@ func _ready():
+ 			for v in s.get_faces():
+ 				var w = n.global_transform * v
+ 				if w.y > 5.0:
+-					print(n.get_path(), " | ", s.resource_path, " | ", w)
++					Log.d(Log.Category.WORLD, n.get_path(), " | ", s.resource_path, " | ", w)
+ 					break
+diff --git a/scenes/test_start_tree.gd b/scenes/test_start_tree.gd
+index f171fa3..dff9a00 100644
+--- a/scenes/test_start_tree.gd
++++ b/scenes/test_start_tree.gd
+@@ -30,4 +30,4 @@ func _on_button_pressed(lane: int, light_name: String) -> void:
+ 	var new_state: bool = not _state.get(key, false)
+ 	_state[key] = new_state
+ 	tree.set_light(lane, light_name, new_state)
+-	print("[Test] Lane %d - %s -> %s" % [lane, light_name, new_state])
++	Log.d(Log.Category.TREE, "[Test] Lane %d - %s -> %s" % [lane, light_name, new_state])
+diff --git a/scenes/weed_spawner.gd b/scenes/weed_spawner.gd
+index bb233a9..5486e8c 100644
+--- a/scenes/weed_spawner.gd
++++ b/scenes/weed_spawner.gd
+@@ -76,7 +76,7 @@ func _build_multimesh():
+ 	var mmi = MultiMeshInstance3D.new()
+ 	mmi.multimesh = mm
+ 	add_child(mmi)
+-	print("WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
++	Log.d(Log.Category.WORLD, "WeedSpawner: placed %d weeds in %d valid faces" % [weed_count, valid_tris.size()])
+ 
+ func _pick_weighted_tri(tris: Array, areas: Array, total: float) -> int:
+ 	var r = randf() * total
+diff --git a/scripts/game/GameManager.gd b/scripts/game/GameManager.gd
+index 40aa6d0..d0fbf0d 100644
+--- a/scripts/game/GameManager.gd
++++ b/scripts/game/GameManager.gd
+@@ -29,7 +29,7 @@ var wheel_modifications: Dictionary = {}
+ var lane_spawns: Array[Marker3D] = []
+ 
+ func _ready() -> void:
+-	print("[GameManager] Initializing...")
++	Log.d(Log.Category.RACE, "[GameManager] Initializing...")
+ 	discover_vehicles()
+ 
+ ## Discover vehicles by scanning scenes folder
+@@ -41,7 +41,7 @@ func discover_vehicles() -> void:
+ 		push_error("[GameManager] Cannot open vehicles folder: " + VEHICLE_SCENES_FOLDER)
+ 		return
+ 
+-	print("[GameManager] Scanning for vehicles...")
++	Log.d(Log.Category.RACE, "[GameManager] Scanning for vehicles...")
+ 	dir.list_dir_begin()
+ 	var file_name = dir.get_next()
+ 	while file_name != "":
+@@ -54,10 +54,10 @@ func discover_vehicles() -> void:
+ 			if ResourceLoader.exists(specific_tres):
+ 				config = load(specific_tres) as VehicleConfig
+ 				if config:
+-					print("  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
++					Log.d(Log.Category.RACE, "  ✓ %s (custom config, %d HP)" % [vehicle_name, config.get_horsepower()])
+ 			else:
+ 				config = _create_default_config(vehicle_name, scene_path)
+-				print("  ✓ %s (default config)" % vehicle_name)
++				Log.d(Log.Category.RACE, "  ✓ %s (default config)" % vehicle_name)
+ 
+ 			if config and config.is_valid():
+ 				available_vehicles.append(config)
+@@ -69,7 +69,7 @@ func discover_vehicles() -> void:
+ 	if available_vehicles.is_empty():
+ 		push_error("[GameManager] No vehicles found in: " + VEHICLE_SCENES_FOLDER)
+ 	else:
+-		print("[GameManager] Found %d vehicles" % available_vehicles.size())
++		Log.d(Log.Category.RACE, "[GameManager] Found %d vehicles" % available_vehicles.size())
+ 
+ ## Generate a default config for any vehicle without a .tres
+ func _create_default_config(vehicle_name: String, scene_path: String) -> VehicleConfig:
+@@ -114,7 +114,7 @@ func set_spawn_markers(markers: Array[Marker3D]) -> void:
+ 		push_error("[GameManager] Empty spawn marker array provided!")
+ 		return
+ 	lane_spawns = markers
+-	print("[GameManager] Spawn markers set: %d lanes" % markers.size())
++	Log.d(Log.Category.RACE, "[GameManager] Spawn markers set: %d lanes" % markers.size())
+ 
+ ## Spawn vehicle body only (NO script attachment here)
+ ## RaceManager handles script attachment after add_child
+@@ -150,7 +150,7 @@ func spawn_vehicle(config: VehicleConfig, is_player: bool, lane: int) -> Vehicle
+ 	vehicle_body.set_meta("is_player", is_player)
+ 	vehicle_body.set_meta("config", config)
+ 
+-	print("[GameManager] Created vehicle body for lane %d" % lane)
++	Log.d(Log.Category.RACE, "[GameManager] Created vehicle body for lane %d" % lane)
+ 	return vehicle_body
+ 
+ ## Debug info
+diff --git a/scripts/game/cameras.gd b/scripts/game/cameras.gd
+index b82528e..8599b26 100644
+--- a/scripts/game/cameras.gd
++++ b/scripts/game/cameras.gd
+@@ -83,11 +83,11 @@ func find_all_vehicles():
+ 		find_vehicles_recursive(all_nodes)
+ 	
+ 	if available_vehicles.size() > 0:
+-		print("[Camera] Found %d vehicles to follow" % available_vehicles.size())
++		Log.d(Log.Category.CAMERA, "[Camera] Found %d vehicles to follow" % available_vehicles.size())
+ 		for i in range(available_vehicles.size()):
+-			print("  [%d] %s" % [i + 1, available_vehicles[i].name])
++			Log.d(Log.Category.CAMERA, "  [%d] %s" % [i + 1, available_vehicles[i].name])
+ 	else:
+-		print("[Camera] WARNING: No vehicles found!")
++		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No vehicles found!")
+ 
+ func find_vehicles_recursive(nodes: Array):
+ 	"""Recursively search for vehicle nodes"""
+@@ -113,9 +113,9 @@ func find_target():
+ 		current_vehicle_index = 0
+ 	
+ 	if target:
+-		print("[Camera] Auto-locked onto target: %s" % target.name)
++		Log.d(Log.Category.CAMERA, "[Camera] Auto-locked onto target: %s" % target.name)
+ 	else:
+-		print("[Camera] WARNING: No target found in group '%s'!" % target_group_name)
++		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No target found in group '%s'!" % target_group_name)
+ 
+ func setup_cameras():
+ 	"""Set up cameras from the exported array"""
+@@ -128,9 +128,9 @@ func setup_cameras():
+ 	if cameras.size() > 0:
+ 		follow_camera = cameras[0]
+ 		set_current_camera(0)
+-		print("[Camera] Found %d cameras" % cameras.size())
++		Log.d(Log.Category.CAMERA, "[Camera] Found %d cameras" % cameras.size())
+ 	else:
+-		print("[Camera] WARNING: No cameras found!")
++		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No cameras found!")
+ 
+ func _physics_process(delta):
+ 	if not follow_camera:
+@@ -265,31 +265,31 @@ func handle_right_click(event: InputEventMouseButton):
+ 		orbit_mode = true
+ 		orbit_active = true  # Lock orbit position
+ 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+-		print("[Camera] ORBIT MODE - Move mouse to rotate, release to lock position")
++		Log.d(Log.Category.CAMERA, "[Camera] ORBIT MODE - Move mouse to rotate, release to lock position")
+ 	else:
+ 		orbit_mode = false
+ 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+-		print("[Camera] ORBIT LOCKED - Press R to reset behind vehicle")
++		Log.d(Log.Category.CAMERA, "[Camera] ORBIT LOCKED - Press R to reset behind vehicle")
+ 
+ func handle_left_click(event: InputEventMouseButton):
+ 	"""Handle left mouse button for pan"""
+ 	if event.pressed and Input.is_key_pressed(KEY_SHIFT):
+ 		pan_mode = true
+ 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+-		print("[Camera] PAN MODE - Move mouse to pan camera view")
++		Log.d(Log.Category.CAMERA, "[Camera] PAN MODE - Move mouse to pan camera view")
+ 	elif not event.pressed and pan_mode:
+ 		pan_mode = false
+ 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+-		print("[Camera] Pan offset: %.1f, %.1f, %.1f" % [pan_offset.x, pan_offset.y, pan_offset.z])
++		Log.d(Log.Category.CAMERA, "[Camera] Pan offset: %.1f, %.1f, %.1f" % [pan_offset.x, pan_offset.y, pan_offset.z])
+ 
+ func handle_mouse_wheel(event: InputEventMouseButton):
+ 	"""Handle mouse wheel for zoom"""
+ 	if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+ 		current_distance = clamp(current_distance - zoom_speed, min_distance, max_distance)
+-		print("[Camera] Zoom: %.1f" % current_distance)
++		Log.d(Log.Category.CAMERA, "[Camera] Zoom: %.1f" % current_distance)
+ 	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+ 		current_distance = clamp(current_distance + zoom_speed, min_distance, max_distance)
+-		print("[Camera] Zoom: %.1f" % current_distance)
++		Log.d(Log.Category.CAMERA, "[Camera] Zoom: %.1f" % current_distance)
+ 
+ func handle_orbit_mouse_motion(event: InputEventMouseMotion):
+ 	"""Handle mouse motion for orbit"""
+@@ -317,7 +317,7 @@ func reset_camera():
+ 	current_distance = camera_distance
+ 	current_height = camera_height
+ 	pan_offset = Vector3.ZERO  # Also reset pan
+-	print("[Camera] RESET - Back to follow mode")
++	Log.d(Log.Category.CAMERA, "[Camera] RESET - Back to follow mode")
+ 
+ func set_current_camera(idx: int):
+ 	if idx < 0 or idx >= cameras.size():
+@@ -340,12 +340,12 @@ func set_current_camera(idx: int):
+ 	follow_camera = cameras[idx]
+ 	current_camera_index = idx
+ 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if follow_camera.has_method("set_active") else Input.MOUSE_MODE_VISIBLE
+-	print("[Camera] Switched to Camera%d" % (idx + 1))
++	Log.d(Log.Category.CAMERA, "[Camera] Switched to Camera%d" % (idx + 1))
+ 
+ func set_target(new_target: Node3D):
+ 	"""Set a new target to follow"""
+ 	target = new_target
+-	print("[Camera] Target changed to: %s" % target.name)
++	Log.d(Log.Category.CAMERA, "[Camera] Target changed to: %s" % target.name)
+ 
+ func set_target_by_group(group_name: String):
+ 	"""Set target by group name"""
+@@ -365,7 +365,7 @@ func add_camera(camera: Camera3D):
+ 	"""Add a camera to the controller"""
+ 	if not camera in cameras:
+ 		cameras.append(camera)
+-		print("[Camera] Added camera: %s" % camera.name)
++		Log.d(Log.Category.CAMERA, "[Camera] Added camera: %s" % camera.name)
+ 
+ func remove_camera(camera: Camera3D):
+ 	"""Remove a camera from the controller"""
+@@ -377,7 +377,7 @@ func remove_camera(camera: Camera3D):
+ 		if idx == current_camera_index and cameras.size() > 0:
+ 			set_current_camera(0)
+ 		
+-		print("[Camera] Removed camera: %s" % camera.name)
++		Log.d(Log.Category.CAMERA, "[Camera] Removed camera: %s" % camera.name)
+ 
+ func _notification(what):
+ 	# Release mouse when exiting game
+diff --git a/scripts/game/race_controller.gd b/scripts/game/race_controller.gd
+index f533e59..9d09039 100644
+--- a/scripts/game/race_controller.gd
++++ b/scripts/game/race_controller.gd
+@@ -12,11 +12,11 @@ var race_manager: Node
+ var finish_line_scene: Control
+ 
+ func _ready():
+-	print("[RaceController] Initializing coordinator...")
++	Log.d(Log.Category.RACE, "[RaceController] Initializing coordinator...")
+ 	await get_tree().process_frame
+ 	_find_systems()
+ 	_connect_systems()
+-	print("[RaceController] All systems connected!")
++	Log.d(Log.Category.RACE, "[RaceController] All systems connected!")
+ 
+ func _find_systems() -> void:
+ 	start_tree = get_tree().get_first_node_in_group("start_tree")
+@@ -27,43 +27,43 @@ func _find_systems() -> void:
+ 	if not start_tree:
+ 		push_error("[RaceController] Start tree not found!")
+ 	else:
+-		print("  ✓ Start tree: %s" % start_tree.name)
++		Log.d(Log.Category.RACE, "  ✓ Start tree: %s" % start_tree.name)
+ 	if not timing_system:
+ 		push_error("[RaceController] Timing system not found!")
+ 	else:
+-		print("  ✓ Timing system: %s" % timing_system.name)
++		Log.d(Log.Category.RACE, "  ✓ Timing system: %s" % timing_system.name)
+ 	if not race_manager:
+ 		push_warning("[RaceController] Race manager not found (optional)")
+ 	else:
+-		print("  ✓ Race manager: %s" % race_manager.name)
++		Log.d(Log.Category.RACE, "  ✓ Race manager: %s" % race_manager.name)
+ 	if not finish_line_scene:
+ 		push_warning("[RaceController] Finish line UI not found (optional)")
+ 	else:
+-		print("  ✓ Finish line UI: %s" % finish_line_scene.name)
++		Log.d(Log.Category.RACE, "  ✓ Finish line UI: %s" % finish_line_scene.name)
+ 
+ func _connect_systems() -> void:
+ 	if start_tree and timing_system:
+ 		if timing_system.has_method("connect_to_start_tree"):
+ 			timing_system.connect_to_start_tree(start_tree)
+-			print("  ✓ Connected start tree → timing system")
++			Log.d(Log.Category.RACE, "  ✓ Connected start tree → timing system")
+ 		elif start_tree.has_signal("green_light"):
+ 			start_tree.green_light.connect(timing_system._on_green_light)
+-			print("  ✓ Manually connected green_light signal")
++			Log.d(Log.Category.RACE, "  ✓ Manually connected green_light signal")
+ 
+ 	if timing_system and start_tree:
+ 		if timing_system.has_signal("red_light_triggered"):
+ 			timing_system.red_light_triggered.connect(_on_red_light_triggered)
+-			print("  ✓ Connected timing system → start tree (fouls)")
++			Log.d(Log.Category.RACE, "  ✓ Connected timing system → start tree (fouls)")
+ 
+ 	if timing_system:
+ 		if timing_system.has_signal("race_finished"):
+ 			timing_system.race_finished.connect(_on_race_finished)
+-			print("  ✓ Connected timing system → race results")
++			Log.d(Log.Category.RACE, "  ✓ Connected timing system → race results")
+ 
+ 	if timing_system and finish_line_scene:
+ 		if timing_system.has_signal("all_finished"):
+ 			timing_system.all_finished.connect(finish_line_scene.show_results)
+-			print("  ✓ Connected timing system → finish line UI")
++			Log.d(Log.Category.RACE, "  ✓ Connected timing system → finish line UI")
+ 
+ 	if finish_line_scene:
+ 		finish_line_scene.rematch_requested.connect(_on_rematch_requested)
+@@ -71,27 +71,27 @@ func _connect_systems() -> void:
+ 		finish_line_scene.new_race_requested.connect(_on_new_race_requested)
+ 		finish_line_scene.end_requested.connect(_on_end_requested)
+ 		finish_line_scene.fish_requested.connect(_on_fish_requested)
+-		print("  ✓ Connected finish line UI buttons")
++		Log.d(Log.Category.RACE, "  ✓ Connected finish line UI buttons")
+ 
+ func _on_red_light_triggered(lane: int) -> void:
+-	print("[RaceController] RED LIGHT FOUL: lane %d!" % lane)
++	Log.d(Log.Category.RACE, "[RaceController] RED LIGHT FOUL: lane %d!" % lane)
+ 	if start_tree and start_tree.has_method("trigger_red_light"):
+ 		start_tree.trigger_red_light(lane)
+ 
+ func _on_race_finished(lane: int, results: Dictionary) -> void:
+-	print("[RaceController] Lane %d finished!" % lane)
+-	print("  ET: %.3f" % results.get("elapsed_time", 0.0))
+-	print("  Speed: %.1f mph" % results.get("speed_mph", 0.0))
++	Log.d(Log.Category.RACE, "[RaceController] Lane %d finished!" % lane)
++	Log.d(Log.Category.RACE, "  ET: %.3f" % results.get("elapsed_time", 0.0))
++	Log.d(Log.Category.RACE, "  Speed: %.1f mph" % results.get("speed_mph", 0.0))
+ 
+ func restart_race() -> void:
+-	print("[RaceController] Restarting race...")
++	Log.d(Log.Category.RACE, "[RaceController] Restarting race...")
+ 	if start_tree and start_tree.has_method("reset_tree"):
+ 		start_tree.reset_tree()
+ 	if timing_system and timing_system.has_method("reset_timing_data"):
+ 		timing_system.reset_timing_data()
+ 	if race_manager and race_manager.has_method("restart_race"):
+ 		race_manager.restart_race()
+-	print("[RaceController] Race restarted")
++	Log.d(Log.Category.RACE, "[RaceController] Race restarted")
+ 
+ func _on_rematch_requested() -> void:
+ 	finish_line_scene.visible = false
+@@ -115,7 +115,7 @@ func _on_fish_requested() -> void:
+ func start_race() -> void:
+ 	if start_tree and start_tree.has_method("start_sequence"):
+ 		start_tree.start_sequence()
+-		print("[RaceController] Started race sequence")
++		Log.d(Log.Category.RACE, "[RaceController] Started race sequence")
+ 	else:
+ 		push_warning("[RaceController] Cannot start race - no start tree!")
+ 
+diff --git a/scripts/game/race_manager.gd b/scripts/game/race_manager.gd
+index b60f0a2..ce729f9 100644
+--- a/scripts/game/race_manager.gd
++++ b/scripts/game/race_manager.gd
+@@ -20,9 +20,9 @@ func _ready():
+ 		push_error("[RaceManager] No player vehicle selected!")
+ 		return
+ 
+-	print("[RaceManager] Starting race:")
+-	print("  Player: %s (lane %d)" % [GameManager.player_car_config.display_name, GameManager.player_lane])
+-	print("  NPC: %s%s" % [
++	Log.d(Log.Category.RACE, "[RaceManager] Starting race:")
++	Log.d(Log.Category.RACE, "  Player: %s (lane %d)" % [GameManager.player_car_config.display_name, GameManager.player_lane])
++	Log.d(Log.Category.RACE, "  NPC: %s%s" % [
+ 		GameManager.npc_car_config.display_name if GameManager.npc_car_config else "None",
+ 		" (lane %d)" % GameManager.npc_lane if GameManager.npc_car_config else ""
+ 	])
+@@ -33,7 +33,7 @@ func _ready():
+ 	start_tree_node = get_tree().get_first_node_in_group("start_tree")
+ 	if start_tree_node and start_tree_node.has_signal("green_light"):
+ 		start_tree_node.green_light.connect(_on_green_light)
+-		print("[RaceManager] Connected to green light signal")
++		Log.d(Log.Category.RACE, "[RaceManager] Connected to green light signal")
+ 	else:
+ 		push_warning("[RaceManager] Could not connect to green light!")
+ 
+@@ -48,7 +48,7 @@ func _setup_staging() -> void:
+ 	staging.setup(start_tree_node, player_vehicle, npc_vehicle)
+ 
+ func _on_green_light() -> void:
+-	print("[RaceManager] GREEN - Starting vehicles!")
++	Log.d(Log.Category.RACE, "[RaceManager] GREEN - Starting vehicles!")
+ 	if player_vehicle:
+ 		player_vehicle.start_race()
+ 	if npc_vehicle:
+@@ -68,7 +68,7 @@ func spawn_vehicles() -> void:
+ 	var active: Array[int] = []
+ 
+ 	# === SPAWN PLAYER ===
+-	print("\n[RaceManager] Spawning player vehicle...")
++	Log.d(Log.Category.RACE, "\n[RaceManager] Spawning player vehicle...")
+ 	var player_body = GameManager.spawn_vehicle(GameManager.player_car_config, true, GameManager.player_lane)
+ 
+ 	if not player_body:
+@@ -98,7 +98,7 @@ func spawn_vehicles() -> void:
+ 	player_vehicle.start_vehicle()
+ 	active.append(player_lane_num)
+ 
+-	print("  ✓ Player ready: %s at %s (lane %d)" % [
++	Log.d(Log.Category.RACE, "  ✓ Player ready: %s at %s (lane %d)" % [
+ 		GameManager.player_car_config.vehicle_name,
+ 		player_spawn_marker.global_position,
+ 		player_lane_num
+@@ -106,7 +106,7 @@ func spawn_vehicles() -> void:
+ 
+ 	# === SPAWN NPC (optional) ===
+ 	if GameManager.npc_car_config != null:
+-		print("\n[RaceManager] Spawning NPC vehicle...")
++		Log.d(Log.Category.RACE, "\n[RaceManager] Spawning NPC vehicle...")
+ 		var npc_body = GameManager.spawn_vehicle(GameManager.npc_car_config, false, GameManager.npc_lane)
+ 
+ 		if not npc_body:
+@@ -136,20 +136,20 @@ func spawn_vehicles() -> void:
+ 		npc_vehicle.start_vehicle()
+ 		active.append(npc_lane_num)
+ 
+-		print("  ✓ NPC ready: %s at %s (lane %d)" % [
++		Log.d(Log.Category.RACE, "  ✓ NPC ready: %s at %s (lane %d)" % [
+ 			GameManager.npc_car_config.vehicle_name,
+ 			npc_spawn_marker.global_position,
+ 			npc_lane_num
+ 		])
+-		print("\n[RaceManager] === BOTH VEHICLES READY ===\n")
++		Log.d(Log.Category.RACE, "\n[RaceManager] === BOTH VEHICLES READY ===\n")
+ 	else:
+-		print("\n[RaceManager] === SOLO RUN - NO NPC ===\n")
++		Log.d(Log.Category.RACE, "\n[RaceManager] === SOLO RUN - NO NPC ===\n")
+ 
+ 	GameManager.active_lanes = active
+-	print("[RaceManager] Active lanes: ", active)
++	Log.d(Log.Category.RACE, "[RaceManager] Active lanes: ", active)
+ 
+ func restart_race() -> void:
+-	print("[RaceManager] Restarting race...")
++	Log.d(Log.Category.RACE, "[RaceManager] Restarting race...")
+ 
+ 	_cleanup_vehicle(player_vehicle)
+ 	_cleanup_vehicle(npc_vehicle)
+diff --git a/scripts/game/staging_controller.gd b/scripts/game/staging_controller.gd
+index 37a9ab1..406922f 100644
+--- a/scripts/game/staging_controller.gd
++++ b/scripts/game/staging_controller.gd
+@@ -53,7 +53,7 @@ func setup(start_tree: Node, player: VehicleController, npc: VehicleController)
+ 		npc.staged = true
+ 
+ 	_active = true
+-	print("[Staging] Ready: lanes %s" % [_vehicles.keys()])
++	Log.d(Log.Category.RACE, "[Staging] Ready: lanes %s" % [_vehicles.keys()])
+ 
+ 
+ func _process(delta: float) -> void:
+@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
+ 			_fired = true
+ 			_capture_rollout_reference()
+ 			all_staged.emit()
+-			print("[Staging] All lanes staged - starting tree")
++			Log.d(Log.Category.RACE, "[Staging] All lanes staged - starting tree")
+ 			tree.start_tree_sequence()
+ 	else:
+ 		_hold = 0.0
+diff --git a/scripts/game/timing_system.gd b/scripts/game/timing_system.gd
+index dd1879e..26c4912 100644
+--- a/scripts/game/timing_system.gd
++++ b/scripts/game/timing_system.gd
+@@ -34,8 +34,8 @@ func _ready():
+ 	await get_tree().process_frame
+ 	_find_checkpoints()
+ 	_connect_checkpoints()
+-	print("[Timing] Checkpoint-based timing system ready")
+-	print("[Timing] Waiting for start tree signals...")
++	Log.d(Log.Category.TIMING, "[Timing] Checkpoint-based timing system ready")
++	Log.d(Log.Category.TIMING, "[Timing] Waiting for start tree signals...")
+ 
+ # ============================================================================
+ # SIGNAL CONNECTIONS (Called by RaceController or manually)
+@@ -43,10 +43,10 @@ func _ready():
+ func connect_to_start_tree(start_tree: Node):
+ 	if start_tree.has_signal("tree_started"):
+ 		start_tree.tree_started.connect(_on_tree_started)
+-		print("[Timing] Connected to tree_started signal")
++		Log.d(Log.Category.TIMING, "[Timing] Connected to tree_started signal")
+ 	if start_tree.has_signal("green_light"):
+ 		start_tree.green_light.connect(_on_green_light)
+-		print("[Timing] Connected to green_light signal")
++		Log.d(Log.Category.TIMING, "[Timing] Connected to green_light signal")
+ 
+ # ============================================================================
+ # SIGNAL HANDLERS
+@@ -54,12 +54,12 @@ func connect_to_start_tree(start_tree: Node):
+ func _on_tree_started():
+ 	reset_timing_data()
+ 	tree_started = true
+-	print("[Timing] Armed and ready (foul detection ACTIVE)...")
++	Log.d(Log.Category.TIMING, "[Timing] Armed and ready (foul detection ACTIVE)...")
+ 
+ func _on_green_light():
+ 	race_started = true
+ 	green_light_time = Time.get_ticks_msec() / 1000.0
+-	print("[Timing] === RACE STARTED - CLOCK RUNNING ===")
++	Log.d(Log.Category.TIMING, "[Timing] === RACE STARTED - CLOCK RUNNING ===")
+ 
+ # ============================================================================
+ # CHECKPOINT HANDLERS
+@@ -95,16 +95,16 @@ func _on_start_line_crossed(body: Node3D):
+ 		data["reaction_time"] = -999.0
+ 		data["vehicle_name"] = get_vehicle_name(body)
+ 		emit_signal("red_light_triggered", lane)
+-		print("[Timing] Lane %d - ***** FOUL START - RED LIGHT! *****" % lane)
++		Log.d(Log.Category.TIMING, "[Timing] Lane %d - ***** FOUL START - RED LIGHT! *****" % lane)
+ 	else:
+ 		data["reaction_time"] = current_time - green_light_time
+ 		data["vehicle_name"] = get_vehicle_name(body)
+ 		if data["reaction_time"] < 0:
+ 			data["red_light"] = true
+ 			emit_signal("red_light_triggered", lane)
+-			print("[Timing] Lane %d - RED LIGHT! RT: %.4f" % [lane, data["reaction_time"]])
++			Log.d(Log.Category.TIMING, "[Timing] Lane %d - RED LIGHT! RT: %.4f" % [lane, data["reaction_time"]])
+ 		else:
+-			print("[Timing] Lane %d - Reaction Time: %.4f" % [lane, data["reaction_time"]])
++			Log.d(Log.Category.TIMING, "[Timing] Lane %d - Reaction Time: %.4f" % [lane, data["reaction_time"]])
+ 			emit_signal("checkpoint_crossed", lane, "start", data["reaction_time"])
+ 
+ func _on_60ft_crossed(body: Node3D):
+@@ -131,7 +131,7 @@ func _handle_checkpoint(body: Node3D, crossed_key: String, time_key: String, lab
+ 	data[crossed_key] = true
+ 	var current_time = Time.get_ticks_msec() / 1000.0
+ 	data[time_key] = current_time - green_light_time
+-	print("[Timing] Lane %d - %s: %.4f" % [lane, label, data[time_key]])
++	Log.d(Log.Category.TIMING, "[Timing] Lane %d - %s: %.4f" % [lane, label, data[time_key]])
+ 	emit_signal("checkpoint_crossed", lane, label, data[time_key])
+ 
+ func _on_speed_trap_entered(body: Node3D):
+@@ -186,32 +186,32 @@ func _all_lanes_finished() -> bool:
+ func _finalize_results():
+ 	var winner = get_winner()
+ 
+-	print("\n" + "=".repeat(70))
+-	print("=== ALL LANES DONE - RESULTS ===")
+-	print("=".repeat(70))
++	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
++	Log.d(Log.Category.TIMING, "=== ALL LANES DONE - RESULTS ===")
++	Log.d(Log.Category.TIMING, "=".repeat(70))
+ 
+ 	for lane in active_lanes:
+ 		var d = timing_data[lane]
+-		print("\nLane %d - %s" % [lane, d["vehicle_name"]])
++		Log.d(Log.Category.TIMING, "\nLane %d - %s" % [lane, d["vehicle_name"]])
+ 		if d["red_light"]:
+-			print("  FOUL - RED LIGHT")
++			Log.d(Log.Category.TIMING, "  FOUL - RED LIGHT")
+ 			continue
+-		print("  Reaction Time: %.4f sec" % d["reaction_time"])
+-		print("  60 ft:         %.4f sec" % d["time_60ft"])
+-		print("  330 ft:        %.4f sec" % d["time_330ft"])
+-		print("  1/8 mile:      %.4f sec" % d["time_660ft"])
+-		print("  1000 ft:       %.4f sec" % d["time_1000ft"])
+-		print("  ET (1/4 mile): %.4f sec" % d["elapsed_time"])
+-		print("  Speed:         %.2f MPH (%.2f KM/H)" % [d["speed_mph"], d["speed_kmh"]])
+-
+-	print("\n" + "=".repeat(70))
++		Log.d(Log.Category.TIMING, "  Reaction Time: %.4f sec" % d["reaction_time"])
++		Log.d(Log.Category.TIMING, "  60 ft:         %.4f sec" % d["time_60ft"])
++		Log.d(Log.Category.TIMING, "  330 ft:        %.4f sec" % d["time_330ft"])
++		Log.d(Log.Category.TIMING, "  1/8 mile:      %.4f sec" % d["time_660ft"])
++		Log.d(Log.Category.TIMING, "  1000 ft:       %.4f sec" % d["time_1000ft"])
++		Log.d(Log.Category.TIMING, "  ET (1/4 mile): %.4f sec" % d["elapsed_time"])
++		Log.d(Log.Category.TIMING, "  Speed:         %.2f MPH (%.2f KM/H)" % [d["speed_mph"], d["speed_kmh"]])
++
++	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
+ 	if str(winner) == "all_fouled":
+-		print("*** ALL DRIVERS FOULED - NO WINNER ***")
++		Log.d(Log.Category.TIMING, "*** ALL DRIVERS FOULED - NO WINNER ***")
+ 	elif str(winner) == "none":
+-		print("*** NO WINNER ***")
++		Log.d(Log.Category.TIMING, "*** NO WINNER ***")
+ 	else:
+-		print("*** WINNER: LANE %d (%s) ***" % [winner, timing_data[winner]["vehicle_name"]])
+-	print("=".repeat(70) + "\n")
++		Log.d(Log.Category.TIMING, "*** WINNER: LANE %d (%s) ***" % [winner, timing_data[winner]["vehicle_name"]])
++	Log.d(Log.Category.TIMING, "=".repeat(70) + "\n")
+ 
+ 	
+ 	# Lane 1 = right, lane 2 = left (per GameManager.gd lane assignment)
+@@ -241,7 +241,7 @@ func reset_timing_data():
+ 	race_started = false
+ 	tree_started = false
+ 	green_light_time = 0.0
+-	print("[Timing] Data reset for lanes: ", active_lanes)
++	Log.d(Log.Category.TIMING, "[Timing] Data reset for lanes: ", active_lanes)
+ 
+ func _create_timing_data() -> Dictionary:
+ 	return {
+@@ -292,26 +292,26 @@ func get_winner():
+ 
+ func print_race_results(lane: int):
+ 	var data = timing_data[lane]
+-	print("\n" + "=".repeat(70))
+-	print("=== LANE %d RESULTS - %s ===" % [lane, data.get("vehicle_name", "Unknown")])
+-	print("=".repeat(70))
++	Log.d(Log.Category.TIMING, "\n" + "=".repeat(70))
++	Log.d(Log.Category.TIMING, "=== LANE %d RESULTS - %s ===" % [lane, data.get("vehicle_name", "Unknown")])
++	Log.d(Log.Category.TIMING, "=".repeat(70))
+ 	if data["red_light"]:
+-		print("***** FOUL START - RED LIGHT *****")
++		Log.d(Log.Category.TIMING, "***** FOUL START - RED LIGHT *****")
+ 	if data["reaction_time"] > 0 and data["reaction_time"] != -999.0:
+-		print("Reaction Time: %.4f sec" % data["reaction_time"])
++		Log.d(Log.Category.TIMING, "Reaction Time: %.4f sec" % data["reaction_time"])
+ 	if data["time_60ft"] > 0:
+-		print("60 ft:         %.4f sec" % data["time_60ft"])
++		Log.d(Log.Category.TIMING, "60 ft:         %.4f sec" % data["time_60ft"])
+ 	if data["time_330ft"] > 0:
+-		print("330 ft:        %.4f sec" % data["time_330ft"])
++		Log.d(Log.Category.TIMING, "330 ft:        %.4f sec" % data["time_330ft"])
+ 	if data["time_660ft"] > 0:
+-		print("1/8 mile:      %.4f sec" % data["time_660ft"])
++		Log.d(Log.Category.TIMING, "1/8 mile:      %.4f sec" % data["time_660ft"])
+ 	if data["time_1000ft"] > 0:
+-		print("1000 ft:       %.4f sec" % data["time_1000ft"])
++		Log.d(Log.Category.TIMING, "1000 ft:       %.4f sec" % data["time_1000ft"])
+ 	if data["elapsed_time"] > 0:
+-		print("ET (1/4 mile): %.4f sec" % data["elapsed_time"])
++		Log.d(Log.Category.TIMING, "ET (1/4 mile): %.4f sec" % data["elapsed_time"])
+ 	if data["speed_mph"] > 0:
+-		print("Speed:         %.2f MPH (%.2f KM/H)" % [data["speed_mph"], data["speed_kmh"]])
+-	print("=".repeat(70))
++		Log.d(Log.Category.TIMING, "Speed:         %.2f MPH (%.2f KM/H)" % [data["speed_mph"], data["speed_kmh"]])
++	Log.d(Log.Category.TIMING, "=".repeat(70))
+ 
+ # ============================================================================
+ # CHECKPOINT DISCOVERY & CONNECTION
+@@ -362,35 +362,35 @@ func _connect_checkpoints():
+ 	var connected_count = 0
+ 	if start_line:
+ 		start_line.body_entered.connect(_on_start_line_crossed)
+-		print("[Timing] Connected: start_line")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: start_line")
+ 		connected_count += 1
+ 	if checkpoint_60ft:
+ 		checkpoint_60ft.body_entered.connect(_on_60ft_crossed)
+-		print("[Timing] Connected: 60ft checkpoint")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: 60ft checkpoint")
+ 		connected_count += 1
+ 	if checkpoint_330ft:
+ 		checkpoint_330ft.body_entered.connect(_on_330ft_crossed)
+-		print("[Timing] Connected: 330ft checkpoint")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: 330ft checkpoint")
+ 		connected_count += 1
+ 	if checkpoint_660ft:
+ 		checkpoint_660ft.body_entered.connect(_on_660ft_crossed)
+-		print("[Timing] Connected: 660ft checkpoint")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: 660ft checkpoint")
+ 		connected_count += 1
+ 	if checkpoint_1000ft:
+ 		checkpoint_1000ft.body_entered.connect(_on_1000ft_crossed)
+-		print("[Timing] Connected: 1000ft checkpoint")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: 1000ft checkpoint")
+ 		connected_count += 1
+ 	if speed_trap_start:
+ 		speed_trap_start.body_entered.connect(_on_speed_trap_entered)
+-		print("[Timing] Connected: speed trap")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: speed trap")
+ 		connected_count += 1
+ 	if finish_line:
+ 		finish_line.body_entered.connect(_on_finish_line_crossed)
+-		print("[Timing] Connected: finish line")
++		Log.d(Log.Category.TIMING, "[Timing] Connected: finish line")
+ 		connected_count += 1
+-	print("[Timing] Total checkpoints connected: %d/7" % connected_count)
+-	print("Start position: ", start_line.global_position)
+-	print("Finish position:", finish_line.global_position)
++	Log.d(Log.Category.TIMING, "[Timing] Total checkpoints connected: %d/7" % connected_count)
++	Log.d(Log.Category.TIMING, "Start position: ", start_line.global_position)
++	Log.d(Log.Category.TIMING, "Finish position:", finish_line.global_position)
+ 
+ func _on_center_line_crossed(body: Node3D):
+ 	if not race_started:
+@@ -404,5 +404,5 @@ func _on_center_line_crossed(body: Node3D):
+ 	data["dnf"] = true
+ 	if not data["vehicle_name"]:
+ 		data["vehicle_name"] = get_vehicle_name(body)
+-	print("[Timing] Lane %d - ***** CENTERLINE CROSSED - DNF! *****" % lane)
++	Log.d(Log.Category.TIMING, "[Timing] Lane %d - ***** CENTERLINE CROSSED - DNF! *****" % lane)
+ 	emit_signal("center_line_crossed", lane)
+diff --git a/scripts/game/vehicle/VehicleController.gd b/scripts/game/vehicle/VehicleController.gd
+index f674127..d01abb2 100644
+--- a/scripts/game/vehicle/VehicleController.gd
++++ b/scripts/game/vehicle/VehicleController.gd
+@@ -186,9 +186,9 @@ func _physics_process(delta: float) -> void:
+ 	_apply_brakes(brake_input)
+ 	_apply_steering(steer)
+ 	
+-	if Engine.get_physics_frames() % 60 == 0:
++	if Log.is_on(Log.Category.WHEELS) and Engine.get_physics_frames() % 60 == 0:
+ 		for w in all_wheels:
+-			print(w.name, " contact: ", w.is_in_contact(), " rpm: ", snappedf(w.get_rpm(), 0.1),
++			Log.d(Log.Category.WHEELS, w.name, " contact: ", w.is_in_contact(), " rpm: ", snappedf(w.get_rpm(), 0.1),
+ 				" y: ", snappedf(w.global_position.y, 0.001),
+ 				" radius: ", w.wheel_radius, " travel: ", w.suspension_travel,
+ 				" rest: ", w.wheel_rest_length, " traction: ", w.use_as_traction)
+@@ -363,7 +363,7 @@ func _update_driven_traction(delta: float) -> void:
+ ## Once a second, when full throttle is on but the car is not moving, print what
+ ## is holding it so the cause is visible instead of guessed.
+ func _log_if_stuck(throttle: float, brake_input: float) -> void:
+-	if not is_player or Engine.get_physics_frames() % 60 != 0:
++	if not is_player or not Log.is_on(Log.Category.PHYSICS) or Engine.get_physics_frames() % 60 != 0:
+ 		return
+ 	if throttle < 0.5 or absf(forward_speed) > 0.5:
+ 		return
+@@ -371,7 +371,7 @@ func _log_if_stuck(throttle: float, brake_input: float) -> void:
+ 	for w in driven_wheels:
+ 		parts.append("%s fric=%.2f slip=%.1f skid=%.2f brake=%.0f contact=%s" % [
+ 			w.name, w.wheel_friction_slip, tires.get_slip_speed(w), w.get_skidinfo(), w.brake, w.is_in_contact()])
+-	print("[Stuck?] thr=%.2f spd=%.2f pedal=%.2f lineLock=%s burnout=%s window=%.1f gear=%d | %s" % [
++	Log.d(Log.Category.PHYSICS, "[Stuck?] thr=%.2f spd=%.2f pedal=%.2f lineLock=%s burnout=%s window=%.1f gear=%d | %s" % [
+ 		throttle, forward_speed, brake_input, line_lock, burnout_active, _spin_window,
+ 		transmission.get_gear_number(), " | ".join(parts)])
+ 
+@@ -385,7 +385,7 @@ func _set_line_lock(on: bool) -> void:
+ 	if on == line_lock:
+ 		return
+ 	line_lock = on
+-	print("[Vehicle] Line lock %s" % ("ON" if on else "OFF"))
++	Log.d(Log.Category.GENERAL, "[Vehicle] Line lock %s" % ("ON" if on else "OFF"))
+ 
+ func _apply_steering(amount: float) -> void:
+ 	for w in steering_wheels:
+diff --git a/scripts/game/vehicle/modules/EngineModule.gd b/scripts/game/vehicle/modules/EngineModule.gd
+index 7f00e42..82ec9ed 100644
+--- a/scripts/game/vehicle/modules/EngineModule.gd
++++ b/scripts/game/vehicle/modules/EngineModule.gd
+@@ -24,12 +24,12 @@ func setup(engine_config: EngineConfig, vehicle_wheel_radius: float = 0.35) -> v
+ 	wheel_radius = vehicle_wheel_radius
+ 	current_rpm = config.idle_rpm
+ 	target_rpm = config.idle_rpm
+-	print("[EngineModule] Setup: %d HP @ %.0f RPM, Wheel: %.2fm" % [
++	Log.d(Log.Category.ENGINE, "[EngineModule] Setup: %d HP @ %.0f RPM, Wheel: %.2fm" % [
+ 		config.get_peak_horsepower(),
+ 		config.get_peak_power_rpm(),
+ 		wheel_radius
+ 	])
+-	print("[EngineModule] Redline: %.0f RPM | Rev Limiter: %.0f RPM" % [
++	Log.d(Log.Category.ENGINE, "[EngineModule] Redline: %.0f RPM | Rev Limiter: %.0f RPM" % [
+ 		config.redline_rpm,
+ 		config.rev_limiter_rpm
+ 	])
+@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
+ 		if not is_rev_limited:
+ 			is_rev_limited = true
+ 			emit_signal("rev_limiter_activated")
+-			print("[EngineModule] REV LIMITER at %.0f RPM" % current_rpm)
++			Log.d(Log.Category.ENGINE, "[EngineModule] REV LIMITER at %.0f RPM" % current_rpm)
+ 
+ 		current_rpm = min(current_rpm, config.redline_rpm)
+ 		target_rpm = config.redline_rpm - 500.0
+diff --git a/scripts/game/vehicle/modules/InputModule.gd b/scripts/game/vehicle/modules/InputModule.gd
+index daa0899..88caa54 100644
+--- a/scripts/game/vehicle/modules/InputModule.gd
++++ b/scripts/game/vehicle/modules/InputModule.gd
+@@ -69,7 +69,7 @@ func setup(player_controlled: bool, config: VehicleConfig = null) -> void:
+ 			ai_target_reaction_time = randf_range(0.10, 0.25)
+ 			ai_throttle_variation = 0.05
+ 		
+-		print("[InputModule] AI setup: reaction=%.3fs, consistency=%.2f" % [
++		Log.d(Log.Category.SETUP, "[InputModule] AI setup: reaction=%.3fs, consistency=%.2f" % [
+ 			ai_target_reaction_time,
+ 			ai_throttle_variation
+ 		])
+@@ -99,7 +99,7 @@ func _validate_input_map() -> void:
+ func start_race() -> void:
+ 	race_started = true
+ 	set_physics_process(true)
+-	print("[InputModule] Race started - %s" % ("Player" if is_player_controlled else "AI"))
++	Log.d(Log.Category.SETUP, "[InputModule] Race started - %s" % ("Player" if is_player_controlled else "AI"))
+ 
+ func stop() -> void:
+ 	set_physics_process(false)
+diff --git a/scripts/game/vehicle/modules/TirePhysicsModule.gd b/scripts/game/vehicle/modules/TirePhysicsModule.gd
+index e23eadc..f4c40be 100644
+--- a/scripts/game/vehicle/modules/TirePhysicsModule.gd
++++ b/scripts/game/vehicle/modules/TirePhysicsModule.gd
+@@ -47,7 +47,7 @@ func setup(front_config: TireConfig, rear_config: TireConfig) -> void:
+ 		rear_config.optimal_slip_ratio
+ 	)
+ 
+-	print("[TirePhysics] Setup:",
++	Log.d(Log.Category.SETUP, "[TirePhysics] Setup:",
+ 		"Front μ=%.2f" % front_base_friction,
+ 		"Rear μ=%.2f" % rear_base_friction,
+ 		"Slip=%.2f" % optimal_slip_ratio
+@@ -164,6 +164,8 @@ func get_slip_speed(w: VehicleWheel3D) -> float:
+ var _log_timer: float = 0.0
+ 
+ func log_wheel_debug(wheels: Array[VehicleWheel3D]) -> void:
++	if not Log.is_on(Log.Category.LATERAL):
++		return
+ 	_log_timer += get_physics_process_delta_time()
+ 	if _log_timer < 0.25:
+ 		return
+@@ -173,9 +175,9 @@ func log_wheel_debug(wheels: Array[VehicleWheel3D]) -> void:
+ 		if vehicle == null:
+ 			return
+ 	var v_local := vehicle.global_transform.basis.inverse() * vehicle.linear_velocity
+-	print("[Lat] lat=%.3f fwd=%.3f yaw_rate=%.4f" % [v_local.x, v_local.z, vehicle.angular_velocity.y])
++	Log.d(Log.Category.LATERAL, "[Lat] lat=%.3f fwd=%.3f yaw_rate=%.4f" % [v_local.x, v_local.z, vehicle.angular_velocity.y])
+ 	for w in wheels:
+-		print("[Lat] %s steer=%.4f eng=%.1f brake=%.1f skid=%.2f rpm=%.1f" % [w.name, w.steering, w.engine_force, w.brake, w.get_skidinfo(), w.get_rpm()])
++		Log.d(Log.Category.LATERAL, "[Lat] %s steer=%.4f eng=%.1f brake=%.1f skid=%.2f rpm=%.1f" % [w.name, w.steering, w.engine_force, w.brake, w.get_skidinfo(), w.get_rpm()])
+ # ---------------------------------------------------------
+ # Optional longitudinal damping (VERY light)
+ # ---------------------------------------------------------
+diff --git a/scripts/game/vehicle/modules/TransmissionModule.gd b/scripts/game/vehicle/modules/TransmissionModule.gd
+index a6e64dd..83c7bb8 100644
+--- a/scripts/game/vehicle/modules/TransmissionModule.gd
++++ b/scripts/game/vehicle/modules/TransmissionModule.gd
+@@ -36,7 +36,7 @@ func setup(transmission_config: TransmissionConfig, engine_cfg: EngineConfig) ->
+ 	config = transmission_config
+ 	engine_config = engine_cfg
+ 	current_gear = 0
+-	print("[TransmissionModule] Setup: %s" % config.get_debug_info())
++	Log.d(Log.Category.SETUP, "[TransmissionModule] Setup: %s" % config.get_debug_info())
+ 
+ 
+ func start() -> void:
+diff --git a/scripts/game/vehicle/resources/VehicleConfig.gd b/scripts/game/vehicle/resources/VehicleConfig.gd
+index cb9645e..c2705d0 100644
+--- a/scripts/game/vehicle/resources/VehicleConfig.gd
++++ b/scripts/game/vehicle/resources/VehicleConfig.gd
+@@ -67,7 +67,7 @@ func apply_to_vehicle(vehicle: VehicleBody3D) -> void:
+ 			front_wheel_config.apply_to_wheel(child)
+ 		else:
+ 			rear_wheel_config.apply_to_wheel(child)
+-		print("[WheelCfg] %s %s -> radius=%.3f rest=%.2f travel=%.2f friction=%.1f stiffness=%.2f maxForce=%.0f" % [
++		Log.d(Log.Category.SETUP, "[WheelCfg] %s %s -> radius=%.3f rest=%.2f travel=%.2f friction=%.1f stiffness=%.2f maxForce=%.0f" % [
+ 			vehicle_name, child.name, child.wheel_radius, child.wheel_rest_length,
+ 			child.suspension_travel, child.wheel_friction_slip,
+ 			child.suspension_stiffness, child.suspension_max_force])
+@@ -97,7 +97,7 @@ func _localize(cfg: WheelConfig) -> WheelConfig:
+ 		return null
+ 	if cfg.resource_path.is_empty() or cfg.resource_path.begins_with(resource_path + "::"):
+ 		return cfg
+-	print("[VehicleConfig] %s: wheel config was the shared file %s - embedding a private copy" % [vehicle_name, cfg.resource_path])
++	Log.d(Log.Category.SETUP, "[VehicleConfig] %s: wheel config was the shared file %s - embedding a private copy" % [vehicle_name, cfg.resource_path])
+ 	return cfg.duplicate(true) as WheelConfig
+ 
+ 
+@@ -112,7 +112,7 @@ func save() -> void:
+ 	if err != OK:
+ 		push_error("[VehicleConfig] Failed to save %s: error %d" % [vehicle_name, err])
+ 	else:
+-		print("[VehicleConfig] Saved: %s" % resource_path)
++		Log.d(Log.Category.SETUP, "[VehicleConfig] Saved: %s" % resource_path)
+ 
+ func get_horsepower() -> float:
+ 	if not engine:
+diff --git a/scripts/main.gd b/scripts/main.gd
+index a2d908d..76c7f9b 100644
+--- a/scripts/main.gd
++++ b/scripts/main.gd
+@@ -23,7 +23,7 @@ func _process(delta: float) -> void:
+ 		_fps_accum = 0.0
+ 		_fps_ticks += 1
+ 		if _fps_ticks % 4 == 0 and not OS.get_cmdline_user_args().is_empty():
+-			print("[fps] %d sim x%.2f" % [Engine.get_frames_per_second(), sim_rate])
++			Log.d(Log.Category.WORLD, "[fps] %d sim x%.2f" % [Engine.get_frames_per_second(), sim_rate])
+ 
+ func _parse_args() -> Dictionary:
+ 	var out := {}
+diff --git a/scripts/parachute.gd b/scripts/parachute.gd
+index 09cf5d8..e94ff3d 100644
+--- a/scripts/parachute.gd
++++ b/scripts/parachute.gd
+@@ -17,14 +17,14 @@ func _ready():
+ func connect_to_finish_line():
+ 	var finish_line = get_tree().get_first_node_in_group("finish_checkpoint")
+ 	if finish_line:
+-		print("[Chute] Connected on: ", get_parent().name)
++		Log.d(Log.Category.CHUTE, "[Chute] Connected on: ", get_parent().name)
+ 		finish_line.body_entered.connect(_on_finish_line_entered)
+ 	else:
+-		print("[Chute] MISSED finish line!")
++		Log.d(Log.Category.CHUTE, "[Chute] MISSED finish line!")
+ 
+ 
+ func _on_finish_line_entered(body: Node3D) -> void:
+-	print("[Chute] body_entered: ", body.name, " parent: ", get_parent().name)
++	Log.d(Log.Category.CHUTE, "[Chute] body_entered: ", body.name, " parent: ", get_parent().name)
+ 	if body == get_parent():
+ 		deploy()
+ 
+@@ -52,7 +52,7 @@ func deploy():
+ 	is_deployed = true
+ 	deployment_progress = 0.0
+ 	set_physics_process(true)
+-	print("[Chute] Deployed!")
++	Log.d(Log.Category.CHUTE, "[Chute] Deployed!")
+ 
+ func retract():
+ 	is_deployed = false
+@@ -60,4 +60,4 @@ func retract():
+ 	set_physics_process(false)
+ 	if chute_mesh:
+ 		chute_mesh.visible = false
+-	print("[Chute] Retracted")
++	Log.d(Log.Category.CHUTE, "[Chute] Retracted")
+diff --git a/scripts/sim_controller.gd b/scripts/sim_controller.gd
+index 9f0b79e..ecfb65c 100644
+--- a/scripts/sim_controller.gd
++++ b/scripts/sim_controller.gd
+@@ -336,7 +336,7 @@ func _init_gpu(bottom_data: PackedByteArray, state_data: PackedByteArray) -> voi
+ 		_rd.texture_update(_tex_state_rd[1], 0, state_data)
+ 
+ 	_gpu_ready = true
+-	print("SimController: GPU init ok (%dx%d, dx=%s, DT=%s, kind=%d)" % [n, n, dxv, dtv, kind])
++	Log.d(Log.Category.WORLD, "SimController: GPU init ok (%dx%d, dx=%s, DT=%s, kind=%d)" % [n, n, dxv, dtv, kind])
+ 
+ func _img_uniform(binding: int, rid: RID) -> RDUniform:
+ 	var u := RDUniform.new()
+@@ -435,6 +435,6 @@ func _on_debug_data(data: PackedByteArray) -> void:
+ 	dbg_max_speed = f[2]
+ 	dbg_wet_cells = f[3]
+ 	dbg_nan_cells = f[4]
+-	print("[sim] t=%.2f vol=%.3f m3 max_h=%.3f max_u=%.2f wet=%d nan=%d" % [
++	Log.d(Log.Category.WORLD, "[sim] t=%.2f vol=%.3f m3 max_h=%.3f max_u=%.2f wet=%d nan=%d" % [
+ 		f[5], f[0], f[1], f[2], int(f[3]), int(f[4]),
+ 	])
+diff --git a/scripts/test_scene.gd b/scripts/test_scene.gd
+index 73a2e24..02fee03 100644
+--- a/scripts/test_scene.gd
++++ b/scripts/test_scene.gd
+@@ -6,7 +6,7 @@ extends Node3D
+ var test_vehicle: VehicleController = null
+ 
+ func _ready():
+-	print("\n=== VEHICLE SPAWN TEST ===\n")
++	Log.d(Log.Category.TEST, "\n=== VEHICLE SPAWN TEST ===\n")
+ 	
+ 	# Wait one frame for everything to initialize
+ 	await get_tree().process_frame
+@@ -18,14 +18,14 @@ func _ready():
+ 		push_error("No vehicles available!")
+ 		return
+ 	
+-	print("Available vehicles:")
++	Log.d(Log.Category.TEST, "Available vehicles:")
+ 	for i in range(available.size()):
+ 		var config: VehicleConfig = available[i]
+-		print("  [%d] %s - %d HP" % [i, config.display_name, config.get_horsepower()])
++		Log.d(Log.Category.TEST, "  [%d] %s - %d HP" % [i, config.display_name, config.get_horsepower()])
+ 	
+ 	# Use the first vehicle
+ 	var config: VehicleConfig = available[0]
+-	print("\nSpawning: %s" % config.display_name)
++	Log.d(Log.Category.TEST, "\nSpawning: %s" % config.display_name)
+ 	
+ 	# Step 1: Spawn the vehicle (creates the scene instance)
+ 	test_vehicle = GameManager.spawn_vehicle(config, true, 0)
+@@ -36,13 +36,13 @@ func _ready():
+ 	
+ 	# Step 2: Add to scene tree FIRST
+ 	add_child(test_vehicle)
+-	print("✓ Vehicle added to scene")
++	Log.d(Log.Category.TEST, "✓ Vehicle added to scene")
+ 	
+ 	# Step 3: Wait for modules to be added to tree
+ 	await get_tree().process_frame
+ 	
+ 	# Step 4: Initialize (this creates and configures modules)
+-	print("✓ Initializing vehicle...")
++	Log.d(Log.Category.TEST, "✓ Initializing vehicle...")
+ 	test_vehicle.initialize(config, true)
+ 	
+ 	# Step 5: Position it
+@@ -55,12 +55,12 @@ func _ready():
+ 	# Step 7: Start the race (enables physics and input)
+ 	test_vehicle.start_race()
+ 	
+-	print("\n=== RACE STARTED - Press W to accelerate ===")
+-	print("Vehicle stats:")
+-	print("  Mass: %.0f kg" % test_vehicle.mass)
+-	print("  Gear: %d" % test_vehicle.get_gear())
+-	print("  RPM: %.0f" % test_vehicle.get_rpm())
+-	print("  Engine HP: %d" % config.get_horsepower())
++	Log.d(Log.Category.TEST, "\n=== RACE STARTED - Press W to accelerate ===")
++	Log.d(Log.Category.TEST, "Vehicle stats:")
++	Log.d(Log.Category.TEST, "  Mass: %.0f kg" % test_vehicle.mass)
++	Log.d(Log.Category.TEST, "  Gear: %d" % test_vehicle.get_gear())
++	Log.d(Log.Category.TEST, "  RPM: %.0f" % test_vehicle.get_rpm())
++	Log.d(Log.Category.TEST, "  Engine HP: %d" % config.get_horsepower())
+ 
+ func _process(_delta):
+ 	if test_vehicle and is_instance_valid(test_vehicle):
+@@ -74,7 +74,7 @@ func _physics_process(_delta):
+ 	if test_vehicle and is_instance_valid(test_vehicle):
+ 		# Debug output every second
+ 		if Engine.get_physics_frames() % 60 == 0:
+-			print("RPM: %.0f | Gear: %d | Speed: %.1f m/s | Pos: %s" % [
++			Log.d(Log.Category.TEST, "RPM: %.0f | Gear: %d | Speed: %.1f m/s | Pos: %s" % [
+ 				test_vehicle.get_rpm(),
+ 				test_vehicle.get_gear(),
+ 				test_vehicle.linear_velocity.length(),
+diff --git a/scripts/vehicle_dashboard.gd b/scripts/vehicle_dashboard.gd
+index fbf4b11..d8c96be 100644
+--- a/scripts/vehicle_dashboard.gd
++++ b/scripts/vehicle_dashboard.gd
+@@ -53,17 +53,17 @@ func _ready():
+ 	var all_found = true
+ 	for i in range(wheel_labels.size()):
+ 		if not wheel_labels[i]:
+-			print("WARNING: Wheel label ", i+1, " not found!")
++			Log.d(Log.Category.UI, "WARNING: Wheel label ", i+1, " not found!")
+ 			all_found = false
+ 	
+ 	if all_found:
+-		print("[Dashboard] All UI elements found successfully!")
++		Log.d(Log.Category.UI, "[Dashboard] All UI elements found successfully!")
+ 	
+ 	# Set initial visibility
+ 	if detailed_panel:
+ 		detailed_panel.visible = show_detailed
+ 	
+-	print("[Dashboard] UI ready for: %s" % vehicle.name)
++	Log.d(Log.Category.UI, "[Dashboard] UI ready for: %s" % vehicle.name)
+ 
+ func find_ui_elements():
+ 	# Find all labels and panels by their names in the scene
+@@ -143,7 +143,7 @@ func update_basic_stats():
+ 
+ func update_detailed_stats():
+ 	if not gforce_label or not inputs_label:
+-		print("Missing gforce or inputs label")
++		Log.d(Log.Category.UI, "Missing gforce or inputs label")
+ 		return
+ 	
+ 	
+@@ -167,7 +167,7 @@ func update_detailed_stats():
+ 	for i in range(min(wheels.size(), current_wheel_labels.size())):
+ 		var label = current_wheel_labels[i]
+ 		if not label:
+-			print("Wheel label ", i, " is null")
++			Log.d(Log.Category.UI, "Wheel label ", i, " is null")
+ 			continue
+ 		
+ 		var wheel = wheels[i]
+@@ -196,7 +196,7 @@ func update_detailed_stats():
+ func get_wheels() -> Array:
+ 	var wheels = []
+ 	if not vehicle:
+-		print("No vehicle in get_wheels!")
++		Log.d(Log.Category.UI, "No vehicle in get_wheels!")
+ 		return wheels
+ 		
+ 	for child in vehicle.get_children():
+diff --git a/vehicles/always_move.gd b/vehicles/always_move.gd
+index 4c38e77..6706d43 100644
+--- a/vehicles/always_move.gd
++++ b/vehicles/always_move.gd
+@@ -8,4 +8,4 @@ func _physics_process(_delta):
+ 	
+ 	# Show we're alive
+ 	if Engine.get_frames_drawn() % 60 == 0:
+-		print("[%s] Speed: %.1f m/s" % [name, linear_velocity.length()])
++		Log.d(Log.Category.TEST, "[%s] Speed: %.1f m/s" % [name, linear_velocity.length()])
+diff --git a/vehicles/exhaust_pipes_flames.gd b/vehicles/exhaust_pipes_flames.gd
+index 66796c2..4b5f455 100644
+--- a/vehicles/exhaust_pipes_flames.gd
++++ b/vehicles/exhaust_pipes_flames.gd
+@@ -9,10 +9,10 @@ extends Node3D
+ 
+ 
+ func _ready():
+-	print("Found ", get_child_count(), " children")
++	Log.d(Log.Category.TEST, "Found ", get_child_count(), " children")
+ 	for marker in get_children():
+-		print("Child: ", marker.name, " Type: ", marker.get_class())
+-		print(marker.name, " forward: ", marker.global_transform.basis.z, " up: ", marker.global_transform.basis.y)
++		Log.d(Log.Category.TEST, "Child: ", marker.name, " Type: ", marker.get_class())
++		Log.d(Log.Category.TEST, marker.name, " forward: ", marker.global_transform.basis.z, " up: ", marker.global_transform.basis.y)
+ 		if marker is Node3D:
+ 			setup_flame(marker)
+ 
+diff --git a/vehicles/node.gd b/vehicles/node.gd
+index 62daaed..312c6b9 100644
+--- a/vehicles/node.gd
++++ b/vehicles/node.gd
+@@ -9,7 +9,7 @@ func _physics_process(delta: float) -> void:
+ 	t = -1000000.0
+ 	for w in get_parent().get_children():
+ 		if w is VehicleWheel3D:
+-			print(w.name, " wheel basis: ", w.basis)
++			Log.d(Log.Category.TEST, w.name, " wheel basis: ", w.basis)
+ 			for m in w.get_children():
+ 				if m is MeshInstance3D:
+-					print("  ", m.name, " global basis: ", m.global_transform.basis, " det: ", m.global_transform.basis.determinant())
++					Log.d(Log.Category.TEST, "  ", m.name, " global basis: ", m.global_transform.basis, " det: ", m.global_transform.basis.determinant())

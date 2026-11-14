@@ -69,7 +69,7 @@ func setup(player_controlled: bool, config: VehicleConfig = null) -> void:
 			ai_target_reaction_time = randf_range(0.10, 0.25)
 			ai_throttle_variation = 0.05
 		
-		print("[InputModule] AI setup: reaction=%.3fs, consistency=%.2f" % [
+		Log.d(Log.Category.SETUP, "[InputModule] AI setup: reaction=%.3fs, consistency=%.2f" % [
 			ai_target_reaction_time,
 			ai_throttle_variation
 		])
@@ -99,7 +99,7 @@ func _validate_input_map() -> void:
 func start_race() -> void:
 	race_started = true
 	set_physics_process(true)
-	print("[InputModule] Race started - %s" % ("Player" if is_player_controlled else "AI"))
+	Log.d(Log.Category.SETUP, "[InputModule] Race started - %s" % ("Player" if is_player_controlled else "AI"))
 
 func stop() -> void:
 	set_physics_process(false)

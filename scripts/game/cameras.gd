@@ -83,11 +83,11 @@ func find_all_vehicles():
 		find_vehicles_recursive(all_nodes)
 	
 	if available_vehicles.size() > 0:
-		print("[Camera] Found %d vehicles to follow" % available_vehicles.size())
+		Log.d(Log.Category.CAMERA, "[Camera] Found %d vehicles to follow" % available_vehicles.size())
 		for i in range(available_vehicles.size()):
-			print("  [%d] %s" % [i + 1, available_vehicles[i].name])
+			Log.d(Log.Category.CAMERA, "  [%d] %s" % [i + 1, available_vehicles[i].name])
 	else:
-		print("[Camera] WARNING: No vehicles found!")
+		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No vehicles found!")
 
 func find_vehicles_recursive(nodes: Array):
 	"""Recursively search for vehicle nodes"""
@@ -113,9 +113,9 @@ func find_target():
 		current_vehicle_index = 0
 	
 	if target:
-		print("[Camera] Auto-locked onto target: %s" % target.name)
+		Log.d(Log.Category.CAMERA, "[Camera] Auto-locked onto target: %s" % target.name)
 	else:
-		print("[Camera] WARNING: No target found in group '%s'!" % target_group_name)
+		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No target found in group '%s'!" % target_group_name)
 
 func setup_cameras():
 	"""Set up cameras from the exported array"""
@@ -128,9 +128,9 @@ func setup_cameras():
 	if cameras.size() > 0:
 		follow_camera = cameras[0]
 		set_current_camera(0)
-		print("[Camera] Found %d cameras" % cameras.size())
+		Log.d(Log.Category.CAMERA, "[Camera] Found %d cameras" % cameras.size())
 	else:
-		print("[Camera] WARNING: No cameras found!")
+		Log.d(Log.Category.CAMERA, "[Camera] WARNING: No cameras found!")
 
 func _physics_process(delta):
 	if not follow_camera:
@@ -265,31 +265,31 @@ func handle_right_click(event: InputEventMouseButton):
 		orbit_mode = true
 		orbit_active = true  # Lock orbit position
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		print("[Camera] ORBIT MODE - Move mouse to rotate, release to lock position")
+		Log.d(Log.Category.CAMERA, "[Camera] ORBIT MODE - Move mouse to rotate, release to lock position")
 	else:
 		orbit_mode = false
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		print("[Camera] ORBIT LOCKED - Press R to reset behind vehicle")
+		Log.d(Log.Category.CAMERA, "[Camera] ORBIT LOCKED - Press R to reset behind vehicle")
 
 func handle_left_click(event: InputEventMouseButton):
 	"""Handle left mouse button for pan"""
 	if event.pressed and Input.is_key_pressed(KEY_SHIFT):
 		pan_mode = true
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		print("[Camera] PAN MODE - Move mouse to pan camera view")
+		Log.d(Log.Category.CAMERA, "[Camera] PAN MODE - Move mouse to pan camera view")
 	elif not event.pressed and pan_mode:
 		pan_mode = false
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		print("[Camera] Pan offset: %.1f, %.1f, %.1f" % [pan_offset.x, pan_offset.y, pan_offset.z])
+		Log.d(Log.Category.CAMERA, "[Camera] Pan offset: %.1f, %.1f, %.1f" % [pan_offset.x, pan_offset.y, pan_offset.z])
 
 func handle_mouse_wheel(event: InputEventMouseButton):
 	"""Handle mouse wheel for zoom"""
 	if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 		current_distance = clamp(current_distance - zoom_speed, min_distance, max_distance)
-		print("[Camera] Zoom: %.1f" % current_distance)
+		Log.d(Log.Category.CAMERA, "[Camera] Zoom: %.1f" % current_distance)
 	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
 		current_distance = clamp(current_distance + zoom_speed, min_distance, max_distance)
-		print("[Camera] Zoom: %.1f" % current_distance)
+		Log.d(Log.Category.CAMERA, "[Camera] Zoom: %.1f" % current_distance)
 
 func handle_orbit_mouse_motion(event: InputEventMouseMotion):
 	"""Handle mouse motion for orbit"""
@@ -317,7 +317,7 @@ func reset_camera():
 	current_distance = camera_distance
 	current_height = camera_height
 	pan_offset = Vector3.ZERO  # Also reset pan
-	print("[Camera] RESET - Back to follow mode")
+	Log.d(Log.Category.CAMERA, "[Camera] RESET - Back to follow mode")
 
 func set_current_camera(idx: int):
 	if idx < 0 or idx >= cameras.size():
@@ -340,12 +340,12 @@ func set_current_camera(idx: int):
 	follow_camera = cameras[idx]
 	current_camera_index = idx
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if follow_camera.has_method("set_active") else Input.MOUSE_MODE_VISIBLE
-	print("[Camera] Switched to Camera%d" % (idx + 1))
+	Log.d(Log.Category.CAMERA, "[Camera] Switched to Camera%d" % (idx + 1))
 
 func set_target(new_target: Node3D):
 	"""Set a new target to follow"""
 	target = new_target
-	print("[Camera] Target changed to: %s" % target.name)
+	Log.d(Log.Category.CAMERA, "[Camera] Target changed to: %s" % target.name)
 
 func set_target_by_group(group_name: String):
 	"""Set target by group name"""
@@ -365,7 +365,7 @@ func add_camera(camera: Camera3D):
 	"""Add a camera to the controller"""
 	if not camera in cameras:
 		cameras.append(camera)
-		print("[Camera] Added camera: %s" % camera.name)
+		Log.d(Log.Category.CAMERA, "[Camera] Added camera: %s" % camera.name)
 
 func remove_camera(camera: Camera3D):
 	"""Remove a camera from the controller"""
@@ -377,7 +377,7 @@ func remove_camera(camera: Camera3D):
 		if idx == current_camera_index and cameras.size() > 0:
 			set_current_camera(0)
 		
-		print("[Camera] Removed camera: %s" % camera.name)
+		Log.d(Log.Category.CAMERA, "[Camera] Removed camera: %s" % camera.name)
 
 func _notification(what):
 	# Release mouse when exiting game

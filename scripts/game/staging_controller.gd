@@ -53,7 +53,7 @@ func setup(start_tree: Node, player: VehicleController, npc: VehicleController) 
 		npc.staged = true
 
 	_active = true
-	print("[Staging] Ready: lanes %s" % [_vehicles.keys()])
+	Log.d(Log.Category.RACE, "[Staging] Ready: lanes %s" % [_vehicles.keys()])
 
 
 func _process(delta: float) -> void:
@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 			_fired = true
 			_capture_rollout_reference()
 			all_staged.emit()
-			print("[Staging] All lanes staged - starting tree")
+			Log.d(Log.Category.RACE, "[Staging] All lanes staged - starting tree")
 			tree.start_tree_sequence()
 	else:
 		_hold = 0.0

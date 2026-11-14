@@ -66,7 +66,7 @@ void fragment() {
 """
 
 func _ready():
-	print("\n=== FULL FLOCKING FISH SPAWNER ===")
+	Log.d(Log.Category.WORLD, "\n=== FULL FLOCKING FISH SPAWNER ===")
 	_sample_lake_mesh()
 	if _valid_tris.is_empty():
 		push_error("Fish spawner: no lake triangles sampled, aborting")
@@ -81,7 +81,7 @@ func _ready():
 		return
 	setup_multimesh(fish_mesh, fish_material)
 	spawn_fish()
-	print("✓ Spawned ", number_of_fish, " fish")
+	Log.d(Log.Category.WORLD, "✓ Spawned ", number_of_fish, " fish")
 
 func _sample_lake_mesh():
 	if not mesh:
@@ -107,7 +107,7 @@ func _sample_lake_mesh():
 			y_count += 1
 	if y_count > 0:
 		_lake_surface_y = y_sum / y_count
-	print("Fish spawner: sampled ", _valid_tris.size(), " lake triangles, surface_y=", _lake_surface_y)
+	Log.d(Log.Category.WORLD, "Fish spawner: sampled ", _valid_tris.size(), " lake triangles, surface_y=", _lake_surface_y)
 
 func _random_point_on_lake() -> Vector3:
 	var tri = _pick_weighted_tri(_valid_tris, _valid_areas, _total_area)

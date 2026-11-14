@@ -44,4 +44,4 @@ func _bake_depth_map() -> void:
 	_mat.set_shader_parameter("max_depth",       MAX_DEPTH)
 	_mat.set_shader_parameter("lake_origin",     LAKE_ORIGIN)
 	_mat.set_shader_parameter("lake_size",       LAKE_SIZE)
-	print("[WaterDepth] Raycast depth map baked: ", MAP_RES, "x", MAP_RES)
+	Log.d(Log.Category.WORLD, "[WaterDepth] Raycast depth map baked: ", MAP_RES, "x", MAP_RES)

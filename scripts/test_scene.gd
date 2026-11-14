@@ -6,7 +6,7 @@ extends Node3D
 var test_vehicle: VehicleController = null
 
 func _ready():
-	print("\n=== VEHICLE SPAWN TEST ===\n")
+	Log.d(Log.Category.TEST, "\n=== VEHICLE SPAWN TEST ===\n")
 	
 	# Wait one frame for everything to initialize
 	await get_tree().process_frame
@@ -18,14 +18,14 @@ func _ready():
 		push_error("No vehicles available!")
 		return
 	
-	print("Available vehicles:")
+	Log.d(Log.Category.TEST, "Available vehicles:")
 	for i in range(available.size()):
 		var config: VehicleConfig = available[i]
-		print("  [%d] %s - %d HP" % [i, config.display_name, config.get_horsepower()])
+		Log.d(Log.Category.TEST, "  [%d] %s - %d HP" % [i, config.display_name, config.get_horsepower()])
 	
 	# Use the first vehicle
 	var config: VehicleConfig = available[0]
-	print("\nSpawning: %s" % config.display_name)
+	Log.d(Log.Category.TEST, "\nSpawning: %s" % config.display_name)
 	
 	# Step 1: Spawn the vehicle (creates the scene instance)
 	test_vehicle = GameManager.spawn_vehicle(config, true, 0)
@@ -36,13 +36,13 @@ func _ready():
 	
 	# Step 2: Add to scene tree FIRST
 	add_child(test_vehicle)
-	print("✓ Vehicle added to scene")
+	Log.d(Log.Category.TEST, "✓ Vehicle added to scene")
 	
 	# Step 3: Wait for modules to be added to tree
 	await get_tree().process_frame
 	
 	# Step 4: Initialize (this creates and configures modules)
-	print("✓ Initializing vehicle...")
+	Log.d(Log.Category.TEST, "✓ Initializing vehicle...")
 	test_vehicle.initialize(config, true)
 	
 	# Step 5: Position it
@@ -55,12 +55,12 @@ func _ready():
 	# Step 7: Start the race (enables physics and input)
 	test_vehicle.start_race()
 	
-	print("\n=== RACE STARTED - Press W to accelerate ===")
-	print("Vehicle stats:")
-	print("  Mass: %.0f kg" % test_vehicle.mass)
-	print("  Gear: %d" % test_vehicle.get_gear())
-	print("  RPM: %.0f" % test_vehicle.get_rpm())
-	print("  Engine HP: %d" % config.get_horsepower())
+	Log.d(Log.Category.TEST, "\n=== RACE STARTED - Press W to accelerate ===")
+	Log.d(Log.Category.TEST, "Vehicle stats:")
+	Log.d(Log.Category.TEST, "  Mass: %.0f kg" % test_vehicle.mass)
+	Log.d(Log.Category.TEST, "  Gear: %d" % test_vehicle.get_gear())
+	Log.d(Log.Category.TEST, "  RPM: %.0f" % test_vehicle.get_rpm())
+	Log.d(Log.Category.TEST, "  Engine HP: %d" % config.get_horsepower())
 
 func _process(_delta):
 	if test_vehicle and is_instance_valid(test_vehicle):
@@ -74,7 +74,7 @@ func _physics_process(_delta):
 	if test_vehicle and is_instance_valid(test_vehicle):
 		# Debug output every second
 		if Engine.get_physics_frames() % 60 == 0:
-			print("RPM: %.0f | Gear: %d | Speed: %.1f m/s | Pos: %s" % [
+			Log.d(Log.Category.TEST, "RPM: %.0f | Gear: %d | Speed: %.1f m/s | Pos: %s" % [
 				test_vehicle.get_rpm(),
 				test_vehicle.get_gear(),
 				test_vehicle.linear_velocity.length(),
